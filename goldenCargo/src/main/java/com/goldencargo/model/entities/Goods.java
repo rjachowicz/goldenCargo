@@ -31,7 +31,7 @@ public class Goods {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "weight", precision = 10, scale = 2)
+    @Column(name = "weight")
     private Double weight;
 
     @Column(name = "dimensions", length = 100)

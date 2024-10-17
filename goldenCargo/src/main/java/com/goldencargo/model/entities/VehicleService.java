@@ -35,7 +35,7 @@ public class VehicleService {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "cost", precision = 10, scale = 2)
+    @Column(name = "cost")
     private Double cost;
 
     @Column(name = "service_center", length = 100)

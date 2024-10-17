@@ -1,5 +1,6 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.UserRoleId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @AllArgsConstructor
-@IdClass(com.goldencargo.model.entities.UserRoleId.class)
+@IdClass(UserRoleId.class)
 public class UserRole implements Serializable {
 
     @Id

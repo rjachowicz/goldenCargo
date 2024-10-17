@@ -29,10 +29,10 @@ public class Route {
     @JoinColumn(name = "end_location_id", nullable = false)
     private Location endLocation;
 
-    @Column(name = "distance", precision = 10, scale = 2)
+    @Column(name = "distance")
     private Double distance;
 
-    @Column(name = "estimated_time", precision = 5, scale = 2)
+    @Column(name = "estimated_time")
     private Double estimatedTime;
 
     @Column(name = "preferred_route")

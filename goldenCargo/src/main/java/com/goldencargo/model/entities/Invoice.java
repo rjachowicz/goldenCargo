@@ -35,7 +35,7 @@ public class Invoice {
     @Column(name = "date_issued")
     private Date dateIssued;
 
-    @Column(name = "total_amount", precision = 10, scale = 2)
+    @Column(name = "total_amount")
     private Double totalAmount;
 
     @Temporal(TemporalType.DATE)

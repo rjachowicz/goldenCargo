@@ -41,10 +41,10 @@ public class Location {
     @Column(name = "postal_code", length = 20)
     private String postalCode;
 
-    @Column(name = "latitude", precision = 9, scale = 6)
+    @Column(name = "latitude")
     private Double latitude;
 
-    @Column(name = "longitude", precision = 9, scale = 6)
+    @Column(name = "longitude")
     private Double longitude;
 
     @Temporal(TemporalType.TIMESTAMP)
