@@ -35,7 +35,7 @@ public class ClientOrder {
     @Column(name = "status", nullable = false)
     private Status status = Status.PENDING;
 
-    @Column(name = "total_amount", precision = 10, scale = 2)
+    @Column(name = "total_amount")
     private Double totalAmount;
 
     @Enumerated(EnumType.STRING)

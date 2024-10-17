@@ -29,7 +29,7 @@ public class VehicleType {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "maximum_load", precision = 10, scale = 2)
+    @Column(name = "maximum_load")
     private Double maximumLoad;
 
     @Column(name = "dimensions", length = 100)

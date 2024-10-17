@@ -28,7 +28,7 @@ public class Breakdown {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "repair_cost", precision = 10, scale = 2)
+    @Column(name = "repair_cost")
     private Double repairCost;
 
     @Temporal(TemporalType.DATE)

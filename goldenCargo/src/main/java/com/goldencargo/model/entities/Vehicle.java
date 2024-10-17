@@ -39,7 +39,7 @@ public class Vehicle {
     @Column(name = "year")
     private Integer year;
 
-    @Column(name = "capacity", precision = 10, scale = 2)
+    @Column(name = "capacity")
     private Double capacity;
 
     @Enumerated(EnumType.STRING)
