@@ -1,73 +1,77 @@
 package com.goldencargo.model.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "driver")
+@Table(name = "drivers")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Driver {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "driver_id")
+    private Long driverId;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User userId;
-    @Column(name = "driving_license", nullable = false)
-    private String drivingLicense;
-    @Column(name = "date_of_employment", nullable = false)
-    private Long dateOfEmployment;
-    @Column(name = "status", nullable = false)
-    private Integer status;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
 
-    public Driver() {
+    @Column(name = "license_number", unique = true, nullable = false, length = 50)
+    private String licenseNumber;
+
+    @Column(name = "license_category", length = 10)
+    private String licenseCategory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "hire_date")
+    private Date hireDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "medical_certificate_expiry")
+    private Date medicalCertificateExpiry;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "driver_status", nullable = false)
+    private DriverStatus driverStatus = DriverStatus.ACTIVE;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false)
+    private Date updatedAt;
+
+    @OneToMany(mappedBy = "driver")
+    private Set<DriverVehicle> driverVehicles = new HashSet<>();
+
+    @OneToMany(mappedBy = "assignedDriver")
+    private Set<TransportOrder> transportOrders = new HashSet<>();
+
+    @OneToMany(mappedBy = "driver")
+    private Set<DriverReport> driverReports = new HashSet<>();
+
+    @OneToMany(mappedBy = "driver")
+    private Set<Incident> incidents = new HashSet<>();
+
+    public enum DriverStatus {
+        ACTIVE,
+        INACTIVE
     }
 
-    public Driver(Long id, User userId, String drivingLicense, Long dateOfEmployment, Integer status) {
-        this.id = id;
-        this.userId = userId;
-        this.drivingLicense = drivingLicense;
-        this.dateOfEmployment = dateOfEmployment;
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
-    public String getDrivingLicense() {
-        return drivingLicense;
-    }
-
-    public void setDrivingLicense(String drivingLicense) {
-        this.drivingLicense = drivingLicense;
-    }
-
-    public Long getDateOfEmployment() {
-        return dateOfEmployment;
-    }
-
-    public void setDateOfEmployment(Long dateOfEmployment) {
-        this.dateOfEmployment = dateOfEmployment;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 }

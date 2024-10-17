@@ -7,36 +7,38 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "vehicle_types")
+@Table(name = "goods")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VehicleType {
+public class Goods {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vehicle_type_id")
-    private Long vehicleTypeId;
+    @Column(name = "goods_id")
+    private Long goodsId;
 
-    @Column(name = "name", unique = true, nullable = false, length = 50)
+    @ManyToOne
+    @JoinColumn(name = "client_order_id", nullable = false)
+    private ClientOrder clientOrder;
+
+    @Column(name = "name", length = 100)
     private String name;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "maximum_load", precision = 10, scale = 2)
-    private Double maximumLoad;
+    @Column(name = "weight", precision = 10, scale = 2)
+    private Double weight;
 
     @Column(name = "dimensions", length = 100)
     private String dimensions;
 
-    @Column(name = "special_features")
-    private String specialFeatures;
+    @Column(name = "special_handling_instructions")
+    private String specialHandlingInstructions;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -45,8 +47,5 @@ public class VehicleType {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
-
-    @OneToMany(mappedBy = "vehicleType")
-    private Set<Vehicle> vehicles = new HashSet<>();
 
 }
