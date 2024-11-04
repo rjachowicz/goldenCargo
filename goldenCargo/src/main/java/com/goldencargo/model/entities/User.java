@@ -63,7 +63,7 @@ public class User {
     private Driver driver;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Logistician logistician;
+    private Logistics logistics;
 
     @OneToMany(mappedBy = "generatedBy")
     private Set<Report> reports = new HashSet<>();
