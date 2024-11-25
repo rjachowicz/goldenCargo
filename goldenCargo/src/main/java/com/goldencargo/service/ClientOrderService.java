@@ -2,7 +2,6 @@ package com.goldencargo.service;
 
 import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.repository.ClientOrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,11 @@ import java.util.Optional;
 @Service
 public class ClientOrderService {
 
-    @Autowired
-    private ClientOrderRepository clientOrderRepository;
+    private final ClientOrderRepository clientOrderRepository;
+
+    public ClientOrderService(ClientOrderRepository clientOrderRepository) {
+        this.clientOrderRepository = clientOrderRepository;
+    }
 
     public List<ClientOrder> getAllClientOrders() {
         return clientOrderRepository.findAll();

@@ -3,6 +3,7 @@ package com.goldencargo.service;
 import com.goldencargo.model.entities.User;
 import com.goldencargo.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,11 +39,13 @@ public class UserService {
             user.setPhoneNumber(userDetails.getPhoneNumber());
             user.setAddress(userDetails.getAddress());
             user.setStatus(userDetails.getStatus());
+            user.setStatus(userDetails.getStatus());
             user.setUpdatedAt(new java.util.Date());
             return userRepository.save(user);
         });
     }
 
+    @Transactional
     public boolean deleteUser(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);

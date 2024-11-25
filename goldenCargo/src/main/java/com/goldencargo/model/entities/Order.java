@@ -1,5 +1,7 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.InvoiceType;
+import com.goldencargo.model.data.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +16,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class Order extends AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,44 +33,10 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_type", nullable = false)
-    private OrderType orderType;
+    private InvoiceType orderType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.PENDING;
+    private Status status = Status.NEW;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = new Date();
-        updatedAt = new Date();
-        if (orderType == null) {
-            orderType = OrderType.CLIENT;
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
-
-    public enum OrderType {
-        CLIENT,
-        TRANSPORT
-    }
-
-    public enum Status {
-        PENDING,
-        CONFIRMED,
-        IN_PROGRESS,
-        COMPLETED,
-        CANCELLED
-    }
 }

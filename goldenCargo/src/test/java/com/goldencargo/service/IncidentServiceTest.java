@@ -1,5 +1,6 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.Incident;
 import com.goldencargo.repository.IncidentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ public class IncidentServiceTest {
         incident.setIncidentType("Test Incident");
         incident.setDate(new Date());
         incident.setDescription("Test description");
-        incident.setStatus(Incident.Status.OPEN);
+        incident.setStatus(Status.NEW);
         incident.setCreatedAt(new Date());
         incident.setUpdatedAt(new Date());
     }

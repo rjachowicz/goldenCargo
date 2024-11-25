@@ -1,5 +1,7 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.InvoiceType;
+import com.goldencargo.model.data.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +16,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Invoice {
+public class Invoice extends AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,54 +33,18 @@ public class Invoice {
     @Column(name = "related_id")
     private Long relatedId;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date_issued")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_issued", nullable = false)
     private Date dateIssued;
 
-    @Column(name = "total_amount")
+    @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "due_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "due_date", nullable = false)
     private Date dueDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
-    private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        dateIssued = new Date();
-        createdAt = new Date();
-        updatedAt = new Date();
-        if (invoiceType == null) {
-            invoiceType = InvoiceType.CLIENT;
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
-
-    public enum InvoiceType {
-        CLIENT,
-        SUPPLIER,
-        OTHER
-    }
-
-    public enum PaymentStatus {
-        PAID,
-        UNPAID,
-        PARTIAL
-    }
-
+    private PaymentStatus paymentStatus = PaymentStatus.NEW;
 }

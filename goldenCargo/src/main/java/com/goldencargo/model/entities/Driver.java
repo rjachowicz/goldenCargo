@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Driver {
+public class Driver extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,29 +33,21 @@ public class Driver {
     @Column(name = "license_category", length = 10)
     private String licenseCategory;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "hire_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "hire_date", nullable = false)
     private Date hireDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "medical_certificate_expiry")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "medical_certificate_expiry", nullable = false)
     private Date medicalCertificateExpiry;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "driver_status", nullable = false)
-    private DriverStatus driverStatus = DriverStatus.ACTIVE;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private DriverStatus driverStatus = DriverStatus.NEW;
 
     @OneToMany(mappedBy = "driver")
     private Set<DriverVehicle> driverVehicles = new HashSet<>();
@@ -70,8 +62,8 @@ public class Driver {
     private Set<Incident> incidents = new HashSet<>();
 
     public enum DriverStatus {
+        NEW,
         ACTIVE,
         INACTIVE
     }
-
 }

@@ -1,5 +1,7 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.data.InvoiceType;
+import com.goldencargo.model.data.PaymentStatus;
 import com.goldencargo.model.entities.Invoice;
 import com.goldencargo.repository.InvoiceRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,12 +35,12 @@ public class InvoiceServiceTest {
         invoice = new Invoice();
         invoice.setInvoiceId(1L);
         invoice.setInvoiceNumber("INV-12345");
-        invoice.setInvoiceType(Invoice.InvoiceType.CLIENT);
+        invoice.setInvoiceType(InvoiceType.CLIENT);
         invoice.setRelatedId(100L);
         invoice.setDateIssued(new Date());
         invoice.setTotalAmount(1500.0);
         invoice.setDueDate(new Date());
-        invoice.setPaymentStatus(Invoice.PaymentStatus.UNPAID);
+        invoice.setPaymentStatus(PaymentStatus.UNPAID);
         invoice.setCreatedAt(new Date());
         invoice.setUpdatedAt(new Date());
     }

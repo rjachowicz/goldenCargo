@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Vehicle {
+public class Vehicle extends AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,30 +44,22 @@ public class Vehicle {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.AVAILABLE;
+    private VehicleStatus status = VehicleStatus.NEW;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "purchase_date")
     private Date purchaseDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_service_date")
     private Date lastServiceDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "next_service_due")
     private Date nextServiceDue;
 
     @Column(name = "mileage")
     private Integer mileage;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
 
     @OneToMany(mappedBy = "vehicle")
     private Set<DriverVehicle> driverVehicles = new HashSet<>();
@@ -76,7 +68,7 @@ public class Vehicle {
     private Set<TransportOrder> transportOrders = new HashSet<>();
 
     @OneToMany(mappedBy = "vehicle")
-    private Set<VehicleService> vehicleServices = new HashSet<>();
+    private Set<VehicleRepairs> vehicleServices = new HashSet<>();
 
     @OneToMany(mappedBy = "vehicle")
     private Set<ServiceSchedule> serviceSchedules = new HashSet<>();
@@ -87,7 +79,8 @@ public class Vehicle {
     @OneToMany(mappedBy = "vehicle")
     private Set<Incident> incidents = new HashSet<>();
 
-    public enum Status {
+    public enum VehicleStatus {
+        NEW,
         AVAILABLE,
         IN_SERVICE,
         ASSIGNED,

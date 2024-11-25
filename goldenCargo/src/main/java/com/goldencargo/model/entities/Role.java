@@ -15,7 +15,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
+public class Role extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +30,5 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private Set<UserRole> userRoles = new HashSet<>();
+
 }

@@ -6,20 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Entity
 @Table(name = "logisticians")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Logistics {
+public class Logistics extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "logistician_id")
-    private Long logisticianId;
+    @Column(name = "logistics_id")
+    private Long logisticsId;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
@@ -27,12 +25,4 @@ public class Logistics {
 
     @Column(name = "department", length = 50)
     private String department;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
 }

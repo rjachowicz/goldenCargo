@@ -1,5 +1,6 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transport {
+public class Transport extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,23 +43,7 @@ public class Transport {
     @Column(name = "notes")
     private String notes;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
     @OneToMany(mappedBy = "transport")
     private Set<ShippingDocument> shippingDocuments = new HashSet<>();
-
-    public enum Status {
-        NEW,
-        IN_PROGRESS,
-        COMPLETED,
-        DELAYED,
-        CANCELLED
-    }
 
 }

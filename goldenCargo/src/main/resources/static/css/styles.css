@@ -1,0 +1,126 @@
+/* Ogólne style dla całego widoku */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Kontener */
+.container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+/* Nagłówki */
+h1, h2 {
+    color: #343a40;
+    font-weight: 700;
+}
+
+/* Formularze */
+form label {
+    font-weight: 600;
+    color: #495057;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="number"],
+form input[type="date"] {
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    padding: 0.5rem;
+}
+
+form .form-control {
+    box-shadow: none;
+    transition: border-color 0.3s ease-in-out;
+}
+
+form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Przycisk zapisz i powrót */
+button.btn-success,
+a.btn-secondary {
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+}
+
+/* Tabela */
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table thead th {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+.table td, .table th {
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* Przyciski w tabeli */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-info {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Animacja dla przycisków */
+button, .btn {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover, .btn:hover {
+    opacity: 0.85;
+}
+
+/* Style dla tekstu i linków */
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

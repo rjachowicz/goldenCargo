@@ -1,5 +1,7 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.Status;
+import com.goldencargo.model.data.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +18,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientOrder {
+public class ClientOrder extends AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,28 +29,20 @@ public class ClientOrder {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "order_date")
     private Date orderDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.PENDING;
+    private Status status = Status.NEW;
 
     @Column(name = "total_amount")
     private Double totalAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
-    private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private PaymentStatus paymentStatus = PaymentStatus.NEW;
 
     @OneToMany(mappedBy = "clientOrder")
     private Set<TransportOrder> transportOrders = new HashSet<>();
@@ -58,18 +52,4 @@ public class ClientOrder {
 
     @OneToMany(mappedBy = "clientOrder")
     private Set<ClientInvoice> clientInvoices = new HashSet<>();
-
-    public enum Status {
-        PENDING,
-        CONFIRMED,
-        CANCELLED,
-        COMPLETED
-    }
-
-    public enum PaymentStatus {
-        PAID,
-        UNPAID,
-        PARTIAL
-    }
-
 }
