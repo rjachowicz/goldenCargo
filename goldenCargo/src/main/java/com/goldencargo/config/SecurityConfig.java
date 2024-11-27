@@ -20,8 +20,8 @@
 //                .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/breakdowns/**").hasRole("USER")
 //                        .requestMatchers("/clients/**").hasRole("USER")
-//                        .requestMatchers("/clientInvoices/**").hasRole("USER")
-//                        .requestMatchers("/clientOrders/**").hasRole("USER")
+//                        .requestMatchers("/client-invoices/**").hasRole("USER")
+//                        .requestMatchers("/client-orders/**").hasRole("USER")
 //                        .anyRequest().authenticated()
 //                )
 //                .httpBasic(withDefaults());

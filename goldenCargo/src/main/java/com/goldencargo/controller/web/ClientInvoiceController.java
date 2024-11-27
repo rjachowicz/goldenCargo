@@ -4,6 +4,8 @@ import com.goldencargo.model.entities.ClientInvoice;
 import com.goldencargo.service.ClientInvoiceService;
 import com.goldencargo.service.ClientOrderService;
 import com.goldencargo.service.ClientService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/clientInvoices")
+@RequestMapping("/client-invoices")
 public class ClientInvoiceController {
 
     private final ClientInvoiceService clientInvoiceService;
@@ -29,7 +31,7 @@ public class ClientInvoiceController {
     public String getAllClientInvoices(Model model) {
         List<ClientInvoice> clientInvoices = clientInvoiceService.getAllClientInvoices();
         model.addAttribute("clientInvoices", clientInvoices);
-        return "clientInvoices/main";
+        return "client-invoices/main";
     }
 
     @GetMapping("/new")
@@ -37,13 +39,13 @@ public class ClientInvoiceController {
         model.addAttribute("clientInvoice", new ClientInvoice());
         model.addAttribute("clients", clientService.getAllClients());
         model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
-        return "clientInvoices/create";
+        return "client-invoices/create";
     }
 
     @PostMapping("/create")
     public String createClientInvoice(@ModelAttribute ClientInvoice clientInvoice) {
         clientInvoiceService.createClientInvoice(clientInvoice);
-        return "redirect:/clientInvoices";
+        return "redirect:/client-invoices";
     }
 
     @GetMapping("/edit/{id}")
@@ -53,15 +55,15 @@ public class ClientInvoiceController {
             model.addAttribute("clientInvoice", clientInvoice.get());
             model.addAttribute("clients", clientService.getAllClients());
             model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
-            return "clientInvoices/edit";
+            return "client-invoices/edit";
         }
-        return "redirect:/clientInvoices";
+        return "redirect:/client-invoices";
     }
 
     @PostMapping("/update/{id}")
     public String updateClientInvoice(@PathVariable Long id, ClientInvoice clientInvoiceDetails) {
         clientInvoiceService.updateClientInvoice(id, clientInvoiceDetails);
-        return "redirect:/clientInvoices";
+        return "redirect:/client-invoices";
     }
 
     @GetMapping("/details/{id}")
@@ -69,14 +71,15 @@ public class ClientInvoiceController {
         Optional<ClientInvoice> clientInvoice = clientInvoiceService.getClientInvoiceById(id);
         if (clientInvoice.isPresent()) {
             model.addAttribute("clientInvoice", clientInvoice.get());
-            return "clientInvoices/details";
+            return "client-invoices/details";
         }
-        return "redirect:/clientInvoices";
+        return "redirect:/client-invoices";
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteClientInvoice(@PathVariable Long id) {
-        clientInvoiceService.deleteClientInvoice(id);
-        return "redirect:/clientInvoices";
+    public ResponseEntity<Void> deleteClientInvoice(@PathVariable Long id) {
+        return clientInvoiceService.deleteClientInvoice(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

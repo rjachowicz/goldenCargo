@@ -26,6 +26,9 @@ public class TransportOrder extends AuditableEntity {
     @JoinColumn(name = "client_order_id", nullable = false)
     private ClientOrder clientOrder;
 
+    @Column(name = "transport_order_name")
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "assigned_driver_id")
     private Driver assignedDriver;

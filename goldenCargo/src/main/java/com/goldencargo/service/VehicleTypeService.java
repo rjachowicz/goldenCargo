@@ -17,7 +17,7 @@ public class VehicleTypeService {
     }
 
     public List<VehicleType> getAllVehicleTypes() {
-        return vehicleTypeRepository.findAll();
+        return vehicleTypeRepository.findByIsDeletedFalse();
     }
 
     public Optional<VehicleType> getVehicleTypeById(Long id) {
@@ -42,7 +42,7 @@ public class VehicleTypeService {
 
     public boolean deleteVehicleType(Long id) {
         if (vehicleTypeRepository.existsById(id)) {
-            vehicleTypeRepository.deleteById(id);
+            vehicleTypeRepository.softDelete(id);
             return true;
         }
         return false;

@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShippingDocument extends AuditableEntity{
+public class ShippingDocument extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,6 @@ public class ShippingDocument extends AuditableEntity{
     @Column(name = "issue_date", nullable = false)
     private Date issueDate;
 
-    @Lob
-    @Column(name = "content")
-    private byte[] content;
+    @Column(name = "file_url", length = 255)
+    private String fileUrl;
 }

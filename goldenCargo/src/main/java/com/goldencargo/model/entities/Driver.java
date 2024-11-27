@@ -24,7 +24,7 @@ public class Driver extends AuditableEntity {
     private Long driverId;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "license_number", unique = true, nullable = false, length = 50)

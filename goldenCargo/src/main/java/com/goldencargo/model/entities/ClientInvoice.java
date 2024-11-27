@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientInvoice extends AuditableEntity{
+public class ClientInvoice extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,8 +47,4 @@ public class ClientInvoice extends AuditableEntity{
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.NEW;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
 }

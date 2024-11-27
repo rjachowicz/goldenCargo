@@ -1,7 +1,7 @@
 package com.goldencargo.service;
 
-import com.goldencargo.model.entities.Vehicle;
-import com.goldencargo.repository.VehicleRepository;
+import com.goldencargo.model.entities.VehicleRepairs;
+import com.goldencargo.repository.VehicleRepairsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,38 +10,41 @@ import java.util.Optional;
 @Service
 public class VehicleRepairsService {
 
-    private final VehicleRepository vehicleRepository;
+    private final VehicleRepairsRepository vehicleRepairsRepository;
 
-    public VehicleRepairsService(VehicleRepository vehicleRepository) {
-        this.vehicleRepository = vehicleRepository;
+    public VehicleRepairsService(VehicleRepairsRepository vehicleRepairsRepository) {
+        this.vehicleRepairsRepository = vehicleRepairsRepository;
     }
 
-    public List<Vehicle> getAllVehicles() {
-        return vehicleRepository.findAll();
+    public List<VehicleRepairs> getAllRepairs() {
+        return vehicleRepairsRepository.findByIsDeletedFalse();
     }
 
-    public Optional<Vehicle> getVehicleById(Long id) {
-        return vehicleRepository.findById(id);
+    public Optional<VehicleRepairs> getRepairById(Long id) {
+        return vehicleRepairsRepository.findById(id);
     }
 
-    public Vehicle createVehicle(Vehicle vehicle) {
-        return vehicleRepository.save(vehicle);
+    public VehicleRepairs createRepair(VehicleRepairs repair) {
+        return vehicleRepairsRepository.save(repair);
     }
 
-    public Optional<Vehicle> updateVehicle(Long id, Vehicle vehicleDetails) {
-        return vehicleRepository.findById(id).map(vehicle -> {
-            vehicle.setRegistrationNumber(vehicleDetails.getRegistrationNumber());
-            vehicle.setModel(vehicleDetails.getModel());
-            vehicle.setMake(vehicleDetails.getMake());
-            vehicle.setYear(vehicleDetails.getYear());
-            vehicle.setUpdatedAt(new java.util.Date());
-            return vehicleRepository.save(vehicle);
+    public Optional<VehicleRepairs> updateRepair(Long id, VehicleRepairs repairDetails) {
+        return vehicleRepairsRepository.findById(id).map(repair -> {
+            repair.setVehicle(repairDetails.getVehicle());
+            repair.setServiceDate(repairDetails.getServiceDate());
+            repair.setServiceType(repairDetails.getServiceType());
+            repair.setDescription(repairDetails.getDescription());
+            repair.setCost(repairDetails.getCost());
+            repair.setServiceCenter(repairDetails.getServiceCenter());
+            repair.setNextServiceDue(repairDetails.getNextServiceDue());
+            repair.setUpdatedAt(new java.util.Date());
+            return vehicleRepairsRepository.save(repair);
         });
     }
 
-    public boolean deleteVehicle(Long id) {
-        if (vehicleRepository.existsById(id)) {
-            vehicleRepository.deleteById(id);
+    public boolean deleteRepair(Long id) {
+        if (vehicleRepairsRepository.existsById(id)) {
+            vehicleRepairsRepository.softDelete(id);
             return true;
         }
         return false;

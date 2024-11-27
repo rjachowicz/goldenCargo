@@ -17,7 +17,7 @@ function updateModalMessage(message) {
 }
 
 function handleDelete(url) {
-    fetch(url, { method: 'DELETE' })
+    fetch(url, {method: 'DELETE'})
         .then(response => {
             if (response.ok) {
                 updateModalMessage('Deleted successfully');

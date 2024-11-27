@@ -3,6 +3,8 @@ package com.goldencargo.controller.web;
 import com.goldencargo.model.entities.Damage;
 import com.goldencargo.service.DamageService;
 import com.goldencargo.service.IncidentService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -69,9 +71,10 @@ public class DamageController {
         return "redirect:/damages";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteDamage(@PathVariable Long id) {
-        damageService.deleteDamage(id);
-        return "redirect:/damages";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteDamage(@PathVariable Long id) {
+        return damageService.deleteDamage(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

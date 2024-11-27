@@ -3,6 +3,8 @@ package com.goldencargo.controller.web;
 import com.goldencargo.model.entities.Driver;
 import com.goldencargo.service.DriverService;
 import com.goldencargo.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +34,7 @@ public class DriverController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("driver", new Driver());
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.getUsersNotAssignedAsDrivers());
         return "drivers/create";
     }
 
@@ -69,9 +71,10 @@ public class DriverController {
         return "redirect:/drivers";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteDriver(@PathVariable Long id) {
-        driverService.deleteDriver(id);
-        return "redirect:/drivers";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteDriver(@PathVariable Long id) {
+        return driverService.deleteDriver(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

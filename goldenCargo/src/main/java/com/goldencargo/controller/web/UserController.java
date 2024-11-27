@@ -45,6 +45,7 @@ public class UserController {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
+            model.addAttribute("statuses", User.UserStatus.values());
             return "users/edit";
         }
         return "redirect:/users";

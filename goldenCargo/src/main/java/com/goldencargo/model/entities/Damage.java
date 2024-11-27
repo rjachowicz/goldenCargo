@@ -19,8 +19,8 @@ public class Damage extends AuditableEntity {
     @Column(name = "damage_id")
     private Long damageId;
 
-    @OneToOne
-    @JoinColumn(name = "incident_id", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "incident_id", nullable = false)
     private Incident incident;
 
     @Column(name = "description")

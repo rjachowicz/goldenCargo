@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "incidents")
@@ -15,7 +17,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Incident extends AuditableEntity{
+public class Incident extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +50,10 @@ public class Incident extends AuditableEntity{
     @Column(name = "status", nullable = false)
     private Status status = Status.NEW;
 
-    @OneToOne(mappedBy = "incident", cascade = CascadeType.ALL)
-    private Breakdown breakdown;
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Breakdown> breakdowns = new ArrayList<>();
 
-    @OneToOne(mappedBy = "incident", cascade = CascadeType.ALL)
-    private Damage damage;
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Damage> damages = new ArrayList<>();
 
 }

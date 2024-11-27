@@ -1,12 +1,14 @@
 package com.goldencargo.controller.web;
 
-import com.goldencargo.model.entities.ClientOrder;
-import com.goldencargo.model.entities.Client;
-import com.goldencargo.model.data.Status;
 import com.goldencargo.model.data.PaymentStatus;
+import com.goldencargo.model.data.Status;
+import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.service.ClientOrderService;
 import com.goldencargo.service.ClientService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/clientOrders")
+@RequestMapping("/client-orders")
 public class ClientOrderController {
 
     private final ClientOrderService clientOrderService;
@@ -29,7 +31,7 @@ public class ClientOrderController {
     public String getAllClientOrders(Model model) {
         List<ClientOrder> clientOrders = clientOrderService.getAllClientOrders();
         model.addAttribute("clientOrders", clientOrders);
-        return "clientOrders/main";
+        return "client-orders/main";
     }
 
     @GetMapping("/new")
@@ -38,13 +40,13 @@ public class ClientOrderController {
         model.addAttribute("clients", clientService.getAllClients());
         model.addAttribute("statuses", Status.values());
         model.addAttribute("paymentStatuses", PaymentStatus.values());
-        return "clientOrders/create";
+        return "client-orders/create";
     }
 
     @PostMapping("/create")
     public String createClientOrder(@ModelAttribute ClientOrder clientOrder) {
         clientOrderService.createClientOrder(clientOrder);
-        return "redirect:/clientOrders";
+        return "redirect:/client-orders";
     }
 
     @GetMapping("/edit/{id}")
@@ -55,30 +57,32 @@ public class ClientOrderController {
             model.addAttribute("clients", clientService.getAllClients());
             model.addAttribute("statuses", Status.values());
             model.addAttribute("paymentStatuses", PaymentStatus.values());
-            return "clientOrders/edit";
+            return "client-orders/edit";
         }
-        return "redirect:/clientOrders";
+        return "redirect:/client-orders";
     }
 
     @PostMapping("/update/{id}")
     public String updateClientOrder(@PathVariable Long id, @ModelAttribute ClientOrder clientOrderDetails) {
         clientOrderService.updateClientOrder(id, clientOrderDetails);
-        return "redirect:/clientOrders";
+        return "redirect:/client-orders";
     }
 
+    @Transactional
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
-        Optional<ClientOrder> clientOrder = clientOrderService.getClientOrderById(id);
+        Optional<ClientOrder> clientOrder = clientOrderService.getClientOrderByIdWithDetails(id);
         if (clientOrder.isPresent()) {
             model.addAttribute("clientOrder", clientOrder.get());
-            return "clientOrders/details";
+            return "client-orders/details";
         }
-        return "redirect:/clientOrders";
+        return "redirect:/client-orders";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteClientOrder(@PathVariable Long id) {
-        clientOrderService.deleteClientOrder(id);
-        return "redirect:/clientOrders";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteClientOrder(@PathVariable Long id) {
+        return clientOrderService.deleteClientOrder(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

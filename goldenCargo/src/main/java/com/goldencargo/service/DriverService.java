@@ -3,6 +3,7 @@ package com.goldencargo.service;
 import com.goldencargo.model.entities.Driver;
 import com.goldencargo.repository.DriverRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class DriverService {
     }
 
     public List<Driver> getAllDrivers() {
-        return driverRepository.findAll();
+        return driverRepository.findByIsDeletedFalse();
     }
 
     public Optional<Driver> getDriverById(Long id) {
@@ -42,9 +43,10 @@ public class DriverService {
         });
     }
 
+    @Transactional
     public boolean deleteDriver(Long id) {
         if (driverRepository.existsById(id)) {
-            driverRepository.deleteById(id);
+            driverRepository.forceDelete(id);
             return true;
         }
         return false;

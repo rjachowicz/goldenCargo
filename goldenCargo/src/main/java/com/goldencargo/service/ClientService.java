@@ -17,7 +17,7 @@ public class ClientService {
     }
 
     public List<Client> getAllClients() {
-        return clientRepository.findAll();
+        return clientRepository.findByIsDeletedFalse();
     }
 
     public Optional<Client> getClientById(Long id) {
@@ -43,7 +43,7 @@ public class ClientService {
 
     public boolean deleteClient(Long id) {
         if (clientRepository.existsById(id)) {
-            clientRepository.deleteById(id);
+            clientRepository.softDelete(id);
             return true;
         }
         return false;

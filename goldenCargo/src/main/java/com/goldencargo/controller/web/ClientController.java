@@ -70,7 +70,8 @@ public class ClientController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-        boolean isDeleted = clientService.deleteClient(id);
-        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return clientService.deleteClient(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

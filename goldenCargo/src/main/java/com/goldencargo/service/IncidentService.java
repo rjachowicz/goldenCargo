@@ -17,7 +17,7 @@ public class IncidentService {
     }
 
     public List<Incident> getAllIncidents() {
-        return incidentRepository.findAll();
+        return incidentRepository.findByIsDeletedFalse();
     }
 
     public Optional<Incident> getIncidentById(Long id) {
@@ -44,7 +44,7 @@ public class IncidentService {
 
     public boolean deleteIncident(Long id) {
         if (incidentRepository.existsById(id)) {
-            incidentRepository.deleteById(id);
+            incidentRepository.softDelete(id);
             return true;
         }
         return false;

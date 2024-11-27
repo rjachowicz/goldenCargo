@@ -1,7 +1,6 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.News;
-import com.goldencargo.model.entities.User;
 import com.goldencargo.service.NewsService;
 import com.goldencargo.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -73,8 +72,9 @@ public class NewsController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
-        boolean isDeleted = newsService.deleteNews(id);
-        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Void> deleteLogistic(@PathVariable Long id) {
+        return newsService.deleteNews(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

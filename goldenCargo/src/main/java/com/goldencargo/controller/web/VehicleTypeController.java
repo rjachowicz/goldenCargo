@@ -25,14 +25,14 @@ public class VehicleTypeController {
     public String getAllVehicleTypes(Model model) {
         List<VehicleType> vehicleTypes = vehicleTypeService.getAllVehicleTypes();
         model.addAttribute("vehicleTypes", vehicleTypes);
-        return "vehicleTypes/main";
+        return "vehicle-types/main";
     }
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("vehicleType", new VehicleType());
         model.addAttribute("formTitle", "Create New Vehicle Type");
-        return "vehicleTypes/create";
+        return "vehicle-types/create";
     }
 
     @PostMapping("/create")
@@ -47,7 +47,7 @@ public class VehicleTypeController {
         if (vehicleType.isPresent()) {
             model.addAttribute("vehicleType", vehicleType.get());
             model.addAttribute("formTitle", "Edit Vehicle Type");
-            return "vehicleTypes/edit";
+            return "vehicle-types/edit";
         }
         return "redirect:/vehicle-types";
     }
@@ -63,7 +63,7 @@ public class VehicleTypeController {
         Optional<VehicleType> vehicleType = vehicleTypeService.getVehicleTypeById(id);
         if (vehicleType.isPresent()) {
             model.addAttribute("vehicleType", vehicleType.get());
-            return "vehicleTypes/details";
+            return "vehicle-types/details";
         }
         return "redirect:/vehicle-types";
     }

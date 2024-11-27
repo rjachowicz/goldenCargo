@@ -1,7 +1,7 @@
 package com.goldencargo.model.entities;
 
-import com.goldencargo.model.data.Status;
 import com.goldencargo.model.data.PaymentStatus;
+import com.goldencargo.model.data.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientOrder extends AuditableEntity{
+public class ClientOrder extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,7 +18,7 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findByIsDeletedFalse();
     }
 
     public Optional<User> getUserById(Long id) {
@@ -45,10 +45,18 @@ public class UserService {
         });
     }
 
+    public List<User> getUsersNotAssignedAsDrivers() {
+        return userRepository.findUsersNotAssignedAsDrivers();
+    }
+
+    public List<User> getUsersNotAssignedAsLogistic() {
+        return userRepository.findUsersNotAssignedAsLogistic();
+    }
+
     @Transactional
     public boolean deleteUser(Long id) {
         if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
+            userRepository.softDelete(id);
             return true;
         }
         return false;

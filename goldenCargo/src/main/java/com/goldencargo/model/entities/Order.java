@@ -8,15 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Entity
 @Table(name = "orders")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order extends AuditableEntity{
+public class Order extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

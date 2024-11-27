@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shipping Documents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{/helpers/navbar :: navbar}"></div>
+<div class="container mt-4">
+    <h1>Shipping Documents</h1>
+    <a class="btn btn-primary mb-3" href="/shipping-documents/new">Add New Document</a>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Transport</th>
+            <th>Document Type</th>
+            <th>Document Number</th>
+            <th>Issue Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="shippingDocument : ${shippingDocuments}">
+            <td th:text="${shippingDocument.transport.transportOrder.name}"></td>
+            <td th:text="${shippingDocument.documentType}"></td>
+            <td th:text="${shippingDocument.documentNumber}"></td>
+            <td th:text="${#dates.format(shippingDocument.issueDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <a class="btn btn-warning btn-sm"
+                   th:href="@{/shipping-documents/edit/{id}(id=${shippingDocument.documentId})}">Edit</a>
+                <a class="btn btn-info btn-sm"
+                   th:href="@{/shipping-documents/details/{id}(id=${shippingDocument.documentId})}">Details</a>
+                <a class="btn btn-success btn-sm"
+                   th:href="@{/shipping-documents/download/{id}(id=${shippingDocument.documentId})}"
+                   target="_blank">Download</a>
+                <form method="post" style="display:inline;"
+                      th:action="@{/shipping-documents/delete/{id}(id=${shippingDocument.documentId})}">
+                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

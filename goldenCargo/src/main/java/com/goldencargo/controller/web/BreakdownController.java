@@ -1,9 +1,10 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.Breakdown;
-import com.goldencargo.model.entities.Incident;
 import com.goldencargo.service.BreakdownService;
 import com.goldencargo.service.IncidentService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +56,16 @@ public class BreakdownController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateBreakdown(@PathVariable Long id, Breakdown breakdownDetails) {
-        breakdownService.updateBreakdown(id, breakdownDetails);
+    public String updateBreakdown(@PathVariable Long id, @ModelAttribute Breakdown breakdownDetails) {
+        Optional<Breakdown> existingBreakdown = breakdownService.getBreakdownById(id);
+        if (existingBreakdown.isPresent()) {
+            Breakdown breakdown = existingBreakdown.get();
+            breakdown.setIncident(breakdownDetails.getIncident());
+            breakdown.setDescription(breakdownDetails.getDescription());
+            breakdown.setRepairCost(breakdownDetails.getRepairCost());
+            breakdown.setRepairDate(breakdownDetails.getRepairDate());
+            breakdownService.createBreakdown(breakdown);
+        }
         return "redirect:/breakdowns";
     }
 
@@ -71,8 +80,9 @@ public class BreakdownController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteBreakdown(@PathVariable Long id) {
-        breakdownService.deleteBreakdown(id);
-        return "redirect:/breakdowns";
+    public ResponseEntity<Void> deleteBreakdown(@PathVariable Long id) {
+        return breakdownService.deleteBreakdown(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

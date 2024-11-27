@@ -14,15 +14,15 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Breakdown extends AuditableEntity{
+public class Breakdown extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "breakdown_id")
     private Long breakdownId;
 
-    @OneToOne
-    @JoinColumn(name = "incident_id", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "incident_id", nullable = false)
     private Incident incident;
 
     @Column(name = "description")

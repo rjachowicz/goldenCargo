@@ -2,7 +2,6 @@ package com.goldencargo.service;
 
 import com.goldencargo.model.entities.Goods;
 import com.goldencargo.repository.GoodsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class GoodsService {
     }
 
     public List<Goods> getAllGoods() {
-        return goodsRepository.findAll();
+        return goodsRepository.findByIsDeletedFalse();
     }
 
     public Optional<Goods> getGoodsById(Long id) {
@@ -44,7 +43,7 @@ public class GoodsService {
 
     public boolean deleteGoods(Long id) {
         if (goodsRepository.existsById(id)) {
-            goodsRepository.deleteById(id);
+            goodsRepository.softDelete(id);
             return true;
         }
         return false;

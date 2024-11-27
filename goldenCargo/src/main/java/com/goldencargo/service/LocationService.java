@@ -17,19 +17,19 @@ public class LocationService {
     }
 
     public List<Location> getAllLocations() {
-        return locationRepository.findAll();
+        return locationRepository.findByIsDeletedFalse();
     }
 
     public Optional<Location> getLocationById(Long id) {
         return locationRepository.findById(id);
     }
 
-    public Location createLocation(Location location) {
-        return locationRepository.save(location);
+    public void createLocation(Location location) {
+        locationRepository.save(location);
     }
 
-    public Optional<Location> updateLocation(Long id, Location locationDetails) {
-        return locationRepository.findById(id).map(location -> {
+    public void updateLocation(Long id, Location locationDetails) {
+        locationRepository.findById(id).map(location -> {
             location.setName(locationDetails.getName());
             location.setAddress(locationDetails.getAddress());
             location.setCity(locationDetails.getCity());
@@ -45,7 +45,7 @@ public class LocationService {
 
     public boolean deleteLocation(Long id) {
         if (locationRepository.existsById(id)) {
-            locationRepository.deleteById(id);
+            locationRepository.softDelete(id);
             return true;
         }
         return false;

@@ -19,7 +19,7 @@ public class NewsService {
     }
 
     public List<News> getAllNews() {
-        return newsRepository.findAll();
+        return newsRepository.findByIsDeletedFalse();
     }
 
     public Optional<News> getNewsById(Long id) {
@@ -43,7 +43,7 @@ public class NewsService {
 
     public boolean deleteNews(Long id) {
         if (newsRepository.existsById(id)) {
-            newsRepository.deleteById(id);
+            newsRepository.softDelete(id);
             return true;
         }
         return false;
