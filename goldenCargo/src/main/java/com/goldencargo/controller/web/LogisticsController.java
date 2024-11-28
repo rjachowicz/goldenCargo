@@ -1,6 +1,8 @@
 package com.goldencargo.controller.web;
 
+import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.Logistics;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.LogisticsService;
 import com.goldencargo.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,24 +20,38 @@ public class LogisticsController {
 
     private final LogisticsService logisticsService;
     private final UserService userService;
+    private final GenericService genericService;
 
-    public LogisticsController(LogisticsService logisticsService, UserService userService) {
+    public LogisticsController(LogisticsService logisticsService, UserService userService, GenericService genericService) {
         this.logisticsService = logisticsService;
         this.userService = userService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllLogistics(Model model) {
-        List<Logistics> logistics = logisticsService.getAllLogistics();
-        model.addAttribute("logistics", logistics);
-        return "logistics/main";
-    }
+    public String getAllLogistics(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "user") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<Logistics> logistics = genericService.getFilteredAndSortedEntities(
+                Logistics.class,
+                "l",
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("logisticsList", logistics);
         model.addAttribute("logistics", new Logistics());
         model.addAttribute("users", userService.getUsersNotAssignedAsLogistic());
-        return "logistics/create";
+        model.addAttribute("statuses", Status.values());
+        return "logistics/main";
     }
 
     @PostMapping("/create")
@@ -45,7 +61,7 @@ public class LogisticsController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
         Optional<Logistics> logistics = logisticsService.getLogisticById(id);
         if (logistics.isPresent()) {
             model.addAttribute("logistics", logistics.get());
@@ -62,7 +78,7 @@ public class LogisticsController {
     }
 
     @GetMapping("/details/{id}")
-    public String showDetails(@PathVariable Long id, Model model) {
+    public String showDetails(@PathVariable("id") Long id, Model model) {
         Optional<Logistics> logistics = logisticsService.getLogisticById(id);
         logistics.ifPresent(value -> model.addAttribute("logistics", value));
         return "logistics/details";

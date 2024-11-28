@@ -7,7 +7,7 @@
     <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{/helpers/navbar :: navbar}"></div>
+<div th:replace="~{/helpers/navbar}"></div>
 <div class="container mt-4">
     <h2>Invoices</h2>
     <a class="btn btn-primary mb-3" href="/invoices/new">Create New Invoice</a>
@@ -50,5 +50,6 @@
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
+<div th:replace="~{/helpers/footer}"></div>
 </body>
 </html>

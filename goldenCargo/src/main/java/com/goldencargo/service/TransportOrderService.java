@@ -1,7 +1,6 @@
 package com.goldencargo.service;
 
 import com.goldencargo.model.entities.TransportOrder;
-import com.goldencargo.model.entities.User;
 import com.goldencargo.repository.TransportOrderRepository;
 import org.springframework.stereotype.Service;
 

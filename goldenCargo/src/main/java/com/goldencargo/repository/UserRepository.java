@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.userId NOT IN (SELECT l.user.userId FROM Logistics l) and u.isDeleted = false")
     List<User> findUsersNotAssignedAsLogistic();
 
+    @Query("select u from User u where u.isDeleted = false")
     List<User> findByIsDeletedFalse();
 
     @Modifying

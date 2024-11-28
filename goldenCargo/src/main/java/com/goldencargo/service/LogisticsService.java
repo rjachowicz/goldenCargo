@@ -17,7 +17,7 @@ public class LogisticsService {
     }
 
     public List<Logistics> getAllLogistics() {
-        return logisticsRepository.findByIsDeletedFalse();
+        return logisticsRepository.getAllLogistics();
     }
 
     public Optional<Logistics> getLogisticById(Long id) {

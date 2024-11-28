@@ -7,13 +7,15 @@
     <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{/helpers/navbar :: navbar}"></div>
+<div th:replace="~{/helpers/navbar}"></div>
 <div class="container mt-4">
     <h2>Transport Order Details</h2>
     <p><strong>ID:</strong> <span th:text="${transportOrder.transportOrderId}"></span></p>
     <p><strong>Client Order:</strong> <span th:text="${transportOrder.clientOrder.client.name}"></span></p>
     <p><strong>Transport name:</strong> <span th:text="${transportOrder.name}"></span></p>
-    <p><strong>Assigned Driver:</strong> <span th:text="${transportOrder.assignedDriver.user.firstName} + ' ' + ${transportOrder.assignedDriver.user.lastName}"></span></p>
+    <p><strong>Assigned Driver:</strong> <span
+            th:text="${transportOrder.assignedDriver.user.firstName} + ' ' + ${transportOrder.assignedDriver.user.lastName}"></span>
+    </p>
     <p><strong>Assigned Vehicle:</strong> <span th:text="${transportOrder.assignedVehicle.registrationNumber}"></span>
     </p>
     <p><strong>Start Location:</strong> <span th:text="${transportOrder.startLocation.name}"></span></p>

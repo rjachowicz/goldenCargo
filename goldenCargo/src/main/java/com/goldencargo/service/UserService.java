@@ -29,18 +29,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> updateUser(Long id, User userDetails) {
+    public Optional<User> updateUser(Long id, User userDetails, String newPassword) {
         return userRepository.findById(id).map(user -> {
             user.setUsername(userDetails.getUsername());
-            user.setPassword(userDetails.getPassword());
             user.setEmail(userDetails.getEmail());
             user.setFirstName(userDetails.getFirstName());
             user.setLastName(userDetails.getLastName());
             user.setPhoneNumber(userDetails.getPhoneNumber());
             user.setAddress(userDetails.getAddress());
             user.setStatus(userDetails.getStatus());
-            user.setStatus(userDetails.getStatus());
             user.setUpdatedAt(new java.util.Date());
+            if (newPassword != null && !newPassword.isEmpty()) {
+                user.setPassword(newPassword);
+            }
             return userRepository.save(user);
         });
     }

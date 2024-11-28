@@ -1,78 +1,145 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>User Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{/helpers/navbar :: navbar}"></div>
-<div class="container mt-4">
-    <h2>User Details</h2>
-
-    <!-- Basic Information -->
-    <p><strong>ID:</strong> <span th:text="${user.userId}"></span></p>
-    <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
-    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-    <p><strong>First Name:</strong> <span th:text="${user.firstName} ?: 'N/A'"></span></p>
-    <p><strong>Last Name:</strong> <span th:text="${user.lastName} ?: 'N/A'"></span></p>
-    <p><strong>Phone Number:</strong> <span th:text="${user.phoneNumber} ?: 'N/A'"></span></p>
-    <p><strong>Address:</strong> <span th:text="${user.address} ?: 'N/A'"></span></p>
-    <p><strong>Status:</strong> <span th:text="${user.status}"></span></p>
-
-    <div>
-        <h5>User Roles</h5>
-        <ul>
-            <li th:each="role : ${user.userRoles}" th:text="${role.role.name}"></li>
-        </ul>
+<div th:fragment="detailsUserModal">
+    <div class="modal-header bg-warning text-dark border-bottom">
+        <h5 class="modal-title">
+            <i class="fas fa-info-circle"></i> User Details
+        </h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
+    <div class="modal-body bg-light text-dark">
+        <form>
+            <div class="row g-3">
+                <!-- Basic Information -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-id-badge"></i> ID
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.userId}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.username}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.email}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-phone"></i> Phone Number
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.phoneNumber} ?: 'N/A'"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-user-circle"></i> First Name
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.firstName} ?: 'N/A'"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-user-circle"></i> Last Name
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.lastName} ?: 'N/A'"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-info-circle"></i> Status
+                    </label>
+                    <p class="form-control-plaintext text-success" th:text="${user.status}"></p>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-map-marker-alt"></i> Address
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.address} ?: 'N/A'"></p>
+                </div>
 
-    <div th:if="${user.driver != null}">
-        <h5>Driver Information</h5>
-        <p><strong>Driver ID:</strong> <span th:text="${user.driver.driverId}"></span></p>
-        <p><strong>License Number:</strong> <span th:text="${user.driver.licenseNumber}"></span></p>
+                <!-- User Roles -->
+                <div class="col-md-12">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-users-cog"></i> Roles
+                    </label>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="role : ${user.userRoles}" th:text="${role.role.name}"></li>
+                    </ul>
+                </div>
+
+                <!-- Driver Information -->
+                <div class="col-md-6" th:if="${user.driver != null}">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-id-card"></i> Driver ID
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.driver.driverId}"></p>
+                </div>
+                <div class="col-md-6" th:if="${user.driver != null}">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-car"></i> License Number
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.driver.licenseNumber}"></p>
+                </div>
+
+                <!-- Logistics Information -->
+                <div class="col-md-6" th:if="${user.logistics != null}">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-truck"></i> Logistics ID
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.logistics.logisticsId}"></p>
+                </div>
+                <div class="col-md-6" th:if="${user.logistics != null}">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-warehouse"></i> Logistics Role
+                    </label>
+                    <p class="form-control-plaintext" th:text="${user.logistics.user.status}"></p>
+                </div>
+
+                <!-- Notifications -->
+                <div class="col-md-12">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-bell"></i> Notifications
+                    </label>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="notification : ${user.notifications}"
+                            th:text="${notification.message}"></li>
+                    </ul>
+                </div>
+
+                <!-- Messages -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-paper-plane"></i> Sent Messages
+                    </label>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="message : ${user.sentMessages}"
+                            th:text="${message.content}"></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-inbox"></i> Received Messages
+                    </label>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="message : ${user.receivedMessages}"
+                            th:text="${message.content}"></li>
+                    </ul>
+                </div>
+
+                <!-- News Posts -->
+                <div class="col-md-12">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-newspaper"></i> News Posts
+                    </label>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="news : ${user.newsPosts}" th:text="${news.title}"></li>
+                    </ul>
+                </div>
+            </div>
+        </form>
     </div>
-
-    <div th:if="${user.logistics != null}">
-        <h5>Logistics Information</h5>
-        <p><strong>Logistics ID:</strong> <span th:text="${user.logistics.logisticsId}"></span></p>
-        <p><strong>Logistics Role:</strong> <span th:text="${user.logistics.user.status}"></span></p>
+    <div class="modal-footer bg-light">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
     </div>
-
-    <div>
-        <h5>Notifications</h5>
-        <ul>
-            <li th:each="notification : ${user.notifications}"
-                th:text="${notification.message}"></li>
-        </ul>
-    </div>
-
-    <div>
-        <h5>Sent Messages</h5>
-        <ul>
-            <li th:each="message : ${user.sentMessages}"
-                th:text="${message.content}"></li>
-        </ul>
-    </div>
-
-    <div>
-        <h5>Received Messages</h5>
-        <ul>
-            <li th:each="message : ${user.receivedMessages}"
-                th:text="${message.content}"></li>
-        </ul>
-    </div>
-
-    <div>
-        <h5>News Posts</h5>
-        <ul>
-            <li th:each="news : ${user.newsPosts}"
-                th:text="${news.title}"></li>
-        </ul>
-    </div>
-
-    <a class="btn btn-secondary" href="/users">Back</a>
 </div>
-</body>
-</html>

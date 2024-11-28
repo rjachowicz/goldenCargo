@@ -7,7 +7,7 @@
     <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{/helpers/navbar :: navbar}"></div>
+<div th:replace="~{/helpers/navbar}"></div>
 <div class="container mt-4">
     <h2>Edit Vehicle</h2>
     <form method="post" th:action="@{'/vehicles/update/' + ${vehicle.vehicleId}}" th:object="${vehicle}">

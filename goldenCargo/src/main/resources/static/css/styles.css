@@ -1,3 +1,9 @@
+html {
+    height: 100%;
+    overflow-y: auto; /* Wymuszenie paska przewijania w pionie */
+    overflow-x: hidden; /* Brak przewijania w poziomie */
+}
+
 body {
     padding-top: 56px;
     background-color: #f8f9fa;

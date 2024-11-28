@@ -11,7 +11,8 @@ import java.util.List;
 
 public interface LogisticsRepository extends JpaRepository<Logistics, Long> {
 
-    List<Logistics> findByIsDeletedFalse();
+    @Query("select l from Logistics l join User u on l.user.userId = u.userId where l.isDeleted = false")
+    List<Logistics> getAllLogistics();
 
     @Modifying
     @Transactional

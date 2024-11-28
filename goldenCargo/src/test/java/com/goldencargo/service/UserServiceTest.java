@@ -84,7 +84,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
 
-        Optional<User> result = userService.updateUser(1L, user);
+        Optional<User> result = userService.updateUser(1L, user, user.getPassword());
 
         assertTrue(result.isPresent());
         assertEquals(user.getUsername(), result.get().getUsername());

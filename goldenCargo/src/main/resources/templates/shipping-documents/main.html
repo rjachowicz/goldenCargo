@@ -7,7 +7,7 @@
     <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{/helpers/navbar :: navbar}"></div>
+<div th:replace="~{/helpers/navbar}"></div>
 <div class="container mt-4">
     <h1>Shipping Documents</h1>
     <a class="btn btn-primary mb-3" href="/shipping-documents/new">Add New Document</a>
@@ -34,8 +34,8 @@
                 <a class="btn btn-info btn-sm"
                    th:href="@{/shipping-documents/details/{id}(id=${shippingDocument.documentId})}">Details</a>
                 <a class="btn btn-success btn-sm"
-                   th:href="@{/shipping-documents/download/{id}(id=${shippingDocument.documentId})}"
-                   target="_blank">Download</a>
+                   target="_blank"
+                   th:href="@{/shipping-documents/download/{id}(id=${shippingDocument.documentId})}">Download</a>
                 <form method="post" style="display:inline;"
                       th:action="@{/shipping-documents/delete/{id}(id=${shippingDocument.documentId})}">
                     <button class="btn btn-danger btn-sm" type="submit">Delete</button>
@@ -45,5 +45,9 @@
         </tbody>
     </table>
 </div>
+<div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/confirmDelete.js"></script>
+<div th:replace="~{/helpers/footer}"></div>
 </body>
 </html>
