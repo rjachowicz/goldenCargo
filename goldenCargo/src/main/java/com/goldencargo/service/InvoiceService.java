@@ -17,7 +17,7 @@ public class InvoiceService {
     }
 
     public List<Invoice> getAllInvoices() {
-        return invoiceRepository.findAll();
+        return invoiceRepository.findByIsDeletedFalse();
     }
 
     public Optional<Invoice> getInvoiceById(Long id) {
@@ -44,7 +44,7 @@ public class InvoiceService {
 
     public boolean deleteInvoice(Long id) {
         if (invoiceRepository.existsById(id)) {
-            invoiceRepository.deleteById(id);
+            invoiceRepository.softDelete(id);
             return true;
         }
         return false;

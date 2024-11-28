@@ -17,7 +17,7 @@ public class BreakdownService {
     }
 
     public List<Breakdown> getAllBreakdowns() {
-        return breakdownRepository.findAll();
+        return breakdownRepository.findByIsDeletedFalse();
     }
 
     public Optional<Breakdown> getBreakdownById(Long id) {
@@ -41,7 +41,7 @@ public class BreakdownService {
 
     public boolean deleteBreakdown(Long id) {
         if (breakdownRepository.existsById(id)) {
-            breakdownRepository.deleteById(id);
+            breakdownRepository.softDelete(id);
             return true;
         }
         return false;

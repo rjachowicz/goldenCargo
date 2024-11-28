@@ -17,7 +17,7 @@ public class DriverReportService {
     }
 
     public List<DriverReport> getAllDriverReports() {
-        return driverReportRepository.findAll();
+        return driverReportRepository.findByIsDeletedFalse();
     }
 
     public Optional<DriverReport> getDriverReportById(Long id) {
@@ -40,7 +40,7 @@ public class DriverReportService {
 
     public boolean deleteDriverReport(Long id) {
         if (driverReportRepository.existsById(id)) {
-            driverReportRepository.deleteById(id);
+            driverReportRepository.softDelete(id);
             return true;
         }
         return false;

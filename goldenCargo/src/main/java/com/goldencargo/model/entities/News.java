@@ -14,17 +14,17 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class News {
+public class News extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "news_id")
     private Long newsId;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -34,25 +34,5 @@ public class News {
     @ManyToOne
     @JoinColumn(name = "posted_by", nullable = false)
     private User postedBy;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        datePosted = new Date();
-        createdAt = new Date();
-        updatedAt = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
 
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class Message extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +29,10 @@ public class Message {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
-    @Column(name = "subject")
+    @Column(name = "subject", nullable = false)
     private String subject;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,25 +41,5 @@ public class Message {
 
     @Column(name = "read_status", nullable = false)
     private Boolean readStatus = false;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        dateSent = new Date();
-        createdAt = new Date();
-        updatedAt = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
 
 }

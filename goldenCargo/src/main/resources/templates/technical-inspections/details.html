@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Technical Inspection Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{/helpers/navbar}"></div>
+<div class="container mt-4">
+    <h2>Technical Inspection Details</h2>
+    <p><strong>ID:</strong> <span th:text="${technicalInspection.inspectionId}"></span></p>
+    <p><strong>Vehicle:</strong> <span th:text="${technicalInspection.vehicle.registrationNumber}"></span></p>
+    <p><strong>Inspection Date:</strong> <span
+            th:text="${#dates.format(technicalInspection.inspectionDate, 'yyyy-MM-dd HH:mm')}"></span></p>
+    <p><strong>Result:</strong> <span th:text="${technicalInspection.result}"></span></p>
+    <p><strong>Comments:</strong> <span th:text="${technicalInspection.comments}"></span></p>
+    <p><strong>Next Inspection Date:</strong> <span
+            th:text="${#dates.format(technicalInspection.nextInspectionDate, 'yyyy-MM-dd HH:mm')}"></span></p>
+    <p><strong>Inspector Name:</strong> <span th:text="${technicalInspection.inspectorName}"></span></p>
+    <a class="btn btn-secondary" href="/technical-inspections">Back</a>
+</div>
+</body>
+</html>

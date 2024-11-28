@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShippingDocument {
+public class ShippingDocument extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,20 +31,10 @@ public class ShippingDocument {
     @Column(name = "document_number", length = 50)
     private String documentNumber;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "issue_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "issue_date", nullable = false)
     private Date issueDate;
 
-    @Lob
-    @Column(name = "content")
-    private byte[] content;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
+    @Column(name = "file_url", length = 255)
+    private String fileUrl;
 }

@@ -1,14 +1,12 @@
 package com.goldencargo.model.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "clients")
@@ -16,7 +14,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+public class Client extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,33 +24,20 @@ public class Client {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     private String address;
 
     @Column(name = "contact_person", length = 100)
     private String contactPerson;
 
+    @Pattern(regexp = "^\\+?[0-9\\s\\-()]{7,20}$")
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "email", length = 100)
+    @Email(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
+    @Column(name = "email", length = 100, nullable = false)
     private String email;
 
-    @Column(name = "tax_id", length = 20)
-    private String taxId;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @OneToMany(mappedBy = "client")
-    private Set<ClientOrder> clientOrders = new HashSet<>();
-
-    @OneToMany(mappedBy = "client")
-    private Set<ClientInvoice> clientInvoices = new HashSet<>();
-
+    @Column(name = "nip", length = 20, nullable = false)
+    private String nip;
 }

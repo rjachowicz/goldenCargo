@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +15,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VehicleType {
+public class VehicleType extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,15 +37,8 @@ public class VehicleType {
     @Column(name = "special_features")
     private String specialFeatures;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
     @OneToMany(mappedBy = "vehicleType")
     private Set<Vehicle> vehicles = new HashSet<>();
+
 
 }

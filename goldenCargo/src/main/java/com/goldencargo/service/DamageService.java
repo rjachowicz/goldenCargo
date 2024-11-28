@@ -17,7 +17,7 @@ public class DamageService {
     }
 
     public List<Damage> getAllDamages() {
-        return damageRepository.findAll();
+        return damageRepository.findByIsDeletedFalse();
     }
 
     public Optional<Damage> getDamageById(Long id) {
@@ -42,7 +42,7 @@ public class DamageService {
 
     public boolean deleteDamage(Long id) {
         if (damageRepository.existsById(id)) {
-            damageRepository.deleteById(id);
+            damageRepository.softDelete(id);
             return true;
         }
         return false;

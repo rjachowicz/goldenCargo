@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TechnicalInspection {
+public class TechnicalInspection extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,47 +25,26 @@ public class TechnicalInspection {
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "inspection_date")
     private Date inspectionDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "result", nullable = false)
-    private Result result;
+    private InspectionResult result = InspectionResult.NEW;
 
     @Column(name = "comments")
     private String comments;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "next_inspection_date")
     private Date nextInspectionDate;
 
     @Column(name = "inspector_name", length = 100)
     private String inspectorName;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = new Date();
-        updatedAt = new Date();
-        if (inspectionDate == null) {
-            inspectionDate = new Date();
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
-
-    public enum Result {
+    public enum InspectionResult {
+        NEW,
         PASSED,
         FAILED
     }

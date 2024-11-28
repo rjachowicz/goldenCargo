@@ -2,8 +2,9 @@ package com.goldencargo.service;
 
 import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.repository.ClientOrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,15 +12,29 @@ import java.util.Optional;
 @Service
 public class ClientOrderService {
 
-    @Autowired
-    private ClientOrderRepository clientOrderRepository;
+    private final ClientOrderRepository clientOrderRepository;
+
+    public ClientOrderService(ClientOrderRepository clientOrderRepository) {
+        this.clientOrderRepository = clientOrderRepository;
+    }
 
     public List<ClientOrder> getAllClientOrders() {
-        return clientOrderRepository.findAll();
+        return clientOrderRepository.findByIsDeletedFalse();
     }
 
     public Optional<ClientOrder> getClientOrderById(Long id) {
         return clientOrderRepository.findById(id);
+    }
+
+    @Transactional
+    public Optional<ClientOrder> getClientOrderByIdWithDetails(Long id) {
+        Optional<ClientOrder> clientOrder = clientOrderRepository.findById(id);
+        clientOrder.ifPresent(order -> {
+            Hibernate.initialize(order.getTransportOrders());
+            Hibernate.initialize(order.getGoods());
+            Hibernate.initialize(order.getClientInvoices());
+        });
+        return clientOrder;
     }
 
     public ClientOrder createClientOrder(ClientOrder clientOrder) {
@@ -40,7 +55,7 @@ public class ClientOrderService {
 
     public boolean deleteClientOrder(Long id) {
         if (clientOrderRepository.existsById(id)) {
-            clientOrderRepository.deleteById(id);
+            clientOrderRepository.softDelete(id);
             return true;
         }
         return false;

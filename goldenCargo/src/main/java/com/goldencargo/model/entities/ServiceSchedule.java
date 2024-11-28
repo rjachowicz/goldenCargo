@@ -1,5 +1,6 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceSchedule {
+public class ServiceSchedule extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class ServiceSchedule {
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "scheduled_date")
     private Date scheduledDate;
 
@@ -34,20 +35,5 @@ public class ServiceSchedule {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.SCHEDULED;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    public enum Status {
-        SCHEDULED,
-        COMPLETED,
-        CANCELLED
-    }
-
+    private Status status = Status.NEW;
 }

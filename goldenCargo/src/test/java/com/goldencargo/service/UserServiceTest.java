@@ -39,7 +39,7 @@ public class UserServiceTest {
         user.setLastName("User");
         user.setPhoneNumber("123456789");
         user.setAddress("Test Address");
-        user.setStatus(User.Status.ACTIVE);
+        user.setStatus(User.UserStatus.ACTIVE);
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
     }
@@ -84,7 +84,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
 
-        Optional<User> result = userService.updateUser(1L, user);
+        Optional<User> result = userService.updateUser(1L, user, user.getPassword());
 
         assertTrue(result.isPresent());
         assertEquals(user.getUsername(), result.get().getUsername());

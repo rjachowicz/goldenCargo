@@ -1,0 +1,121 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><i class="fas fa-truck"></i> GOLDEN CARGO</a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                       id="userDropdown"
+                       role="button">
+                        <i class="fas fa-users"></i> User Management
+                    </a>
+                    <ul aria-labelledby="userDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/users"><i class="fas fa-user"></i> Users</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                       id="logisticsDropdown"
+                       role="button">
+                        <i class="fas fa-shipping-fast"></i> Logistics
+                    </a>
+                    <ul aria-labelledby="logisticsDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/logistics"><i class="fas fa-map"></i> Overview</a></li>
+                        <li><a class="dropdown-item" href="/routes"><i class="fas fa-route"></i> Routes</a></li>
+                        <li><a class="dropdown-item" href="/locations"><i class="fas fa-map-marker-alt"></i>
+                            Locations</a></li>
+                        <li><a class="dropdown-item" href="/transports"><i class="fas fa-truck"></i> Transports</a></li>
+                        <li><a class="dropdown-item" href="/transport-orders"><i class="fas fa-tasks"></i> Transport
+                            Orders</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                       id="driversDropdown"
+                       role="button">
+                        <i class="fas fa-id-badge"></i> Drivers
+                    </a>
+                    <ul aria-labelledby="driversDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/drivers"><i class="fas fa-user-tie"></i> Driver List</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/driver-reports"><i class="fas fa-file-alt"></i> Driver
+                            Reports</a></li>
+                        <li><a class="dropdown-item" href="/driver-vehicles"><i class="fas fa-car"></i> Driver Vehicles</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                       id="vehiclesDropdown"
+                       role="button">
+                        <i class="fas fa-car"></i> Vehicles
+                    </a>
+                    <ul aria-labelledby="vehiclesDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/vehicles"><i class="fas fa-car"></i> Vehicle List</a></li>
+                        <li><a class="dropdown-item" href="/vehicle-types"><i class="fas fa-car-side"></i> Vehicle Types</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/vehicle-repairs"><i class="fas fa-tools"></i> Vehicle
+                            Repairs</a></li>
+                        <li><a class="dropdown-item" href="/technical-inspections"><i
+                                class="fas fa-clipboard-check"></i> Technical Inspections</a></li>
+                        <li><a class="dropdown-item" href="/service-schedules"><i class="fas fa-calendar-alt"></i>
+                            Service Schedules</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                       id="clientsDropdown"
+                       role="button">
+                        <i class="fas fa-handshake"></i> Clients & Orders
+                    </a>
+                    <ul aria-labelledby="clientsDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/clients"><i class="fas fa-user"></i> Clients</a></li>
+                        <li><a class="dropdown-item" href="/client-orders"><i class="fas fa-shopping-cart"></i> Client
+                            Orders</a></li>
+                        <li><a class="dropdown-item" href="/orders"><i class="fas fa-box"></i> Orders</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                       id="invoicesDropdown"
+                       role="button">
+                        <i class="fas fa-file-invoice"></i> Invoices & Documents
+                    </a>
+                    <ul aria-labelledby="invoicesDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/client-invoices"><i class="fas fa-file-invoice-dollar"></i>
+                            Client Invoices</a></li>
+                        <li><a class="dropdown-item" href="/invoices"><i class="fas fa-file-invoice"></i> Invoices</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/shipping-documents"><i class="fas fa-file"></i> Shipping
+                            Documents</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                       id="incidentsDropdown"
+                       role="button">
+                        <i class="fas fa-exclamation-triangle"></i> Incidents & Reports
+                    </a>
+                    <ul aria-labelledby="incidentsDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/incidents"><i class="fas fa-exclamation-circle"></i>
+                            Incidents</a></li>
+                        <li><a class="dropdown-item" href="/damages"><i class="fas fa-hammer"></i> Damages</a></li>
+                        <li><a class="dropdown-item" href="/reports"><i class="fas fa-chart-line"></i> Reports</a></li>
+                        <li><a class="dropdown-item" href="/breakdowns"><i class="fas fa-wrench"></i> Breakdowns</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

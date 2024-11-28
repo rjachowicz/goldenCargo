@@ -14,46 +14,24 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Breakdown {
+public class Breakdown extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "breakdown_id")
     private Long breakdownId;
 
-    @OneToOne
-    @JoinColumn(name = "incident_id", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "incident_id", nullable = false)
     private Incident incident;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "repair_cost")
+    @Column(name = "repair_cost", nullable = false)
     private Double repairCost;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "repair_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "repair_date", nullable = false)
     private Date repairDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = new Date();
-        updatedAt = new Date();
-        if (repairDate == null) {
-            repairDate = new Date();
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
 }

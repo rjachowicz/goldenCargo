@@ -1,12 +1,15 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "incidents")
@@ -14,7 +17,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Incident {
+public class Incident extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +27,8 @@ public class Incident {
     @Column(name = "incident_type", length = 50)
     private String incidentType;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date", nullable = false)
     private Date date;
 
     @Column(name = "description")
@@ -45,37 +48,12 @@ public class Incident {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.OPEN;
+    private Status status = Status.NEW;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Breakdown> breakdowns = new ArrayList<>();
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    @OneToOne(mappedBy = "incident", cascade = CascadeType.ALL)
-    private Breakdown breakdown;
-
-    @OneToOne(mappedBy = "incident", cascade = CascadeType.ALL)
-    private Damage damage;
-
-    @PrePersist
-    protected void onCreate() {
-        date = new Date();
-        createdAt = new Date();
-        updatedAt = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = new Date();
-    }
-
-    public enum Status {
-        OPEN,
-        CLOSED
-    }
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Damage> damages = new ArrayList<>();
 
 }

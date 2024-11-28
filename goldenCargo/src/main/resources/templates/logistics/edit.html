@@ -1,0 +1,32 @@
+<div th:fragment="editLogisticsModal">
+    <div class="modal-header bg-warning text-dark border-bottom">
+        <h5 class="modal-title">
+            <i class="fas fa-user-edit"></i> Edit Logistics
+        </h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+    </div>
+    <div class="modal-body bg-light text-dark">
+        <form method="post" th:action="@{/logistics/update/{id}(id=${logistics.logisticsId})}" th:object="${logistics}">
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="user">User</label>
+                <select class="form-select" id="user" th:field="*{user.userId}">
+                    <option th:each="user : ${users}" th:text="${user.firstName} + ' ' + ${user.lastName}"
+                            th:value="${user.userId}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="department">Department</label>
+                <input class="form-control" id="department" placeholder="Enter department" th:field="*{department}"
+                       type="text">
+            </div>
+            <div class="modal-footer mt-3">
+                <button class="btn btn-success" type="submit">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

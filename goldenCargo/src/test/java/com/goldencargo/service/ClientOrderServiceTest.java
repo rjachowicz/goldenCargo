@@ -1,5 +1,7 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.data.Status;
+import com.goldencargo.model.data.PaymentStatus;
 import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.repository.ClientOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,10 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,23 +35,23 @@ public class ClientOrderServiceTest {
         clientOrder = new ClientOrder();
         clientOrder.setClientOrderId(1L);
         clientOrder.setOrderDate(new Date());
-        clientOrder.setStatus(ClientOrder.Status.PENDING);
+        clientOrder.setStatus(Status.PENDING);
         clientOrder.setTotalAmount(1500.0);
-        clientOrder.setPaymentStatus(ClientOrder.PaymentStatus.UNPAID);
+        clientOrder.setPaymentStatus(PaymentStatus.UNPAID);
         clientOrder.setCreatedAt(new Date());
         clientOrder.setUpdatedAt(new Date());
     }
 
     @Test
     public void testGetAllClientOrders() {
-        List<ClientOrder> clientOrders = Arrays.asList(clientOrder);
+        List<ClientOrder> clientOrders = Collections.singletonList(clientOrder);
         when(clientOrderRepository.findAll()).thenReturn(clientOrders);
 
         List<ClientOrder> result = clientOrderService.getAllClientOrders();
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(clientOrder.getStatus(), result.get(0).getStatus());
+        assertEquals(clientOrder.getStatus(), result.getFirst().getStatus());
         verify(clientOrderRepository, times(1)).findAll();
     }
 

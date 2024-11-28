@@ -34,7 +34,7 @@ public class ClientServiceTest {
         client.setContactPerson("John Doe");
         client.setPhone("123-456-7890");
         client.setEmail("test@example.com");
-        client.setTaxId("123456789");
+        client.setNip("123456789");
         client.setCreatedAt(new Date());
         client.setUpdatedAt(new Date());
     }

@@ -1,0 +1,23 @@
+<div th:fragment="detailsLogisticsModal">
+    <div class="modal-header bg-info text-dark border-bottom">
+        <h5 class="modal-title">
+            <i class="fas fa-info-circle"></i> Logistics Details
+        </h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+    </div>
+    <div class="modal-body bg-light text-dark">
+        <p><strong>ID:</strong> <span th:text="${logistics.logisticsId}"></span></p>
+        <p><strong>User:</strong> <span th:text="${logistics.user.firstName} + ' ' + ${logistics.user.lastName}"></span>
+        </p>
+        <p><strong>Department:</strong> <span th:text="${logistics.department}"></span></p>
+        <p><strong>Created At:</strong> <span
+                th:text="${#dates.format(logistics.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Updated At:</strong> <span
+                th:text="${#dates.format(logistics.updatedAt, 'dd/MM/yyyy HH:mm')}"></span></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+            <i class="fas fa-times"></i> Close
+        </button>
+    </div>
+</div>

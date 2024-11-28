@@ -34,7 +34,7 @@ public class DriverVehicleServiceTest {
         driverVehicle.setId(1L);
         driverVehicle.setAssignedDate(new Date());
         driverVehicle.setEndDate(new Date());
-        driverVehicle.setStatus(DriverVehicle.Status.ACTIVE);
+        driverVehicle.setStatus(DriverVehicle.RepairStatus.NEW);
         driverVehicle.setNotes("Test assignment");
         driverVehicle.setCreatedAt(new Date());
         driverVehicle.setUpdatedAt(new Date());

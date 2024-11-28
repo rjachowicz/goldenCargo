@@ -1,0 +1,39 @@
+<div class="border p-4">
+    <h4 class="h3 mb-3"><i class="fas fa-user-plus"></i> Add New User</h4>
+    <form class="row g-3" method="post" th:action="@{/users/create}" th:object="${user}">
+        <div class="col-md-4">
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" id="username" required th:field="*{username}" type="text">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" id="password" required th:field="*{password}" type="password">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" id="email" required th:field="*{email}" type="email">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="firstName">First Name</label>
+            <input class="form-control" id="firstName" th:field="*{firstName}" type="text">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input class="form-control" id="lastName" th:field="*{lastName}" type="text">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="phoneNumber">Phone Number</label>
+            <input class="form-control" id="phoneNumber" th:field="*{phoneNumber}" type="text">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label" for="address">Address</label>
+            <textarea class="form-control" id="address" th:field="*{address}"></textarea>
+        </div>
+        <div class="col-md-12 d-flex">
+            <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
+            <button class="btn btn-secondary" data-bs-target="#addUserForm" data-bs-toggle="collapse" type="button">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </form>
+</div>

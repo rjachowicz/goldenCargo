@@ -17,7 +17,7 @@ public class ClientService {
     }
 
     public List<Client> getAllClients() {
-        return clientRepository.findAll();
+        return clientRepository.findByIsDeletedFalse();
     }
 
     public Optional<Client> getClientById(Long id) {
@@ -35,7 +35,7 @@ public class ClientService {
             client.setContactPerson(clientDetails.getContactPerson());
             client.setPhone(clientDetails.getPhone());
             client.setEmail(clientDetails.getEmail());
-            client.setTaxId(clientDetails.getTaxId());
+            client.setNip(clientDetails.getNip());
             client.setUpdatedAt(new java.util.Date());
             return clientRepository.save(client);
         });
@@ -43,7 +43,7 @@ public class ClientService {
 
     public boolean deleteClient(Long id) {
         if (clientRepository.existsById(id)) {
-            clientRepository.deleteById(id);
+            clientRepository.softDelete(id);
             return true;
         }
         return false;

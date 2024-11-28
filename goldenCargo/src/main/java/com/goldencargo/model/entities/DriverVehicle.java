@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DriverVehicle {
+public class DriverVehicle extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,32 +29,25 @@ public class DriverVehicle {
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "assigned_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "assigned_date", nullable = false)
     private Date assignedDate;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "end_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "end_date", nullable = false)
     private Date endDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.ACTIVE;
+    private RepairStatus status = RepairStatus.NEW;
 
     @Column(name = "notes")
     private String notes;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-    public enum Status {
-        ACTIVE,
-        INACTIVE
+    public enum RepairStatus {
+        NEW,
+        IN_REPAIR,
+        COMPLETED,
+        CANCELLED
     }
-
 }

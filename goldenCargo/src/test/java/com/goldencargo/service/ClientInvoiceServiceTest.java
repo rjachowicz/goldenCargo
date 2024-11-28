@@ -1,5 +1,6 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.data.PaymentStatus;
 import com.goldencargo.model.entities.ClientInvoice;
 import com.goldencargo.repository.ClientInvoiceRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ public class ClientInvoiceServiceTest {
         clientInvoice.setDateIssued(new Date());
         clientInvoice.setTotalAmount(1000.0);
         clientInvoice.setDueDate(new Date());
-        clientInvoice.setPaymentStatus(ClientInvoice.PaymentStatus.UNPAID);
+        clientInvoice.setPaymentStatus(PaymentStatus.UNPAID);
         clientInvoice.setCreatedAt(new Date());
         clientInvoice.setUpdatedAt(new Date());
     }
