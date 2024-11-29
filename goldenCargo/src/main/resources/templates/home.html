@@ -1,78 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Main Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <div class="row">
-        <h1 class="mb-4 text-center">Dashboard</h1>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-primary text-white text-center">
-                <div class="card-body">
-                    <h5>Total Users</h5>
-                    <h2 th:text="${totalUsers}">0</h2>
-                    <i class="fas fa-users fa-3x"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-success text-white text-center">
-                <div class="card-body">
-                    <h5>Active Transports</h5>
-                    <h2 th:text="${activeTransports}">0</h2>
-                    <i class="fas fa-truck fa-3x"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-warning text-white text-center">
-                <div class="card-body">
-                    <h5>Total Vehicles</h5>
-                    <h2 th:text="${totalVehicles}">0</h2>
-                    <i class="fas fa-car fa-3x"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-danger text-white text-center">
-                <div class="card-body">
-                    <h5>Pending Orders</h5>
-                    <h2 th:text="${pendingOrders}">0</h2>
-                    <i class="fas fa-tasks fa-3x"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-lg-6 mb-4">
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Dashboard</h1>
+    <div class="scrollable-container">
+        <div class="grid">
+            <!-- User Roles -->
             <div class="card">
-                <div class="card-header">
-                    Transport Status Overview
-                </div>
                 <div class="card-body">
+                    <h5 class="card-title">User Roles</h5>
+                    <canvas id="userRolesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Order Statuses -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Statuses</h5>
+                    <canvas id="orderStatusesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Vehicle Statuses -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Vehicle Statuses</h5>
+                    <canvas id="vehicleStatusesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Message Statuses -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Message Statuses</h5>
+                    <canvas id="messageStatusesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Incident Types -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Incident Types</h5>
+                    <canvas id="incidentTypesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Vehicle Repair Costs -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Vehicle Repair Costs</h5>
+                    <canvas id="vehicleRepairChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Transport Statuses -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Transport Statuses</h5>
                     <canvas id="transportStatusChart"></canvas>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 mb-4">
+
+            <!-- Client Invoice Statuses -->
             <div class="card">
-                <div class="card-header">
-                    Recent Orders
-                </div>
                 <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item" th:each="order : ${recentOrders}">
-                            <strong th:text="${order.clientOrder.client.name}">Client Name</strong>: <span
-                                th:text="${order.orderType}">Order Details</span>
-                            <span class="badge bg-primary float-end" th:text="${order.status}">Status</span>
-                        </li>
-                    </ul>
+                    <h5 class="card-title">Client Invoice Statuses</h5>
+                    <canvas id="clientInvoiceStatusChart"></canvas>
                 </div>
             </div>
         </div>
@@ -80,5 +83,24 @@
 </div>
 <div th:replace="~{/helpers/footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/mainChart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="userRolesLabels" type="application/json">[[${userRolesLabels}]]</script>
+<script id="userRolesData" type="application/json">[[${userRolesData}]]</script>
+<script id="orderStatusesLabels" type="application/json">[[${orderStatusesLabels}]]</script>
+<script id="orderStatusesData" type="application/json">[[${orderStatusesData}]]</script>
+<script id="vehicleStatusesLabels" type="application/json">[[${vehicleStatusesLabels}]]</script>
+<script id="vehicleStatusesData" type="application/json">[[${vehicleStatusesData}]]</script>
+<script id="messageStatusesLabels" type="application/json">[[${messageStatusesLabels}]]</script>
+<script id="messageStatusesData" type="application/json">[[${messageStatusesData}]]</script>
+<script id="incidentTypesLabels" type="application/json">[[${incidentTypesLabels}]]</script>
+<script id="incidentTypesData" type="application/json">[[${incidentTypesData}]]</script>
+<script id="vehicleRepairLabels" type="application/json">[[${vehicleRepairLabels}]]</script>
+<script id="vehicleRepairData" type="application/json">[[${vehicleRepairData}]]</script>
+<script id="transportStatusLabels" type="application/json">[[${transportStatusLabels}]]</script>
+<script id="transportStatusData" type="application/json">[[${transportStatusData}]]</script>
+<script id="clientInvoiceStatusLabels" type="application/json">[[${clientInvoiceStatusLabels}]]</script>
+<script id="clientInvoiceStatusData" type="application/json">[[${clientInvoiceStatusData}]]</script>
+
 </body>
 </html>

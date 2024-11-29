@@ -8,7 +8,6 @@
     <div class="modal-body bg-light text-dark">
         <form>
             <div class="row g-3">
-                <!-- Basic Information -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-id-badge"></i> ID
@@ -57,8 +56,6 @@
                     </label>
                     <p class="form-control-plaintext" th:text="${user.address} ?: 'N/A'"></p>
                 </div>
-
-                <!-- User Roles -->
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-users-cog"></i> Roles
@@ -67,8 +64,6 @@
                         <li class="list-group-item" th:each="role : ${user.userRoles}" th:text="${role.role.name}"></li>
                     </ul>
                 </div>
-
-                <!-- Driver Information -->
                 <div class="col-md-6" th:if="${user.driver != null}">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-id-card"></i> Driver ID
@@ -82,7 +77,6 @@
                     <p class="form-control-plaintext" th:text="${user.driver.licenseNumber}"></p>
                 </div>
 
-                <!-- Logistics Information -->
                 <div class="col-md-6" th:if="${user.logistics != null}">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-truck"></i> Logistics ID
@@ -95,8 +89,6 @@
                     </label>
                     <p class="form-control-plaintext" th:text="${user.logistics.user.status}"></p>
                 </div>
-
-                <!-- Notifications -->
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-bell"></i> Notifications
@@ -106,8 +98,6 @@
                             th:text="${notification.message}"></li>
                     </ul>
                 </div>
-
-                <!-- Messages -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-paper-plane"></i> Sent Messages
@@ -126,8 +116,6 @@
                             th:text="${message.content}"></li>
                     </ul>
                 </div>
-
-                <!-- News Posts -->
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-newspaper"></i> News Posts
