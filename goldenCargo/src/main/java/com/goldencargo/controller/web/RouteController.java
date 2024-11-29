@@ -1,14 +1,15 @@
 package com.goldencargo.controller.web;
 
+import com.goldencargo.model.entities.Location;
 import com.goldencargo.model.entities.Route;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.LocationService;
 import com.goldencargo.service.RouteService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,24 +20,41 @@ public class RouteController {
 
     private final RouteService routeService;
     private final LocationService locationService;
+    private final GenericService genericService;
 
-    public RouteController(RouteService routeService, LocationService locationService) {
+    private static final String ALIAS = "r";
+
+    public RouteController(RouteService routeService, LocationService locationService, GenericService genericService) {
         this.routeService = routeService;
         this.locationService = locationService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllRoutes(Model model) {
-        List<Route> routes = routeService.getAllRoutes();
-        model.addAttribute("routes", routes);
-        return "routes/main";
-    }
+    public String getAllRoutes(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "startLocation.name") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<Route> routes = genericService.getFilteredAndSortedEntities(
+                Route.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        List<Location> allLocations = locationService.getAllLocations();
+
+        model.addAttribute("routeList", routes);
         model.addAttribute("route", new Route());
-        model.addAttribute("locations", locationService.getAllLocations());
-        return "routes/create";
+        model.addAttribute("locations", allLocations);
+        return "routes/main";
     }
 
     @PostMapping("/create")
@@ -51,7 +69,7 @@ public class RouteController {
         if (route.isPresent()) {
             model.addAttribute("route", route.get());
             model.addAttribute("locations", locationService.getAllLocations());
-            return "routes/edit";
+            return "routes/edit :: editRouteModal";
         }
         return "redirect:/routes";
     }
@@ -66,12 +84,13 @@ public class RouteController {
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<Route> route = routeService.getRouteById(id);
         route.ifPresent(value -> model.addAttribute("route", value));
-        return "routes/details";
+        return "routes/details :: detailsRouteModal";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteRoute(@PathVariable Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteRoute(@PathVariable Long id) {
         routeService.deleteRoute(id);
-        return "redirect:/routes";
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

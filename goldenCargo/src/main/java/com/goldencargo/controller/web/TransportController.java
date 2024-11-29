@@ -2,14 +2,14 @@ package com.goldencargo.controller.web;
 
 import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.Transport;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.TransportOrderService;
 import com.goldencargo.service.TransportService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,29 +20,44 @@ public class TransportController {
 
     private final TransportService transportService;
     private final TransportOrderService transportOrderService;
+    private final GenericService genericService;
 
-    public TransportController(TransportService transportService, TransportOrderService transportOrderService) {
+    public TransportController(TransportService transportService,
+                               TransportOrderService transportOrderService,
+                               GenericService genericService) {
         this.transportService = transportService;
         this.transportOrderService = transportOrderService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllTransports(Model model) {
-        List<Transport> transports = transportService.getAllTransports();
+    public String getAllTransports(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "transportOrder.name") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
+
+        List<Transport> transports = genericService.getFilteredAndSortedEntities(
+                Transport.class,
+                "t",
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
         model.addAttribute("transports", transports);
+        model.addAttribute("transport", new Transport());
+        model.addAttribute("statuses", Status.values());
+        model.addAttribute("transportOrders", transportOrderService.getTransportOrdersNotAssignedToTransport());
         return "transports/main";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("transport", new Transport());
-        model.addAttribute("transportOrders", transportOrderService.getTransportOrdersNotAssignedToTransport());
-        model.addAttribute("statuses", Status.values());
-        return "transports/create";
-    }
-
     @PostMapping("/create")
-    public String createTransport(Transport transport) {
+    public String createTransport(@ModelAttribute Transport transport) {
         transportService.createTransport(transport);
         return "redirect:/transports";
     }
@@ -54,13 +69,13 @@ public class TransportController {
             model.addAttribute("transport", transport.get());
             model.addAttribute("transportOrders", transportOrderService.getAllOrders());
             model.addAttribute("statuses", Status.values());
-            return "transports/edit";
+            return "transports/edit :: editTransportModal";
         }
         return "redirect:/transports";
     }
 
     @PostMapping("/update/{id}")
-    public String updateTransport(@PathVariable Long id, Transport transportDetails) {
+    public String updateTransport(@PathVariable Long id, @ModelAttribute Transport transportDetails) {
         transportService.updateTransport(id, transportDetails);
         return "redirect:/transports";
     }
@@ -69,12 +84,12 @@ public class TransportController {
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<Transport> transport = transportService.getTransportById(id);
         transport.ifPresent(value -> model.addAttribute("transport", value));
-        return "transports/details";
+        return "transports/details :: detailsTransportModal";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteTransport(@PathVariable Long id) {
-        transportService.deleteTransport(id);
-        return "redirect:/transports";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteTransport(@PathVariable Long id) {
+        boolean isDeleted = transportService.deleteTransport(id);
+        return isDeleted ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

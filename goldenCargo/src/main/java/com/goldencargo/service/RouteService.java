@@ -24,12 +24,12 @@ public class RouteService {
         return routeRepository.findById(id);
     }
 
-    public Route createRoute(Route route) {
-        return routeRepository.save(route);
+    public void createRoute(Route route) {
+        routeRepository.save(route);
     }
 
-    public Optional<Route> updateRoute(Long id, Route routeDetails) {
-        return routeRepository.findById(id).map(route -> {
+    public void updateRoute(Long id, Route routeDetails) {
+        routeRepository.findById(id).map(route -> {
             route.setStartLocation(routeDetails.getStartLocation());
             route.setEndLocation(routeDetails.getEndLocation());
             route.setDistance(routeDetails.getDistance());
