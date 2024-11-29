@@ -13,8 +13,13 @@
                 <label class="form-label" for="department">Department</label>
                 <input class="form-control" id="department" required th:field="*{department}" type="text">
             </div>
-            <button class="btn btn-success" type="submit">Save</button>
-            <button class="btn btn-secondary" data-bs-dismiss="collapse" type="button">Cancel</button>
+            <button class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
+            <button class="btn btn-secondary"
+                    data-bs-target="#addLogisticsForm"
+                    data-bs-toggle="collapse"
+                    type="button">
+                <i class="fas fa-times"></i> Cancel
+            </button>
         </form>
     </div>
 </div>

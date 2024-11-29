@@ -1,0 +1,33 @@
+<div class="border p-4">
+    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Locations</h4>
+    <form action="/locations" class="row g-3 align-items-end" method="get">
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterValue">Search Value</label>
+            <input class="form-control" id="filterValue" name="filterValue" placeholder="Enter value" type="text">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterType">Column</label>
+            <select class="form-select" id="filterType" name="filterType">
+                <option value="name">Name</option>
+                <option value="address">Address</option>
+                <option value="city">City</option>
+                <option value="state">State</option>
+                <option value="country">Country</option>
+                <option value="postalCode">Postal Code</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="comparisonType">Operation</label>
+            <select class="form-select" id="comparisonType" name="comparisonType">
+                <option value="like">Contains (LIKE)</option>
+                <option value="=">Equals (=)</option>
+                <option value="!=">Not Equals (!=)</option>
+                <option value=">">Greater Than (&gt;)</option>
+                <option value="<">Less Than (&lt;)</option>
+            </select>
+        </div>
+        <div class="col-md-4 d-flex">
+            <button class="btn btn-primary me-2" type="submit"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </form>
+</div>

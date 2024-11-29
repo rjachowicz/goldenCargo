@@ -8,7 +8,6 @@
     <div class="modal-body bg-light text-dark">
         <form method="post" th:action="@{/users/update/{id}(id=${user.userId})}" th:object="${user}">
             <div class="row g-3">
-                <!-- Section: Basic Information -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user"></i> Username
@@ -23,8 +22,6 @@
                     <input class="form-control" id="email" placeholder="Enter email" required th:field="*{email}"
                            type="email">
                 </div>
-
-                <!-- Section: Personal Information -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user-circle"></i> First Name
@@ -39,8 +36,6 @@
                     <input class="form-control" id="lastName" placeholder="Enter last name" th:field="*{lastName}"
                            type="text">
                 </div>
-
-                <!-- Section: Contact Information -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-phone"></i> Phone Number
@@ -58,7 +53,6 @@
                     </select>
                 </div>
 
-                <!-- Section: Address -->
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-map-marker-alt"></i> Address
@@ -66,8 +60,6 @@
                     <textarea class="form-control" id="address" placeholder="Enter address"
                               th:field="*{address}"></textarea>
                 </div>
-
-                <!-- Section: Password Change -->
                 <div class="col-md-12 mt-3">
                     <button class="btn btn-outline-secondary" id="togglePasswordChange" type="button">
                         <i class="fas fa-key"></i> Change Password
@@ -91,7 +83,6 @@
                     </button>
                 </div>
             </div>
-            <!-- Footer Buttons -->
             <div class="modal-footer mt-4 bg-light">
                 <button class="btn btn-success" type="submit">
                     <i class="fas fa-save"></i> Save

@@ -1,0 +1,34 @@
+<div class="border p-4">
+    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Transports</h4>
+    <form action="/transports" method="get">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label fw-bold" for="filterValue">Search Value</label>
+                <input class="form-control" id="filterValue" name="filterValue" type="text">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold" for="filterType">Column</label>
+                <select class="form-select" id="filterType" name="filterType">
+                    <option value="transportOrder.name">Transport Order</option>
+                    <option value="status">Status</option>
+                    <option value="actualDeparture">Departure Date</option>
+                    <option value="actualArrival">Arrival Date</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold" for="comparisonType">Operation</label>
+                <select class="form-select" id="comparisonType" name="comparisonType">
+                    <option value="like">Contains (LIKE)</option>
+                    <option value="!=">Not Equals (!=)</option>
+                    <option value=">">Greater Than (&gt;)</option>
+                    <option value="<">Less Than (&lt;)</option>
+                    <option value=">=">Greater Than or Equals (&gt;=)</option>
+                    <option value="<=">Less Than or Equals (&lt;=)</option>
+                </select>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-primary me-2" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
