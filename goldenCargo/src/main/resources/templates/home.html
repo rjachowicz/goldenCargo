@@ -11,77 +11,65 @@
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Dashboard</h1>
-    <div class="scrollable-container">
-        <div class="grid">
-            <!-- User Roles -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">User Roles</h5>
-                    <canvas id="userRolesChart"></canvas>
+<main>
+    <div class="container mt-5">
+        <div class="scrollable-container">
+            <div class="grid">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">User Roles</h5>
+                        <canvas id="userRolesChart"></canvas>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Order Statuses -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Order Statuses</h5>
-                    <canvas id="orderStatusesChart"></canvas>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Order Statuses</h5>
+                        <canvas id="orderStatusesChart"></canvas>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Vehicle Statuses -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Vehicle Statuses</h5>
-                    <canvas id="vehicleStatusesChart"></canvas>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Vehicle Statuses</h5>
+                        <canvas id="vehicleStatusesChart"></canvas>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Message Statuses -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Message Statuses</h5>
-                    <canvas id="messageStatusesChart"></canvas>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Message Statuses</h5>
+                        <canvas id="messageStatusesChart"></canvas>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Incident Types -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Incident Types</h5>
-                    <canvas id="incidentTypesChart"></canvas>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Incident Types</h5>
+                        <canvas id="incidentTypesChart"></canvas>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Vehicle Repair Costs -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Vehicle Repair Costs</h5>
-                    <canvas id="vehicleRepairChart"></canvas>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Vehicle Repair Costs</h5>
+                        <canvas id="vehicleRepairChart"></canvas>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Transport Statuses -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Transport Statuses</h5>
-                    <canvas id="transportStatusChart"></canvas>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Transport Statuses</h5>
+                        <canvas id="transportStatusChart"></canvas>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Client Invoice Statuses -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Client Invoice Statuses</h5>
-                    <canvas id="clientInvoiceStatusChart"></canvas>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Client Invoice Statuses</h5>
+                        <canvas id="clientInvoiceStatusChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div th:replace="~{/helpers/footer}"></div>
+</main>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/mainChart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -101,6 +89,7 @@
 <script id="transportStatusData" type="application/json">[[${transportStatusData}]]</script>
 <script id="clientInvoiceStatusLabels" type="application/json">[[${clientInvoiceStatusLabels}]]</script>
 <script id="clientInvoiceStatusData" type="application/json">[[${clientInvoiceStatusData}]]</script>
+<div th:replace="~{/helpers/footer}"></div>
 
 </body>
 </html>

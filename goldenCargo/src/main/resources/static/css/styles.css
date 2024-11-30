@@ -1,14 +1,19 @@
 html {
     height: 100%;
-    overflow-y: auto; /* Wymuszenie paska przewijania w pionie */
-    overflow-x: hidden; /* Brak przewijania w poziomie */
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 body {
+    display: flex;
     padding-top: 56px;
-    background-color: #f8f9fa;
-    font-family: 'Arial', sans-serif;
-    color: #6c6c6c;
+    flex-direction: column;
+    min-height: 100%;
+    margin: 0;
+}
+
+main {
+    flex: 1;
 }
 
 .navbar {
@@ -115,9 +120,8 @@ footer {
     padding: 20px 0;
     text-align: center;
     font-size: 0.9rem;
-    position: absolute;
     width: 100%;
-    bottom: 0;
+    margin-top: auto;
 }
 
 footer a {
@@ -154,18 +158,18 @@ canvas {
 
 @media (min-width: 1200px) {
     .grid {
-        grid-template-columns: repeat(3, 1fr); /* 3 kolumny */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
     .grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 kolumny */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 767px) {
     .grid {
-        grid-template-columns: 1fr; /* 1 kolumna */
+        grid-template-columns: 1fr;
     }
 }

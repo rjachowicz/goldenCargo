@@ -3,12 +3,11 @@ package com.goldencargo.controller.web;
 import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.TransportOrder;
 import com.goldencargo.service.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,35 +21,50 @@ public class TransportOrderController {
     private final DriverService driverService;
     private final VehicleService vehicleService;
     private final LocationService locationService;
+    private final GenericService genericService;
 
     public TransportOrderController(TransportOrderService transportOrderService,
                                     ClientOrderService clientOrderService,
                                     DriverService driverService,
                                     VehicleService vehicleService,
-                                    LocationService locationService) {
+                                    LocationService locationService,
+                                    GenericService genericService) {
         this.transportOrderService = transportOrderService;
         this.clientOrderService = clientOrderService;
         this.driverService = driverService;
         this.vehicleService = vehicleService;
         this.locationService = locationService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllOrders(Model model) {
-        List<TransportOrder> transportOrders = transportOrderService.getAllOrders();
-        model.addAttribute("transportOrders", transportOrders);
-        return "transport-orders/main";
-    }
+    public String getAllOrders(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "name") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<TransportOrder> transportOrders = genericService.getFilteredAndSortedEntities(
+                TransportOrder.class,
+                "t",
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("transportOrders", transportOrders);
         model.addAttribute("transportOrder", new TransportOrder());
         model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
         model.addAttribute("drivers", driverService.getAllDrivers());
         model.addAttribute("vehicles", vehicleService.getAllVehicles());
         model.addAttribute("locations", locationService.getAllLocations());
         model.addAttribute("statuses", Status.values());
-        return "transport-orders/create";
+
+        return "transport-orders/main";
     }
 
     @PostMapping("/create")
@@ -69,7 +83,7 @@ public class TransportOrderController {
             model.addAttribute("vehicles", vehicleService.getAllVehicles());
             model.addAttribute("locations", locationService.getAllLocations());
             model.addAttribute("statuses", Status.values());
-            return "transport-orders/edit";
+            return "transport-orders/edit :: editTransportOrderModal";
         }
         return "redirect:/transport-orders";
     }
@@ -84,12 +98,12 @@ public class TransportOrderController {
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<TransportOrder> transportOrder = transportOrderService.getOrderById(id);
         transportOrder.ifPresent(value -> model.addAttribute("transportOrder", value));
-        return "transport-orders/details";
+        return "transport-orders/details :: detailsTransportOrderModal";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteOrder(@PathVariable Long id) {
-        transportOrderService.deleteOrder(id);
-        return "redirect:/transport-orders";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        boolean isDeleted = transportOrderService.deleteOrder(id);
+        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

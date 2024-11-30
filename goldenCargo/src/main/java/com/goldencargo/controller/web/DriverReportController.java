@@ -3,6 +3,7 @@ package com.goldencargo.controller.web;
 import com.goldencargo.model.entities.DriverReport;
 import com.goldencargo.service.DriverReportService;
 import com.goldencargo.service.DriverService;
+import com.goldencargo.service.GenericService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,24 +19,40 @@ public class DriverReportController {
 
     private final DriverReportService driverReportService;
     private final DriverService driverService;
+    private final GenericService genericService;
 
-    public DriverReportController(DriverReportService driverReportService, DriverService driverService) {
+    private static final String ALIAS = "dr";
+
+    public DriverReportController(DriverReportService driverReportService, DriverService driverService, GenericService genericService) {
         this.driverReportService = driverReportService;
         this.driverService = driverService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllDriverReports(Model model) {
-        List<DriverReport> driverReports = driverReportService.getAllDriverReports();
-        model.addAttribute("driverReports", driverReports);
-        return "driver-reports/main";
-    }
+    public String getAllDriverReports(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "date") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "desc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<DriverReport> driverReports = genericService.getFilteredAndSortedEntities(
+                DriverReport.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("driverReports", driverReports);
         model.addAttribute("driverReport", new DriverReport());
         model.addAttribute("drivers", driverService.getAllDrivers());
-        return "driver-reports/create";
+
+        return "driver-reports/main";
     }
 
     @PostMapping("/create")
@@ -50,7 +67,7 @@ public class DriverReportController {
         if (driverReport.isPresent()) {
             model.addAttribute("driverReport", driverReport.get());
             model.addAttribute("drivers", driverService.getAllDrivers());
-            return "driver-reports/edit";
+            return "driver-reports/edit :: editDriverReportModal";
         }
         return "redirect:/driver-reports";
     }
@@ -64,17 +81,13 @@ public class DriverReportController {
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<DriverReport> driverReport = driverReportService.getDriverReportById(id);
-        if (driverReport.isPresent()) {
-            model.addAttribute("driverReport", driverReport.get());
-            return "driver-reports/details";
-        }
-        return "redirect:/driver-reports";
+        driverReport.ifPresent(value -> model.addAttribute("driverReport", value));
+        return "driver-reports/details :: detailsDriverReportModal";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteDriverReport(@PathVariable Long id) {
-        return driverReportService.deleteDriverReport(id)
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        boolean isDeleted = driverReportService.deleteDriverReport(id);
+        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

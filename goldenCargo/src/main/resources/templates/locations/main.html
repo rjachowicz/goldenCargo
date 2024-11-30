@@ -8,143 +8,147 @@
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
-        <div>
-            <h1 class="h3 mb-0"><i class="fas fa-map-marker-alt"></i> Manage Locations</h1>
-            <p class="mb-0 text-muted">Easily view, edit, and manage location data.</p>
+<main>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
+            <div>
+                <h1 class="h3 mb-0"><i class="fas fa-map-marker-alt"></i> Manage Locations</h1>
+                <p class="mb-0 text-muted">Easily view, edit, and manage location data.</p>
+            </div>
+            <div>
+                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
+                        data-bs-target="#searchForm"
+                        data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button aria-controls="addLocationForm" aria-expanded="false" class="btn btn-outline-success"
+                        data-bs-target="#addLocationForm"
+                        data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-plus"></i> Add Location
+                </button>
+                <a class="btn btn-secondary" href="/locations"><i class="fas fa-redo"></i> Show All</a>
+            </div>
         </div>
-        <div>
-            <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                    data-bs-target="#searchForm"
-                    data-bs-toggle="collapse" type="button">
-                <i class="fas fa-search"></i> Search
-            </button>
-            <button aria-controls="addLocationForm" aria-expanded="false" class="btn btn-outline-success"
-                    data-bs-target="#addLocationForm"
-                    data-bs-toggle="collapse" type="button">
-                <i class="fas fa-plus"></i> Add Location
-            </button>
-            <a class="btn btn-secondary" href="/locations"><i class="fas fa-redo"></i> Show All</a>
+        <div class="collapse mb-4" id="searchForm">
+            <div th:replace="~{/locations/search-sort}"></div>
+        </div>
+        <div class="collapse mb-4" id="addLocationForm">
+            <div th:replace="~{/locations/create}"></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>
+                        Name
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='name', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='name', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Address
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='address', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='address', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        City
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='city', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='city', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        State
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='state', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='state', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Country
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='country', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='country', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Postal Code
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='postalCode', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/locations(sortBy='postalCode', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="location : ${locations}">
+                    <td th:text="${location.name}"></td>
+                    <td th:text="${location.address}"></td>
+                    <td th:text="${location.city}"></td>
+                    <td th:text="${location.state}"></td>
+                    <td th:text="${location.country}"></td>
+                    <td th:text="${location.postalCode}"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm"
+                                data-modal-action
+                                data-modal-id="editLocationModal"
+                                data-endpoint="locations/edit"
+                                th:attr="data-id=${location.locationId}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                data-modal-action
+                                data-modal-id="detailsLocationModal"
+                                data-endpoint="drivers/details"
+                                th:attr="data-id=${location.locationId}">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-delete-url="/locations/delete/{id}"
+                                data-entity-type="location"
+                                onclick="showDeleteModal(this)"
+                                th:attr="data-entity-id=${location.locationId}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="collapse mb-4" id="searchForm">
-        <div th:replace="~{/locations/search-sort}"></div>
-    </div>
-    <div class="collapse mb-4" id="addLocationForm">
-        <div th:replace="~{/locations/create}"></div>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-            <tr>
-                <th>
-                    Name
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='name', sortLogic='asc')}">
-                        <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                    </a>
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='name', sortLogic='desc')}">
-                        <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                    </a>
-                </th>
-                <th>
-                    Address
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='address', sortLogic='asc')}">
-                        <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                    </a>
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='address', sortLogic='desc')}">
-                        <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                    </a>
-                </th>
-                <th>
-                    City
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='city', sortLogic='asc')}">
-                        <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                    </a>
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='city', sortLogic='desc')}">
-                        <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                    </a>
-                </th>
-                <th>
-                    State
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='state', sortLogic='asc')}">
-                        <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                    </a>
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='state', sortLogic='desc')}">
-                        <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                    </a>
-                </th>
-                <th>
-                    Country
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='country', sortLogic='asc')}">
-                        <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                    </a>
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='country', sortLogic='desc')}">
-                        <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                    </a>
-                </th>
-                <th>
-                    Postal Code
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='postalCode', sortLogic='asc')}">
-                        <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                    </a>
-                    <a class="text-decoration-none" th:href="@{/locations(sortBy='postalCode', sortLogic='desc')}">
-                        <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                    </a>
-                </th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="location : ${locations}">
-                <td th:text="${location.name}"></td>
-                <td th:text="${location.address}"></td>
-                <td th:text="${location.city}"></td>
-                <td th:text="${location.state}"></td>
-                <td th:text="${location.country}"></td>
-                <td th:text="${location.postalCode}"></td>
-                <td>
-                    <button class="btn btn-warning btn-sm" onclick="openEditModal(this)"
-                            th:attr="data-id=${location.locationId}">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="openDetailsModal(this)"
-                            th:attr="data-id=${location.locationId}">
-                        <i class="fas fa-info-circle"></i> Details
-                    </button>
-                    <button class="btn btn-danger btn-sm" data-delete-url="/locations/delete/{id}"
-                            data-entity-type="location"
-                            onclick="showDeleteModal(this)"
-                            th:attr="data-entity-id=${location.locationId}">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+</main>
 <div aria-hidden="true" aria-labelledby="editLocationModalLabel" class="modal fade" id="editLocationModal"
      tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div th:replace="~{locations/edit :: editLocationModal}"></div>
         </div>
     </div>
 </div>
 <div aria-hidden="true" aria-labelledby="detailsLocationModalLabel" class="modal fade" id="detailsLocationModal"
      tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div th:replace="~{locations/details :: detailsLocationModal}"></div>
-        </div>
+        <div class="modal-content"></div>
     </div>
 </div>
 <div th:replace="~{/helpers/footer :: footer}"></div>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
-<script th:src="@{/js/locations/editLocationModal.js}"></script>
-<script th:src="@{/js/locations/detailsLocationModal.js}"></script>
+<script th:src="@{/js/modalScript.js}"></script>
 </body>
 </html>
