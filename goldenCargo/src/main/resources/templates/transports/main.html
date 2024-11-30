@@ -8,78 +8,84 @@
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
-        <div>
-            <h1 class="h3 mb-0"><i class="fas fa-truck"></i> Manage Transports</h1>
-            <p class="mb-0 text-muted">Easily view, create, and manage transport data.</p>
+<main>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
+            <div>
+                <h1 class="h3 mb-0"><i class="fas fa-truck"></i> Manage Transports</h1>
+                <p class="mb-0 text-muted">Easily view, create, and manage transport data.</p>
+            </div>
+            <div>
+                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button aria-controls="addTransportForm" aria-expanded="false" class="btn btn-outline-success"
+                        data-bs-target="#addTransportForm" data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-plus"></i> Add Transport
+                </button>
+                <a class="btn btn-secondary" href="/transports"><i class="fas fa-redo"></i> Show All</a>
+            </div>
         </div>
-        <div>
-            <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                    data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
-                <i class="fas fa-search"></i> Search
-            </button>
-            <button aria-controls="addTransportForm" aria-expanded="false" class="btn btn-outline-success"
-                    data-bs-target="#addTransportForm" data-bs-toggle="collapse" type="button">
-                <i class="fas fa-plus"></i> Add Transport
-            </button>
-            <a class="btn btn-secondary" href="/transports"><i class="fas fa-redo"></i> Show All</a>
+        <div class="collapse mb-4" id="searchForm">
+            <div th:replace="~{/transports/search-sort}"></div>
+        </div>
+        <div class="collapse mb-4" id="addTransportForm">
+            <div th:replace="~{/transports/create}"></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>Transport Order</th>
+                    <th>Actual Departure</th>
+                    <th>Actual Arrival</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transport : ${transports}">
+                    <td th:text="${transport.transportOrder.name}"></td>
+                    <td th:text="${#dates.format(transport.actualDeparture, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${#dates.format(transport.actualArrival, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${transport.status}"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" data-modal-action
+                                data-modal-id="editTransportModal"
+                                data-endpoint="transports/edit"
+                                th:attr="data-id=${transport.transportId}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-info btn-sm" data-modal-action
+                                data-modal-id="detailsTransportModal"
+                                data-endpoint="transports/details"
+                                th:attr="data-id=${transport.transportId}">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-delete-url="/transports/delete/{id}"
+                                data-entity-type="transport" onclick="showDeleteModal(this)"
+                                th:attr="data-entity-id=${transport.transportId}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="collapse mb-4" id="searchForm">
-        <div th:replace="~{/transports/search-sort}"></div>
-    </div>
-    <div class="collapse mb-4" id="addTransportForm">
-        <div th:replace="~{/transports/create}"></div>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-            <tr>
-                <th>Transport Order</th>
-                <th>Actual Departure</th>
-                <th>Actual Arrival</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="transport : ${transports}">
-                <td th:text="${transport.transportOrder.name}"></td>
-                <td th:text="${#dates.format(transport.actualDeparture, 'yyyy-MM-dd')}"></td>
-                <td th:text="${#dates.format(transport.actualArrival, 'yyyy-MM-dd')}"></td>
-                <td th:text="${transport.status}"></td>
-                <td>
-                    <button class="btn btn-warning btn-sm" onclick="openEditModal(this)"
-                            th:attr="data-id=${transport.transportId}">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="btn btn-info btn-sm" onclick="openDetailsModal(this)"
-                            th:attr="data-id=${transport.transportId}">
-                        <i class="fas fa-info-circle"></i> Details
-                    </button>
-                    <button class="btn btn-danger btn-sm" data-delete-url="/transports/delete/{id}"
-                            data-entity-type="transport" onclick="showDeleteModal(this)"
-                            th:attr="data-entity-id=${transport.transportId}">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div aria-hidden="true" aria-labelledby="editTransportModalLabel" class="modal fade" id="editTransportModal" tabindex="-1">
+</main>
+<div aria-hidden="true" aria-labelledby="editTransportModalLabel" class="modal fade" id="editTransportModal"
+     tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div th:replace="~{transports/edit :: editTransportModal}"></div>
         </div>
     </div>
 </div>
-<div aria-hidden="true" aria-labelledby="detailsTransportModalLabel" class="modal fade" id="detailsTransportModal" tabindex="-1">
+<div aria-hidden="true" aria-labelledby="detailsTransportModalLabel" class="modal fade" id="detailsTransportModal"
+     tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div th:replace="~{transports/details :: detailsTransportModal}"></div>
         </div>
     </div>
 </div>
@@ -87,7 +93,7 @@
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
-<script th:src="@{/js/transports/editTransportOrdersModal.js}"></script>
-<script th:src="@{/js/transports/detailsTransportOrdersModal.js}"></script>
+<script th:src="@{/js/modalScript.js}"></script>
+
 </body>
 </html>

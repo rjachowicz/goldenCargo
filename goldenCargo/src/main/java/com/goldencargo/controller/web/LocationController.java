@@ -1,7 +1,6 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.Location;
-import com.goldencargo.model.entities.Route;
 import com.goldencargo.service.GenericService;
 import com.goldencargo.service.LocationService;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 <div class="border p-4">
-    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Locations</h4>
-    <form action="/locations" class="row g-3 align-items-end" method="get">
+    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Driver Vehicle Assignments</h4>
+    <form action="/driver-vehicles" class="row g-3 align-items-end" method="get">
         <div class="col-md-4">
             <label class="form-label fw-bold" for="filterValue">Search Value</label>
             <input class="form-control" id="filterValue" name="filterValue" placeholder="Enter value" type="text">
@@ -8,12 +8,12 @@
         <div class="col-md-4">
             <label class="form-label fw-bold" for="filterType">Column</label>
             <select class="form-select" id="filterType" name="filterType">
-                <option value="name">Name</option>
-                <option value="address">Address</option>
-                <option value="city">City</option>
-                <option value="state">State</option>
-                <option value="country">Country</option>
-                <option value="postalCode">Postal Code</option>
+                <option value="driver.user.firstName">Driver First Name</option>
+                <option value="driver.user.lastName">Driver Last Name</option>
+                <option value="vehicle.registrationNumber">Vehicle Registration</option>
+                <option value="assignedDate">Assigned Date</option>
+                <option value="endDate">End Date</option>
+                <option value="status">Status</option>
             </select>
         </div>
         <div class="col-md-4">
@@ -24,10 +24,14 @@
                 <option value="!=">Not Equals (!=)</option>
                 <option value=">">Greater Than (&gt;)</option>
                 <option value="<">Less Than (&lt;)</option>
+                <option value=">=">Greater Than or Equals (&gt;=)</option>
+                <option value="<=">Less Than or Equals (&lt;=)</option>
             </select>
         </div>
         <div class="col-md-4 d-flex">
-            <button class="btn btn-primary me-2" type="submit"><i class="fas fa-search"></i> Search</button>
+            <button class="btn btn-primary me-2" type="submit">
+                <i class="fas fa-search"></i> Search
+            </button>
             <button class="btn btn-secondary"
                     data-bs-target="#searchForm"
                     data-bs-toggle="collapse"
