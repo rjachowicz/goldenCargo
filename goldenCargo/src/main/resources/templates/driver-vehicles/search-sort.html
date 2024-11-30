@@ -16,28 +16,7 @@
                 <option value="status">Status</option>
             </select>
         </div>
-        <div class="col-md-4">
-            <label class="form-label fw-bold" for="comparisonType">Operation</label>
-            <select class="form-select" id="comparisonType" name="comparisonType">
-                <option value="like">Contains (LIKE)</option>
-                <option value="=">Equals (=)</option>
-                <option value="!=">Not Equals (!=)</option>
-                <option value=">">Greater Than (&gt;)</option>
-                <option value="<">Less Than (&lt;)</option>
-                <option value=">=">Greater Than or Equals (&gt;=)</option>
-                <option value="<=">Less Than or Equals (&lt;=)</option>
-            </select>
-        </div>
-        <div class="col-md-4 d-flex">
-            <button class="btn btn-primary me-2" type="submit">
-                <i class="fas fa-search"></i> Search
-            </button>
-            <button class="btn btn-secondary"
-                    data-bs-target="#searchForm"
-                    data-bs-toggle="collapse"
-                    type="button">
-                <i class="fas fa-times"></i> Cancel
-            </button>
-        </div>
+        <div th:replace="~{/helpers/search-option}"></div>
+
     </form>
 </div>

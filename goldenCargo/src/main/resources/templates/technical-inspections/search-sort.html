@@ -1,0 +1,22 @@
+<div class="border p-4">
+    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Technical Inspections</h4>
+    <form class="row g-3 align-items-end" method="get" th:action="@{/technical-inspections}">
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterValue"> Search Value
+            </label>
+            <input class="form-control" id="filterValue" name="filterValue" placeholder="Enter value" type="text">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterType">Column
+            </label>
+            <select class="form-select" id="filterType" name="filterType">
+                <option value="vehicle.registrationNumber">Vehicle</option>
+                <option value="inspectionDate">Inspection Date</option>
+                <option value="result">Result</option>
+                <option value="nextInspectionDate">Next Inspection Date</option>
+                <option value="inspectorName">Inspector Name</option>
+            </select>
+        </div>
+        <div th:replace="~{/helpers/search-option}"></div>
+    </form>
+</div>

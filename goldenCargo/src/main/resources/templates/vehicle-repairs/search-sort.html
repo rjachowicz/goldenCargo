@@ -1,6 +1,6 @@
 <div class="border p-4">
-    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Locations</h4>
-    <form action="/locations" class="row g-3 align-items-end" method="get">
+    <h4 class="h3 mb-3"><i class="fas fa-tools"></i> Search Vehicle Repairs</h4>
+    <form action="/vehicle-repairs" class="row g-3 align-items-end" method="get">
         <div class="col-md-4">
             <label class="form-label fw-bold" for="filterValue">Search Value</label>
             <input class="form-control" id="filterValue" name="filterValue" placeholder="Enter value" type="text">
@@ -8,15 +8,13 @@
         <div class="col-md-4">
             <label class="form-label fw-bold" for="filterType">Column</label>
             <select class="form-select" id="filterType" name="filterType">
-                <option value="name">Name</option>
-                <option value="address">Address</option>
-                <option value="city">City</option>
-                <option value="state">State</option>
-                <option value="country">Country</option>
-                <option value="postalCode">Postal Code</option>
+                <option value="vehicle.registrationNumber">Vehicle</option>
+                <option value="serviceDate">Service Date</option>
+                <option value="serviceType">Service Type</option>
+                <option value="cost">Cost</option>
+                <option value="serviceCenter">Service Center</option>
             </select>
         </div>
         <div th:replace="~{/helpers/search-option}"></div>
-
     </form>
 </div>
