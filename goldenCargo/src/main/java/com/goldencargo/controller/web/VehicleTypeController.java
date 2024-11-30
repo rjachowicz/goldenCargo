@@ -1,6 +1,7 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.VehicleType;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.VehicleTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,23 +17,37 @@ import java.util.Optional;
 public class VehicleTypeController {
 
     private final VehicleTypeService vehicleTypeService;
+    private final GenericService genericService;
 
-    public VehicleTypeController(VehicleTypeService vehicleTypeService) {
+    private static final String ALIAS = "vt";
+
+    public VehicleTypeController(VehicleTypeService vehicleTypeService, GenericService genericService) {
         this.vehicleTypeService = vehicleTypeService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllVehicleTypes(Model model) {
-        List<VehicleType> vehicleTypes = vehicleTypeService.getAllVehicleTypes();
-        model.addAttribute("vehicleTypes", vehicleTypes);
-        return "vehicle-types/main";
-    }
+    public String getAllVehicleTypes(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "name") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<VehicleType> vehicleTypes = genericService.getFilteredAndSortedEntities(
+                VehicleType.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("vehicleTypes", vehicleTypes);
         model.addAttribute("vehicleType", new VehicleType());
-        model.addAttribute("formTitle", "Create New Vehicle Type");
-        return "vehicle-types/create";
+        return "vehicle-types/main";
     }
 
     @PostMapping("/create")
@@ -46,14 +61,13 @@ public class VehicleTypeController {
         Optional<VehicleType> vehicleType = vehicleTypeService.getVehicleTypeById(id);
         if (vehicleType.isPresent()) {
             model.addAttribute("vehicleType", vehicleType.get());
-            model.addAttribute("formTitle", "Edit Vehicle Type");
-            return "vehicle-types/edit";
+            return "vehicle-types/edit :: editVehicleTypeModal";
         }
         return "redirect:/vehicle-types";
     }
 
     @PostMapping("/update/{id}")
-    public String updateClient(@PathVariable Long id, VehicleType vehicleType) {
+    public String updateVehicleType(@PathVariable Long id, @ModelAttribute VehicleType vehicleType) {
         vehicleTypeService.updateVehicleType(id, vehicleType);
         return "redirect:/vehicle-types";
     }
@@ -61,16 +75,14 @@ public class VehicleTypeController {
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<VehicleType> vehicleType = vehicleTypeService.getVehicleTypeById(id);
-        if (vehicleType.isPresent()) {
-            model.addAttribute("vehicleType", vehicleType.get());
-            return "vehicle-types/details";
-        }
-        return "redirect:/vehicle-types";
+        vehicleType.ifPresent(value -> model.addAttribute("vehicleType", value));
+        return "vehicle-types/details :: detailsVehicleTypeModal";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteVehicleType(@PathVariable Long id) {
-        boolean isDeleted = vehicleTypeService.deleteVehicleType(id);
-        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return vehicleTypeService.deleteVehicleType(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

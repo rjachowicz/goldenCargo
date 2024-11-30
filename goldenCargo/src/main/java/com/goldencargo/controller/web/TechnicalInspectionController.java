@@ -1,14 +1,12 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.TechnicalInspection;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.TechnicalInspectionService;
 import com.goldencargo.service.VehicleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,31 +16,47 @@ import java.util.Optional;
 public class TechnicalInspectionController {
 
     private final TechnicalInspectionService technicalInspectionService;
-    private final VehicleService VehicleService;
+    private final VehicleService vehicleService;
+    private final GenericService genericService;
+
+    private static final String ALIAS = "ti";
 
     public TechnicalInspectionController(TechnicalInspectionService technicalInspectionService,
-                                         VehicleService VehicleService) {
+                                         VehicleService vehicleService,
+                                         GenericService genericService) {
         this.technicalInspectionService = technicalInspectionService;
-        this.VehicleService = VehicleService;
+        this.vehicleService = vehicleService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllInspections(Model model) {
-        List<TechnicalInspection> inspections = technicalInspectionService.getAllInspections();
+    public String getAllInspections(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "inspectionDate") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
+
+        List<TechnicalInspection> inspections = genericService.getFilteredAndSortedEntities(
+                TechnicalInspection.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
         model.addAttribute("technicalInspections", inspections);
+        model.addAttribute("technicalInspection", new TechnicalInspection());
+        model.addAttribute("vehicles", vehicleService.getAllVehicles());
+        model.addAttribute("results", TechnicalInspection.InspectionResult.values());
         return "technical-inspections/main";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("technicalInspection", new TechnicalInspection());
-        model.addAttribute("vehicles", VehicleService.getAllVehicles());
-        model.addAttribute("results", TechnicalInspection.InspectionResult.values());
-        return "technical-inspections/create";
-    }
-
     @PostMapping("/create")
-    public String createInspection(TechnicalInspection inspection) {
+    public String createInspection(@ModelAttribute TechnicalInspection inspection) {
         technicalInspectionService.createInspection(inspection);
         return "redirect:/technical-inspections";
     }
@@ -52,7 +66,7 @@ public class TechnicalInspectionController {
         Optional<TechnicalInspection> inspection = technicalInspectionService.getInspectionById(id);
         if (inspection.isPresent()) {
             model.addAttribute("technicalInspection", inspection.get());
-            model.addAttribute("vehicles", VehicleService.getAllVehicles());
+            model.addAttribute("vehicles", vehicleService.getAllVehicles());
             model.addAttribute("results", TechnicalInspection.InspectionResult.values());
             return "technical-inspections/edit";
         }
@@ -60,7 +74,7 @@ public class TechnicalInspectionController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateInspection(@PathVariable Long id, TechnicalInspection inspectionDetails) {
+    public String updateInspection(@PathVariable Long id, @ModelAttribute TechnicalInspection inspectionDetails) {
         technicalInspectionService.updateInspection(id, inspectionDetails);
         return "redirect:/technical-inspections";
     }

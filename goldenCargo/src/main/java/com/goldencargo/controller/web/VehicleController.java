@@ -1,14 +1,14 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.Vehicle;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.VehicleService;
 import com.goldencargo.service.VehicleTypeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,29 +19,44 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
     private final VehicleTypeService vehicleTypeService;
+    private final GenericService genericService;
 
-    public VehicleController(VehicleService vehicleService, VehicleTypeService vehicleTypeService) {
+    private static final String ALIAS = "v";
+
+    public VehicleController(VehicleService vehicleService, VehicleTypeService vehicleTypeService, GenericService genericService) {
         this.vehicleService = vehicleService;
         this.vehicleTypeService = vehicleTypeService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllVehicles(Model model) {
-        List<Vehicle> vehicles = vehicleService.getAllVehicles();
-        model.addAttribute("vehicles", vehicles);
-        return "vehicles/main";
-    }
+    public String getAllVehicles(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "registrationNumber") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<Vehicle> vehicles = genericService.getFilteredAndSortedEntities(
+                Vehicle.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("vehicles", vehicles);
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("vehicleTypes", vehicleTypeService.getAllVehicleTypes());
         model.addAttribute("statuses", Vehicle.VehicleStatus.values());
-        return "vehicles/create";
+        return "vehicles/main";
     }
 
     @PostMapping("/create")
-    public String createVehicle(Vehicle vehicle) {
+    public String createVehicle(@ModelAttribute Vehicle vehicle) {
         vehicleService.createVehicle(vehicle);
         return "redirect:/vehicles";
     }
@@ -53,13 +68,13 @@ public class VehicleController {
             model.addAttribute("vehicle", vehicle.get());
             model.addAttribute("vehicleTypes", vehicleTypeService.getAllVehicleTypes());
             model.addAttribute("statuses", Vehicle.VehicleStatus.values());
-            return "vehicles/edit";
+            return "vehicles/edit :: editVehicleModal";
         }
         return "redirect:/vehicles";
     }
 
     @PostMapping("/update/{id}")
-    public String updateVehicle(@PathVariable Long id, Vehicle vehicleDetails) {
+    public String updateVehicle(@PathVariable Long id, @ModelAttribute Vehicle vehicleDetails) {
         vehicleService.updateVehicle(id, vehicleDetails);
         return "redirect:/vehicles";
     }
@@ -68,12 +83,13 @@ public class VehicleController {
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<Vehicle> vehicle = vehicleService.getVehicleById(id);
         vehicle.ifPresent(value -> model.addAttribute("vehicle", value));
-        return "vehicles/details";
+        return "vehicles/details :: detailsVehicleModal";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteVehicle(@PathVariable Long id) {
-        vehicleService.deleteVehicle(id);
-        return "redirect:/vehicles";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteVehicle(@PathVariable Long id) {
+        return vehicleService.deleteVehicle(id)
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

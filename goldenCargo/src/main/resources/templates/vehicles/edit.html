@@ -1,70 +1,104 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Edit Vehicle</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <h2>Edit Vehicle</h2>
-    <form method="post" th:action="@{'/vehicles/update/' + ${vehicle.vehicleId}}" th:object="${vehicle}">
-        <div class="mb-3">
-            <label class="form-label" for="vehicleType">Vehicle Type</label>
-            <select class="form-control" id="vehicleType" th:field="*{vehicleType.vehicleTypeId}">
-                <option th:each="type : ${vehicleTypes}"
-                        th:selected="${type.vehicleTypeId == vehicle.vehicleType.vehicleTypeId}" th:text="${type.name}"
-                        th:value="${type.vehicleTypeId}"></option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="registrationNumber">Registration Number</label>
-            <input class="form-control" id="registrationNumber" th:field="*{registrationNumber}" type="text">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="make">Make</label>
-            <input class="form-control" id="make" th:field="*{make}" type="text">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="model">Model</label>
-            <input class="form-control" id="model" th:field="*{model}" type="text">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="year">Year</label>
-            <input class="form-control" id="year" th:field="*{year}" type="number">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="capacity">Capacity</label>
-            <input class="form-control" id="capacity" step="0.01" th:field="*{capacity}" type="number">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="status">Status</label>
-            <select class="form-control" id="status" th:field="*{status}">
-                <option th:each="status : ${statuses}" th:selected="${status == vehicle.status}" th:text="${status}"
-                        th:value="${status}"></option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="purchaseDate">Purchase Date</label>
-            <input class="form-control" id="purchaseDate" th:field="*{purchaseDate}" type="date">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="lastServiceDate">Last Service Date</label>
-            <input class="form-control" id="lastServiceDate" th:field="*{lastServiceDate}" type="date">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="nextServiceDue">Next Service Due</label>
-            <input class="form-control" id="nextServiceDue" th:field="*{nextServiceDue}" type="date">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="mileage">Mileage</label>
-            <input class="form-control" id="mileage" th:field="*{mileage}" type="number">
-        </div>
-        <button class="btn btn-success" type="submit">Save</button>
-        <a class="btn btn-secondary" href="/vehicles">Back</a>
-    </form>
+<div th:fragment="editVehicleModal">
+    <div class="modal-header bg-warning text-dark border-bottom">
+        <h5 class="modal-title">
+            <i class="fas fa-edit"></i> Edit Vehicle
+        </h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+    </div>
+    <div class="modal-body bg-light text-dark">
+        <form method="post" th:action="@{/vehicles/update/{id}(id=${vehicle.vehicleId})}" th:object="${vehicle}">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-truck"></i> Vehicle Type
+                    </label>
+                    <select class="form-control" id="vehicleType" th:field="*{vehicleType.vehicleTypeId}">
+                        <option th:each="type : ${vehicleTypes}"
+                                th:selected="${type.vehicleTypeId == vehicle.vehicleType.vehicleTypeId}"
+                                th:text="${type.name}"
+                                th:value="${type.vehicleTypeId}"></option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-clipboard-list"></i> Registration Number
+                    </label>
+                    <input class="form-control" id="registrationNumber" placeholder="Enter registration number"
+                           th:field="*{registrationNumber}" type="text">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-industry"></i> Make
+                    </label>
+                    <input class="form-control" id="make" placeholder="Enter make" th:field="*{make}" type="text">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-car"></i> Model
+                    </label>
+                    <input class="form-control" id="model" placeholder="Enter model" th:field="*{model}" type="text">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-calendar-alt"></i> Year
+                    </label>
+                    <input class="form-control" id="year" placeholder="Enter year" th:field="*{year}" type="number">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-balance-scale"></i> Capacity
+                    </label>
+                    <input class="form-control" id="capacity" placeholder="Enter capacity"
+                           step="0.01" th:field="*{capacity}" type="number">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-info-circle"></i> Status
+                    </label>
+                    <select class="form-control" id="status" th:field="*{status}">
+                        <option th:each="status : ${statuses}"
+                                th:selected="${status == vehicle.status}"
+                                th:text="${status}"
+                                th:value="${status}"></option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-calendar-plus"></i> Purchase Date
+                    </label>
+                    <input class="form-control" id="purchaseDate" placeholder="Enter purchase date"
+                           th:field="*{purchaseDate}" type="date">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-calendar-check"></i> Last Service Date
+                    </label>
+                    <input class="form-control" id="lastServiceDate" placeholder="Enter last service date"
+                           th:field="*{lastServiceDate}" type="date">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-calendar-alt"></i> Next Service Due
+                    </label>
+                    <input class="form-control" id="nextServiceDue" placeholder="Enter next service due date"
+                           th:field="*{nextServiceDue}" type="date">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-tachometer-alt"></i> Mileage
+                    </label>
+                    <input class="form-control" id="mileage" placeholder="Enter mileage"
+                           th:field="*{mileage}" type="number">
+                </div>
+            </div>
+            <div class="modal-footer mt-4 bg-light">
+                <button class="btn btn-success" type="submit">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
-</body>
-</html>

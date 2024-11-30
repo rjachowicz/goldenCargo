@@ -3,6 +3,7 @@ package com.goldencargo.service;
 import com.goldencargo.model.entities.Vehicle;
 import com.goldencargo.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,9 +47,12 @@ public class VehicleService {
         });
     }
 
-    public void deleteVehicle(Long id) {
+    @Transactional
+    public boolean deleteVehicle(Long id) {
         if (vehicleRepository.existsById(id)) {
             vehicleRepository.softDelete(id);
+            return true;
         }
+        return false;
     }
 }
