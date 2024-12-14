@@ -24,18 +24,15 @@ public class UserController {
     private final GenericService genericService;
     private final EmailService emailService;
     private final PasswordResetTokenService passwordResetTokenService;
-    private final PasswordEncoder passwordEncoder;
 
     public UserController(UserService userService,
                           GenericService genericService,
                           EmailService emailService,
-                          PasswordResetTokenService passwordResetTokenService,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordResetTokenService passwordResetTokenService) {
         this.userService = userService;
         this.genericService = genericService;
         this.emailService = emailService;
         this.passwordResetTokenService = passwordResetTokenService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
