@@ -1,0 +1,20 @@
+<div class="border p-4">
+    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Users</h4>
+    <form action="/orders" class="row g-3 align-items-end" method="get">
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterValue">Search Value</label>
+            <input class="form-control" id="filterValue" name="filterValue" placeholder="Enter value"
+                   type="text">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterType">Column</label>
+            <select class="form-select" id="filterType" name="filterType">
+                <option value="clientOrder.client.name">Client Order</option>
+                <option value="transportOrder">Transport Order</option>
+                <option value="orderType">Order Type</option>
+                <option value="status">Status</option>
+            </select>
+        </div>
+        <div th:replace="~{/helpers/search-option}"></div>
+    </form>
+</div>

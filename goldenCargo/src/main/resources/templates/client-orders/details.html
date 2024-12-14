@@ -1,108 +1,117 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Client Order Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <h2>Client Order Details</h2>
-    <dl class="row">
-        <dt class="col-sm-3">ID</dt>
-        <dd class="col-sm-9" th:text="${clientOrder.clientOrderId}"></dd>
+<div th:fragment="detailsClientOrderModal">
+    <div class="modal-header bg-info text-dark border-bottom">
+        <h5 class="modal-title">
+            <i class="fas fa-info-circle"></i> Client Order Details
+        </h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+    </div>
+    <div class="modal-body bg-light text-dark">
+        <form>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">ID</label>
+                    <p class="form-control-plaintext" th:text="${clientOrder.clientOrderId}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Client</label>
+                    <p class="form-control-plaintext" th:text="${clientOrder.client.name}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Order Date</label>
+                    <p class="form-control-plaintext" th:text="${#dates.format(clientOrder.orderDate, 'yyyy-MM-dd')}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Status</label>
+                    <p class="form-control-plaintext" th:text="${clientOrder.status}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Total Amount</label>
+                    <p class="form-control-plaintext" th:text="${clientOrder.totalAmount}"></p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Payment Status</label>
+                    <p class="form-control-plaintext" th:text="${clientOrder.paymentStatus}"></p>
+                </div>
+            </div>
 
-        <dt class="col-sm-3">Client</dt>
-        <dd class="col-sm-9" th:text="${clientOrder.client.name}"></dd>
+            <h5 class="mt-4">Transport Orders</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Client Order</th>
+                        <th>Assigned Driver</th>
+                        <th>Assigned Vehicle</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Scheduled Arrival</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order : ${clientOrder.transportOrders}">
+                        <td th:text="${order.clientOrder.clientOrderId}"></td>
+                        <td th:text="${order.assignedDriver.driverId}"></td>
+                        <td th:text="${order.assignedVehicle.vehicleId}"></td>
+                        <td th:text="${order.startLocation.name}"></td>
+                        <td th:text="${order.endLocation.name}"></td>
+                        <td th:text="${#dates.format(order.scheduledArrival, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${order.status}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <dt class="col-sm-3">Order Date</dt>
-        <dd class="col-sm-9" th:text="${#dates.format(clientOrder.orderDate, 'yyyy-MM-dd')}"></dd>
+            <h5 class="mt-4">Goods</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Weight</th>
+                        <th>Dimensions</th>
+                        <th>Special Handling</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="good : ${clientOrder.goods}">
+                        <td th:text="${good.name}"></td>
+                        <td th:text="${good.description}"></td>
+                        <td th:text="${good.weight}"></td>
+                        <td th:text="${good.dimensions}"></td>
+                        <td th:text="${good.specialHandlingInstructions}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <dt class="col-sm-3">Status</dt>
-        <dd class="col-sm-9" th:text="${clientOrder.status}"></dd>
-
-        <dt class="col-sm-3">Total Amount</dt>
-        <dd class="col-sm-9" th:text="${clientOrder.totalAmount}"></dd>
-
-        <dt class="col-sm-3">Payment Status</dt>
-        <dd class="col-sm-9" th:text="${clientOrder.paymentStatus}"></dd>
-    </dl>
-
-    <h4>Transport Orders</h4>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>clientOrder</th>
-            <th>assignedDriver</th>
-            <th>assignedVehicle</th>
-            <th>startLocation</th>
-            <th>endLocation</th>
-            <th>scheduledArrival</th>
-            <th>status</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="order : ${clientOrder.transportOrders}">
-            <td th:text="${order.transportOrderId}"></td>
-            <td th:text="${order.clientOrder.clientOrderId}"></td>
-            <td th:text="${order.assignedDriver.driverId}"></td>
-            <td th:text="${order.assignedVehicle.vehicleId}"></td>
-            <td th:text="${order.startLocation.name}"></td>
-            <td th:text="${order.endLocation.name}"></td>
-            <td th:text="${#dates.format(order.scheduledArrival, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td th:text="${order.status}"></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <h4>Goods</h4>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>description</th>
-            <th>weight</th>
-            <th>dimensions</th>
-            <th>special</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="good : ${clientOrder.goods}">
-            <td th:text="${good.goodsId}"></td>
-            <td th:text="${good.name}"></td>
-            <td th:text="${good.description}"></td>
-            <td th:text="${good.weight}"></td>
-            <td th:text="${good.dimensions}"></td>
-            <td th:text="${good.specialHandlingInstructions}"></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <h4>Client Invoices</h4>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Invoice Number</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="invoice : ${clientOrder.clientInvoices}">
-            <td th:text="${invoice.invoiceId}"></td>
-            <td th:text="${invoice.invoiceNumber}"></td>
-            <td th:text="${invoice.totalAmount}"></td>
-            <td th:text="${invoice.paymentStatus}"></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <a class="btn btn-secondary" href="/client-orders">Back</a>
+            <h5 class="mt-4">Client Invoices</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Invoice Number</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="invoice : ${clientOrder.clientInvoices}">
+                        <td th:text="${invoice.invoiceId}"></td>
+                        <td th:text="${invoice.invoiceNumber}"></td>
+                        <td th:text="${invoice.totalAmount}"></td>
+                        <td th:text="${invoice.paymentStatus}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer bg-light">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+            <i class="fas fa-times"></i> Close
+        </button>
+    </div>
 </div>
-</body>
-</html>

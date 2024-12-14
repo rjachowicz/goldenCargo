@@ -1,0 +1,22 @@
+<div class="border p-4">
+    <h4 class="h3 mb-3"><i class="fas fa-search"></i> Search Client Invoices</h4>
+    <form action="/client-invoices" class="row g-3 align-items-end" method="get">
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterValue">Search Value</label>
+            <input class="form-control" id="filterValue" name="filterValue" placeholder="Enter value" type="text">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-bold" for="filterType">Column</label>
+            <select class="form-select" id="filterType" name="filterType">
+                <option value="client.name">Client Name</option>
+                <option value="clientOrder.clientOrderId">Client Order ID</option>
+                <option value="invoiceNumber">Invoice Number</option>
+                <option value="dateIssued">Date Issued</option>
+                <option value="dueDate">Due Date</option>
+                <option value="totalAmount">Total Amount</option>
+                <option value="paymentStatus">Payment Status</option>
+            </select>
+        </div>
+        <div th:replace="~{/helpers/search-option}"></div>
+    </form>
+</div>

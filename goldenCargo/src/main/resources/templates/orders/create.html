@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Create Order</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <h2>Create Order</h2>
+<div class="border p-4">
+    <h4 class="h3 mb-3"><i class="fas fa-file-invoice"></i> Create New Order</h4>
     <form method="post" th:action="@{/orders/create}" th:object="${order}">
         <div class="mb-3">
             <label class="form-label" for="clientOrder">Client Order</label>
@@ -41,5 +31,3 @@
         <a class="btn btn-secondary" href="/orders">Back</a>
     </form>
 </div>
-</body>
-</html>

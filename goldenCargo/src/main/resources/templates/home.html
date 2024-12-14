@@ -19,16 +19,9 @@
                 <p class="mb-0 text-muted">Easily view, edit, and manage user accounts.</p>
             </div>
             <div>
-                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm"
-                        data-bs-toggle="collapse" type="button">
-                    <i class="fa-solid fa-file"></i> Create Report
-                </button>
-                <button aria-controls="addUserForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#addUserForm"
-                        data-bs-toggle="collapse" type="button">
-                    <i class="fa-solid fa-envelope"></i> Send Email
-                </button>
+                <a href="/create-report" class="btn btn-primary me-2">
+                    <i class="fas fa-file-alt"></i> Generate Vehicle Report
+                </a>
                 <button aria-controls="addUserForm" aria-expanded="false" class="btn btn-outline-primary me-2"
                         data-bs-target="#addUserForm"
                         data-bs-toggle="collapse" type="button">
@@ -36,58 +29,56 @@
                 </button>
             </div>
         </div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">User Roles</h5>
-                        <canvas id="userRolesChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Order Statuses</h5>
-                        <canvas id="orderStatusesChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Vehicle Statuses</h5>
-                        <canvas id="vehicleStatusesChart"></canvas>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Message Statuses</h5>
-                        <canvas id="messageStatusesChart"></canvas>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Incident Types</h5>
-                        <canvas id="incidentTypesChart"></canvas>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Vehicle Repair Costs</h5>
-                        <canvas id="vehicleRepairChart"></canvas>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Transport Statuses</h5>
-                        <canvas id="transportStatusChart"></canvas>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Client Invoice Statuses</h5>
-                        <canvas id="clientInvoiceStatusChart"></canvas>
-                    </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">User Roles</h5>
+                    <canvas id="userRolesChart"></canvas>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Statuses</h5>
+                    <canvas id="orderStatusesChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Vehicle Statuses</h5>
+                    <canvas id="vehicleStatusesChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Message Statuses</h5>
+                    <canvas id="messageStatusesChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Incident Types</h5>
+                    <canvas id="incidentTypesChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Vehicle Repair Costs</h5>
+                    <canvas id="vehicleRepairChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Transport Statuses</h5>
+                    <canvas id="transportStatusChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Client Invoice Statuses</h5>
+                    <canvas id="clientInvoiceStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
