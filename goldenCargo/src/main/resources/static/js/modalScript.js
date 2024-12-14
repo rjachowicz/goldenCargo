@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 modalContent.innerHTML = html;
                 const modal = new bootstrap.Modal(document.getElementById(modalId));
                 modal.show();
+                setupPasswordChange(modalContent); // Initialize password change logic
             })
             .catch(error => console.error("Error loading modal content:", error));
     }
@@ -34,4 +35,47 @@ document.addEventListener("DOMContentLoaded", () => {
             openModal(button, modalId, endpoint);
         });
     });
+
+    function setupPasswordChange(modalContent) {
+        const togglePasswordButton = modalContent.querySelector("#togglePasswordChange");
+        const passwordFields = modalContent.querySelectorAll(".password-change");
+        const newPasswordInput = modalContent.querySelector("#newPassword");
+        const toggleVisibilityButton = modalContent.querySelector("#togglePasswordVisibility");
+        const generatePasswordButton = modalContent.querySelector("#generatePassword");
+
+        // Toggle visibility of password fields
+        if (togglePasswordButton) {
+            togglePasswordButton.addEventListener("click", () => {
+                passwordFields.forEach(field => field.classList.toggle("d-none"));
+            });
+        }
+
+        if (toggleVisibilityButton && newPasswordInput) {
+            toggleVisibilityButton.addEventListener("click", () => {
+                if (newPasswordInput.type === "password") {
+                    newPasswordInput.type = "text";
+                    toggleVisibilityButton.textContent = "Hide";
+                } else {
+                    newPasswordInput.type = "password";
+                    toggleVisibilityButton.textContent = "Show";
+                }
+            });
+        }
+
+        // Generate random password
+        if (generatePasswordButton && newPasswordInput) {
+            generatePasswordButton.addEventListener("click", () => {
+                newPasswordInput.value = generateRandomPassword(12);
+            });
+        }
+    }
+
+    function generateRandomPassword(length) {
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+        let result = "";
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    }
 });
