@@ -5,10 +5,10 @@ import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.service.ClientOrderService;
 import com.goldencargo.service.ClientService;
+import com.goldencargo.service.GenericService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,26 +21,40 @@ public class ClientOrderController {
 
     private final ClientOrderService clientOrderService;
     private final ClientService clientService;
+    private final GenericService genericService;
 
-    public ClientOrderController(ClientOrderService clientOrderService, ClientService clientService) {
+    private static final String ALIAS = "co";
+
+    public ClientOrderController(ClientOrderService clientOrderService, ClientService clientService, GenericService genericService) {
         this.clientOrderService = clientOrderService;
         this.clientService = clientService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllClientOrders(Model model) {
-        List<ClientOrder> clientOrders = clientOrderService.getAllClientOrders();
-        model.addAttribute("clientOrders", clientOrders);
-        return "client-orders/main";
-    }
+    public String getAllClientOrders(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "orderDate") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("clientOrder", new ClientOrder());
+        List<ClientOrder> clientOrders = genericService.getFilteredAndSortedEntities(
+                ClientOrder.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+        model.addAttribute("clientOrders", clientOrders);
         model.addAttribute("clients", clientService.getAllClients());
-        model.addAttribute("statuses", Status.values());
-        model.addAttribute("paymentStatuses", PaymentStatus.values());
-        return "client-orders/create";
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortLogic", sortLogic);
+        model.addAttribute("clientOrder", new ClientOrder());
+        return "client-orders/main";
     }
 
     @PostMapping("/create")
@@ -57,7 +71,7 @@ public class ClientOrderController {
             model.addAttribute("clients", clientService.getAllClients());
             model.addAttribute("statuses", Status.values());
             model.addAttribute("paymentStatuses", PaymentStatus.values());
-            return "client-orders/edit";
+            return "client-orders/edit :: editClientOrderModal";
         }
         return "redirect:/client-orders";
     }
@@ -68,21 +82,19 @@ public class ClientOrderController {
         return "redirect:/client-orders";
     }
 
-    @Transactional
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<ClientOrder> clientOrder = clientOrderService.getClientOrderByIdWithDetails(id);
         if (clientOrder.isPresent()) {
             model.addAttribute("clientOrder", clientOrder.get());
-            return "client-orders/details";
+            return "client-orders/details :: detailsClientOrderModal";
         }
         return "redirect:/client-orders";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteClientOrder(@PathVariable Long id) {
-        return clientOrderService.deleteClientOrder(id)
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        boolean isDeleted = clientOrderService.deleteClientOrder(id);
+        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

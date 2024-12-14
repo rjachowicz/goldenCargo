@@ -8,49 +8,92 @@
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-
-<div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <h2>Client Orders</h2>
-    <a class="btn btn-primary mb-3" href="/client-orders/new">Add Client Order</a>
-
-
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Client</th>
-            <th>Order Date</th>
-            <th>Status</th>
-            <th>Total Amount</th>
-            <th>Payment Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="order : ${clientOrders}">
-            <td th:text="${order.client.name}"></td>
-            <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
-            <td th:text="${order.status}"></td>
-            <td th:text="${order.totalAmount}"></td>
-            <td th:text="${order.paymentStatus}"></td>
-            <td>
-                <a class="btn btn-info btn-sm"
-                   th:href="@{'/client-orders/details/' + ${order.clientOrderId}}">Details</a>
-                <a class="btn btn-warning btn-sm" th:href="@{'/client-orders/edit/' + ${order.clientOrderId}}">Edit</a>
-                <button class="btn btn-danger btn-sm"
-                        data-delete-url="/client-orders/delete/{id}"
-                        data-entity-type="clientOrder"
-                        onclick="showDeleteModal(this)"
-                        th:attr="data-entity-id=${order.clientOrderId}">Delete
+<main>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
+            <div>
+                <h1 class="h3 mb-0"><i class="fas fa-clipboard-list"></i> Manage Client Orders</h1>
+                <p class="mb-0 text-muted">Easily view, edit, and manage client orders.</p>
+            </div>
+            <div>
+                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-search"></i> Search
                 </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+                <button aria-controls="addClientOrderForm" aria-expanded="false" class="btn btn-outline-success"
+                        data-bs-target="#addClientOrderForm" data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-plus"></i> Add Client Order
+                </button>
+                <a class="btn btn-secondary" href="/client-orders"><i class="fas fa-redo"></i> Show All</a>
+            </div>
+        </div>
+        <div class="collapse mb-4" id="searchForm">
+            <div th:replace="~{/client-orders/search-sort}"></div>
+        </div>
+        <div class="collapse mb-4" id="addClientOrderForm">
+            <div th:replace="~{/client-orders/create}"></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>Client</th>
+                    <th>Order Date</th>
+                    <th>Status</th>
+                    <th>Total Amount</th>
+                    <th>Payment Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${clientOrders}">
+                    <td th:text="${order.client.name}"></td>
+                    <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td th:text="${order.totalAmount}"></td>
+                    <td th:text="${order.paymentStatus}"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm"
+                                data-modal-action
+                                data-modal-id="editClientOrderModal"
+                                data-endpoint="client-orders/edit"
+                                th:attr="data-id=${order.clientOrderId}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                data-modal-action
+                                data-modal-id="detailsClientOrderModal"
+                                data-endpoint="client-orders/details"
+                                th:attr="data-id=${order.clientOrderId}">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-delete-url="/client-orders/delete/{id}"
+                                data-entity-type="clientOrder" onclick="showDeleteModal(this)"
+                                th:attr="data-entity-id=${order.clientOrderId}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div aria-hidden="true" aria-labelledby="editClientOrderModalLabel" class="modal fade" id="editClientOrderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div aria-hidden="true" aria-labelledby="detailsClientOrderModalLabel" class="modal fade" id="detailsClientOrderModal"
+         tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+</main>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
+<div th:replace="~{/helpers/footer :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
-<div th:replace="~{/helpers/footer}"></div>
+<script th:src="@{/js/modalScript.js}"></script>
 </body>
 </html>

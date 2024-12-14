@@ -4,6 +4,7 @@ import com.goldencargo.model.entities.ClientInvoice;
 import com.goldencargo.service.ClientInvoiceService;
 import com.goldencargo.service.ClientOrderService;
 import com.goldencargo.service.ClientService;
+import com.goldencargo.service.GenericService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,26 +21,45 @@ public class ClientInvoiceController {
     private final ClientInvoiceService clientInvoiceService;
     private final ClientService clientService;
     private final ClientOrderService clientOrderService;
+    private final GenericService genericService;
 
-    public ClientInvoiceController(ClientInvoiceService clientInvoiceService, ClientService clientService, ClientOrderService clientOrderService) {
+    public ClientInvoiceController(ClientInvoiceService clientInvoiceService,
+                                   ClientService clientService,
+                                   ClientOrderService clientOrderService,
+                                   GenericService genericService) {
         this.clientInvoiceService = clientInvoiceService;
         this.clientService = clientService;
         this.clientOrderService = clientOrderService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllClientInvoices(Model model) {
-        List<ClientInvoice> clientInvoices = clientInvoiceService.getAllClientInvoices();
-        model.addAttribute("clientInvoices", clientInvoices);
-        return "client-invoices/main";
-    }
+    public String getAllClientInvoices(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "dateIssued") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<ClientInvoice> clientInvoices = genericService.getFilteredAndSortedEntities(
+                ClientInvoice.class,
+                "ci",
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("clientInvoices", clientInvoices);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortLogic", sortLogic);
+        model.addAttribute("clientInvoice", new ClientInvoice());
         model.addAttribute("clientInvoice", new ClientInvoice());
         model.addAttribute("clients", clientService.getAllClients());
         model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
-        return "client-invoices/create";
+        return "client-invoices/main";
     }
 
     @PostMapping("/create")
@@ -55,13 +75,14 @@ public class ClientInvoiceController {
             model.addAttribute("clientInvoice", clientInvoice.get());
             model.addAttribute("clients", clientService.getAllClients());
             model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
-            return "client-invoices/edit";
+            return "client-invoices/edit :: editClientInvoiceModal";
         }
         return "redirect:/client-invoices";
     }
 
     @PostMapping("/update/{id}")
-    public String updateClientInvoice(@PathVariable Long id, ClientInvoice clientInvoiceDetails) {
+    public String updateClientInvoice(@PathVariable Long id,
+                                      @ModelAttribute ClientInvoice clientInvoiceDetails) {
         clientInvoiceService.updateClientInvoice(id, clientInvoiceDetails);
         return "redirect:/client-invoices";
     }
@@ -71,15 +92,14 @@ public class ClientInvoiceController {
         Optional<ClientInvoice> clientInvoice = clientInvoiceService.getClientInvoiceById(id);
         if (clientInvoice.isPresent()) {
             model.addAttribute("clientInvoice", clientInvoice.get());
-            return "client-invoices/details";
+            return "client-invoices/details :: detailsClientInvoiceModal";
         }
         return "redirect:/client-invoices";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteClientInvoice(@PathVariable Long id) {
-        return clientInvoiceService.deleteClientInvoice(id)
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        boolean isDeleted = clientInvoiceService.deleteClientInvoice(id);
+        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

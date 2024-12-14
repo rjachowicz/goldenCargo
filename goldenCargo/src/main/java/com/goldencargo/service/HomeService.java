@@ -1,5 +1,7 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.dto.VehicleReportDTO;
+import com.goldencargo.model.entities.Vehicle;
 import com.goldencargo.repository.HomeRepository;
 import org.springframework.stereotype.Service;
 

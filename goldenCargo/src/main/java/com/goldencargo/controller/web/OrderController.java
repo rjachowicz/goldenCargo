@@ -4,14 +4,14 @@ import com.goldencargo.model.data.InvoiceType;
 import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.Order;
 import com.goldencargo.service.ClientOrderService;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.OrderService;
 import com.goldencargo.service.TransportOrderService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,19 +23,48 @@ public class OrderController {
     private final OrderService orderService;
     private final ClientOrderService clientOrderService;
     private final TransportOrderService transportOrderService;
+    private final GenericService genericService;
+
+    private static final String ALIAS = "o";
 
     public OrderController(OrderService orderService,
                            ClientOrderService clientOrderService,
-                           TransportOrderService transportOrderService) {
+                           TransportOrderService transportOrderService,
+                           GenericService genericService) {
         this.orderService = orderService;
         this.clientOrderService = clientOrderService;
         this.transportOrderService = transportOrderService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllOrders(Model model) {
-        List<Order> orders = orderService.getAllOrders();
+    public String getAllOrders(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "orderType") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
+
+        List<Order> orders = genericService.getFilteredAndSortedEntities(
+                Order.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+        model.addAttribute("order", new Order());
+        model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
+        model.addAttribute("transportOrders", transportOrderService.getAllOrders());
+        model.addAttribute("orderTypes", InvoiceType.values());
+        model.addAttribute("statuses", Status.values());
         model.addAttribute("orders", orders);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortLogic", sortLogic);
+        model.addAttribute("filterType", filterType);
+        model.addAttribute("filterValue", filterValue);
         return "orders/main";
     }
 
@@ -50,7 +79,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public String createOrder(Order order) {
+    public String createOrder(@ModelAttribute Order order) {
         orderService.createOrder(order);
         return "redirect:/orders";
     }
@@ -70,7 +99,7 @@ public class OrderController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateOrder(@PathVariable Long id, Order orderDetails) {
+    public String updateOrder(@PathVariable Long id, @ModelAttribute Order orderDetails) {
         orderService.updateOrder(id, orderDetails);
         return "redirect:/orders";
     }
@@ -78,13 +107,15 @@ public class OrderController {
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<Order> order = orderService.getOrderById(id);
-        order.ifPresent(value -> model.addAttribute("order", value));
-        return "orders/details";
+        if (order.isPresent()) {
+            model.addAttribute("order", order.get());
+            return "orders/details";
+        }
+        return "redirect:/orders";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
-        return "redirect:/orders";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
+        return orderService.deleteOrder(id) ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
