@@ -1,17 +1,21 @@
 package com.goldencargo.util;
 
-import com.goldencargo.model.dto.ClientReportDTO;
-import com.goldencargo.model.dto.VehicleReportDTO;
+import com.goldencargo.model.dto.*;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 public class PdfGenerator {
 
-    public static byte[] generateReportPdf(VehicleReportDTO vehicleReport, ClientReportDTO clientReport) {
+    public static byte[] generateReportPdf(VehicleReportDTO vehicleReport,
+                                           ClientReportDTO clientReport,
+                                           List<TechnicalInspectionDTO> technicalInspections,
+                                           List<ServiceScheduleDTO> serviceSchedules,
+                                           List<DriverVehicleDTO> driverHistory) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(outputStream);
         Document document = new Document(new com.itextpdf.kernel.pdf.PdfDocument(writer));
@@ -48,6 +52,44 @@ public class PdfGenerator {
         });
         document.add(incidentsTable);
 
+        document.add(new Paragraph("\nTechnical Inspections:"));
+        Table inspectionsTable = new Table(new float[]{4, 4, 4, 4});
+        inspectionsTable.addHeaderCell("Inspection Date");
+        inspectionsTable.addHeaderCell("Next Inspection Date");
+        inspectionsTable.addHeaderCell("Inspector Name");
+        inspectionsTable.addHeaderCell("Result");
+        technicalInspections.forEach(inspection -> {
+            inspectionsTable.addCell(safeText(inspection.getInspectionDate().toString()));
+            inspectionsTable.addCell(safeText(inspection.getNextInspectionDate() != null ? inspection.getNextInspectionDate().toString() : "N/A"));
+            inspectionsTable.addCell(safeText(inspection.getInspectorName()));
+            inspectionsTable.addCell(safeText(inspection.getResult()));
+        });
+        document.add(inspectionsTable);
+
+        document.add(new Paragraph("\nService Schedules:"));
+        Table schedulesTable = new Table(new float[]{4, 4, 4});
+        schedulesTable.addHeaderCell("Scheduled Date");
+        schedulesTable.addHeaderCell("Service Type");
+        schedulesTable.addHeaderCell("Status");
+        serviceSchedules.forEach(schedule -> {
+            schedulesTable.addCell(safeText(schedule.getScheduledDate().toString()));
+            schedulesTable.addCell(safeText(schedule.getServiceType()));
+            schedulesTable.addCell(safeText(schedule.getStatus()));
+        });
+        document.add(schedulesTable);
+
+        document.add(new Paragraph("\nDriver History:"));
+        Table driverTable = new Table(new float[]{4, 4, 4});
+        driverTable.addHeaderCell("Driver Name");
+        driverTable.addHeaderCell("Assigned Date");
+        driverTable.addHeaderCell("End Date");
+        driverHistory.forEach(history -> {
+            driverTable.addCell(safeText(history.getFirstName() + " " + history.getLastName()));
+            driverTable.addCell(safeText(history.getAssignedDate().toString()));
+            driverTable.addCell(safeText(history.getEndDate() != null ? history.getEndDate().toString() : "N/A"));
+        });
+        document.add(driverTable);
+
         document.add(new Paragraph("\nClient Report").setBold().setFontSize(14));
         document.add(new Paragraph("Name: " + safeText(clientReport.getClient().getName())));
         document.add(new Paragraph("Email: " + safeText(clientReport.getClient().getEmail())));
@@ -77,7 +119,6 @@ public class PdfGenerator {
         });
         document.add(invoicesTable);
 
-        // Goods Section
         document.add(new Paragraph("\nGoods:"));
         Table goodsTable = new Table(new float[]{4, 4, 4});
         goodsTable.addHeaderCell("Name");

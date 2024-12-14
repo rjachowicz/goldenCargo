@@ -1,7 +1,6 @@
 package com.goldencargo.controller.web;
 
-import com.goldencargo.model.dto.ClientReportDTO;
-import com.goldencargo.model.dto.VehicleReportDTO;
+import com.goldencargo.model.dto.*;
 import com.goldencargo.model.entities.Client;
 import com.goldencargo.model.entities.Vehicle;
 import com.goldencargo.service.CreateReportService;
@@ -42,8 +41,15 @@ public class CreateReportController {
                                  Model model) {
         VehicleReportDTO report = createReportService.generateVehicleReport(vehicleId);
         ClientReportDTO clientReport = createReportService.generateClientReport(clientId);
+        List<TechnicalInspectionDTO> technicalInspections = createReportService.getTechnicalInspections(vehicleId);
+        List<ServiceScheduleDTO> serviceSchedules = createReportService.getServiceSchedules(vehicleId);
+        List<DriverVehicleDTO> driverHistory = createReportService.getDriverHistory(vehicleId);
+
         model.addAttribute("clientReport", clientReport);
         model.addAttribute("report", report);
+        model.addAttribute("technicalInspections", technicalInspections);
+        model.addAttribute("serviceSchedules", serviceSchedules);
+        model.addAttribute("driverHistory", driverHistory);
 
         return "generate/report-result";
     }
@@ -52,8 +58,11 @@ public class CreateReportController {
     public ResponseEntity<byte[]> exportPdf(@RequestParam Long vehicleId, @RequestParam Long clientId) {
         VehicleReportDTO vehicleReport = createReportService.generateVehicleReport(vehicleId);
         ClientReportDTO clientReport = createReportService.generateClientReport(clientId);
+        List<TechnicalInspectionDTO> technicalInspections = createReportService.getTechnicalInspections(vehicleId);
+        List<ServiceScheduleDTO> serviceSchedules = createReportService.getServiceSchedules(vehicleId);
+        List<DriverVehicleDTO> driverHistory = createReportService.getDriverHistory(vehicleId);
 
-        byte[] pdfContent = PdfGenerator.generateReportPdf(vehicleReport, clientReport);
+        byte[] pdfContent = PdfGenerator.generateReportPdf(vehicleReport, clientReport, technicalInspections, serviceSchedules, driverHistory);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -61,6 +70,4 @@ public class CreateReportController {
 
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
-
-
 }

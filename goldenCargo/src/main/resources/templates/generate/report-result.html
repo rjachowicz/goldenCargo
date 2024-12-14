@@ -21,12 +21,15 @@
                     <i class="fas fa-file-alt"></i>
                     <span>Download PDF</span>
                 </a>
-                <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#emailModal">
+                <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal"
+                        data-bs-target="#emailModal">
                     <i class="fa-solid fa-envelope"></i>
                     <span>Send Email</span>
                 </button>
             </div>
         </div>
+
+        <!-- Vehicle Report -->
         <div th:if="${report}" class="border p-4 bg-light rounded shadow-sm mb-4">
             <h2><i class="fas fa-car"></i> Vehicle Report</h2>
             <p><strong>Make:</strong> <span th:text="${report.vehicle.make}"></span></p>
@@ -50,14 +53,29 @@
                 </li>
             </ul>
             <hr>
-            <h3>Transport Orders</h3>
+            <h3>Technical Inspections</h3>
             <ul>
-                <li th:each="order : ${report.transportOrders}"
-                    th:text="'Name: ' + ${order.name} + ', Departure: ' + ${#dates.format(order.scheduledDeparture, 'yyyy-MM-dd HH:mm')} + ', Arrival: ' + ${#dates.format(order.scheduledArrival, 'yyyy-MM-dd HH:mm')}">
+                <li th:each="inspection : ${technicalInspections}"
+                    th:text="'Date: ' + ${inspection.inspectionDate} + ', Result: ' + ${inspection.result} + ', Comments: ' + ${inspection.comments}">
+                </li>
+            </ul>
+            <hr>
+            <h3>Service Schedules</h3>
+            <ul>
+                <li th:each="schedule : ${serviceSchedules}"
+                    th:text="'Scheduled Date: ' + ${schedule.scheduledDate} + ', Type: ' + ${schedule.serviceType} + ', Status: ' + ${schedule.status}">
+                </li>
+            </ul>
+            <hr>
+            <h3>Driver History</h3>
+            <ul>
+                <li th:each="history : ${driverHistory}"
+                    th:text="'Driver: ' + ${history.firstName} + ' ' + ${history.lastName} + ', Assigned: ' + ${history.assignedDate} + ', End: ' + ${history.endDate}">
                 </li>
             </ul>
         </div>
 
+        <!-- Client Report -->
         <div th:if="${clientReport}" class="border p-4 bg-light rounded shadow-sm">
             <h2><i class="fas fa-user"></i> Client Report</h2>
             <p><strong>Name:</strong> <span th:text="${clientReport.client.name}"></span></p>
@@ -101,10 +119,11 @@
                 <form id="emailForm">
                     <div class="mb-3">
                         <label for="emailAddress" class="form-label">Recipient Email</label>
-                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter email address" required>
+                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter email address"
+                               required>
                     </div>
-                    <input type="hidden" id="vehicleId" th:value="${report.vehicle.vehicleId}" />
-                    <input type="hidden" id="clientId" th:value="${clientReport.client.clientId}" />
+                    <input type="hidden" id="vehicleId" th:value="${report.vehicle.vehicleId}"/>
+                    <input type="hidden" id="clientId" th:value="${clientReport.client.clientId}"/>
                 </form>
             </div>
             <div class="modal-footer">

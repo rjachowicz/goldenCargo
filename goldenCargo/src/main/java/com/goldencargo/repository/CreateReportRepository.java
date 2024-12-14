@@ -1,8 +1,7 @@
 package com.goldencargo.repository;
 
 import com.goldencargo.model.data.Status;
-import com.goldencargo.model.dto.ClientReportDTO;
-import com.goldencargo.model.dto.VehicleReportDTO;
+import com.goldencargo.model.dto.*;
 import com.goldencargo.model.entities.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -194,6 +193,49 @@ public class CreateReportRepository {
         goods.setName(rs.getString("name"));
         goods.setWeight(rs.getDouble("weight"));
         return goods;
+    }
+
+    public List<TechnicalInspectionDTO> findTechnicalInspections(Long vehicleId) {
+        String sql = """
+            SELECT * FROM technical_inspections 
+            WHERE vehicle_id = ? AND is_deleted = FALSE
+        """;
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new TechnicalInspectionDTO(
+                rs.getTimestamp("inspection_date"),
+                rs.getTimestamp("next_inspection_date"),
+                rs.getString("inspector_name"),
+                rs.getString("result"),
+                rs.getString("comments")
+        ), vehicleId);
+    }
+
+    public List<ServiceScheduleDTO> findServiceSchedules(Long vehicleId) {
+        String sql = """
+            SELECT * FROM service_schedules 
+            WHERE vehicle_id = ? AND is_deleted = FALSE
+        """;
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new ServiceScheduleDTO(
+                rs.getTimestamp("scheduled_date"),
+                rs.getString("service_type"),
+                rs.getString("status")
+        ), vehicleId);
+    }
+
+    public List<DriverVehicleDTO> findDriverHistory(Long vehicleId) {
+        String sql = """
+            SELECT dv.assigned_date, dv.end_date, u.first_name, u.last_name, dv.notes 
+            FROM driver_vehicles dv
+            JOIN drivers d ON dv.driver_id = d.driver_id
+            JOIN users u ON d.user_id = u.user_id
+            WHERE dv.vehicle_id = ? AND dv.is_deleted = FALSE
+        """;
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new DriverVehicleDTO(
+                rs.getTimestamp("assigned_date"),
+                rs.getTimestamp("end_date"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("notes")
+        ), vehicleId);
     }
 
 }

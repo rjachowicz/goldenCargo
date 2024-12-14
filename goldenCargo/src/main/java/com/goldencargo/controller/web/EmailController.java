@@ -1,14 +1,18 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.component.EmailRequestWithIds;
+import com.goldencargo.model.dto.*;
+import com.goldencargo.service.CreateReportService;
 import com.goldencargo.service.EmailService;
 import com.goldencargo.util.PdfGenerator;
-import com.goldencargo.model.dto.ClientReportDTO;
-import com.goldencargo.model.dto.VehicleReportDTO;
-import com.goldencargo.service.CreateReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/email")
@@ -28,8 +32,13 @@ public class EmailController {
         VehicleReportDTO vehicleReport = reportService.generateVehicleReport(request.getVehicleId());
         ClientReportDTO clientReport = reportService.generateClientReport(request.getClientId());
 
-        byte[] pdf = PdfGenerator.generateReportPdf(vehicleReport, clientReport);
-        emailService.sendEmailWithAttachment(request.getTo(), "Your Report", "Please find the attached report.", pdf);
+        List<TechnicalInspectionDTO> technicalInspections = reportService.getTechnicalInspections(request.getVehicleId());
+        List<ServiceScheduleDTO> serviceSchedules = reportService.getServiceSchedules(request.getVehicleId());
+        List<DriverVehicleDTO> driverHistory = reportService.getDriverHistory(request.getVehicleId());
+
+        byte[] pdfContent = PdfGenerator.generateReportPdf(vehicleReport, clientReport, technicalInspections, serviceSchedules, driverHistory);
+
+        emailService.sendEmailWithAttachment(request.getTo(), "Your Report", "Please find the attached report.", pdfContent);
 
         return ResponseEntity.ok("Email sent successfully!");
     }
