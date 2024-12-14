@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    private static final String SENDER = "robertjach74@gmail.com";
+    private static final String FILE_TYP = ".pdf";
+
 
     @Autowired
     public EmailService(JavaMailSender mailSender) {
@@ -26,12 +29,29 @@ public class EmailService {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(body);
-            helper.setFrom("robertjach74@gmail.com");
-            helper.addAttachment("report.pdf", new ByteArrayDataSource(attachment, "application/pdf"));
+            helper.setFrom(SENDER);
+            helper.addAttachment("report" + FILE_TYP, new ByteArrayDataSource(attachment, "application/pdf"));
 
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email with attachment", e);
         }
     }
+
+    public void sendSimpleEmail(String to, String subject, String body) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false);
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(body);
+            helper.setFrom(SENDER);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Failed to send email", e);
+        }
+    }
+
 }

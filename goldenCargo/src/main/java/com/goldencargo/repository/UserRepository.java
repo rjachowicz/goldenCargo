@@ -11,14 +11,17 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT u FROM User u WHERE u.userId NOT IN (SELECT d.user.userId FROM Driver d) and u.isDeleted = false")
+    @Query("SELECT u FROM User u WHERE u.isDeleted = false")
+    List<User> findByIsDeletedFalse();
+
+    @Query("SELECT u FROM User u WHERE u.isDeleted = false AND u.email = :email")
+    User findByEmailAndIsDeletedFalse(String email);
+
+    @Query("SELECT u FROM User u WHERE u.isDeleted = false AND u.userId NOT IN (SELECT d.user.userId FROM Driver d)")
     List<User> findUsersNotAssignedAsDrivers();
 
-    @Query("SELECT u FROM User u WHERE u.userId NOT IN (SELECT l.user.userId FROM Logistics l) and u.isDeleted = false")
+    @Query("SELECT u FROM User u WHERE u.isDeleted = false AND u.userId NOT IN (SELECT l.user.userId FROM Logistics l)")
     List<User> findUsersNotAssignedAsLogistic();
-
-    @Query("select u from User u where u.isDeleted = false")
-    List<User> findByIsDeletedFalse();
 
     @Modifying
     @Transactional
