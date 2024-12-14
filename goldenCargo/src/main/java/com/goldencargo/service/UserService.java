@@ -2,6 +2,7 @@ package com.goldencargo.service;
 
 import com.goldencargo.model.entities.User;
 import com.goldencargo.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +13,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers() {
@@ -26,8 +29,10 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
+
 
     public Optional<User> updateUser(Long id, User userDetails, String newPassword) {
         return userRepository.findById(id).map(user -> {
@@ -40,7 +45,7 @@ public class UserService {
             user.setStatus(userDetails.getStatus());
             user.setUpdatedAt(new java.util.Date());
             if (newPassword != null && !newPassword.isEmpty()) {
-                user.setPassword(newPassword);
+                user.setPassword(passwordEncoder.encode(newPassword));
             }
             return userRepository.save(user);
         });
@@ -61,5 +66,14 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmailAndIsDeletedFalse(email);
+    }
+
+    public void updateUserPassword(User user, String rawPassword) {
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        userRepository.save(user);
     }
 }

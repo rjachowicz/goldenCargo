@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 modalContent.innerHTML = html;
                 const modal = new bootstrap.Modal(document.getElementById(modalId));
                 modal.show();
-                setupPasswordChange(modalContent); // Initialize password change logic
+                setupPasswordChange(modalContent);
             })
             .catch(error => console.error("Error loading modal content:", error));
     }
@@ -42,8 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const newPasswordInput = modalContent.querySelector("#newPassword");
         const toggleVisibilityButton = modalContent.querySelector("#togglePasswordVisibility");
         const generatePasswordButton = modalContent.querySelector("#generatePassword");
-
-        // Toggle visibility of password fields
         if (togglePasswordButton) {
             togglePasswordButton.addEventListener("click", () => {
                 passwordFields.forEach(field => field.classList.toggle("d-none"));
@@ -62,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Generate random password
         if (generatePasswordButton && newPasswordInput) {
             generatePasswordButton.addEventListener("click", () => {
                 newPasswordInput.value = generateRandomPassword(12);

@@ -17,13 +17,9 @@ public class HomeRepository {
 
     public List<Map<String, Object>> getUserRoleDistribution() {
         String sql = """
-                    SELECT r.name AS roleName, COUNT(u.user_id) AS userCount
+                    SELECT count(*) userCount, r.name AS roleName
                     FROM roles r
-                    LEFT JOIN user_roles ur ON r.role_id = ur.role_id
-                    LEFT JOIN users u ON ur.user_id = u.user_id
-                    WHERE u.is_deleted = FALSE
-                    GROUP BY r.name
-                    ORDER BY userCount DESC
+                    GROUP BY r.name;
                 """;
         return jdbcTemplate.queryForList(sql);
     }
@@ -34,7 +30,7 @@ public class HomeRepository {
                     FROM client_orders co
                     WHERE co.is_deleted = FALSE
                     GROUP BY co.status
-                    ORDER BY orderCount DESC
+                    ORDER BY orderCount DESC;
                 """;
         return jdbcTemplate.queryForList(sql);
     }
