@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -28,4 +29,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User b SET b.isDeleted = true WHERE b.userId = :id")
     void softDelete(@Param("id") Long id);
 
+    Optional<User> findByUsername(String username);
 }

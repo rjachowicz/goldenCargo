@@ -33,7 +33,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
     public Optional<User> updateUser(Long id, User userDetails, String newPassword) {
         return userRepository.findById(id).map(user -> {
             user.setUsername(userDetails.getUsername());
