@@ -1,16 +1,16 @@
 package com.goldencargo.repository;
 
 import com.goldencargo.model.data.Status;
+import com.goldencargo.model.dto.ClientReportDTO;
 import com.goldencargo.model.dto.VehicleReportDTO;
-import com.goldencargo.model.entities.Incident;
-import com.goldencargo.model.entities.TransportOrder;
-import com.goldencargo.model.entities.Vehicle;
-import com.goldencargo.model.entities.VehicleRepairs;
+import com.goldencargo.model.entities.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,4 +116,84 @@ public class CreateReportRepository {
         transportOrder.setStatus(Status.valueOf(rs.getString("status")));
         return transportOrder;
     }
+
+    public List<Client> findAllClients() {
+        String sql = "SELECT * FROM clients WHERE is_deleted = FALSE";
+        return jdbcTemplate.query(sql, this::mapClient);
+    }
+
+    public Optional<ClientReportDTO> findClientReport(Long clientId) {
+        String sql = "SELECT * FROM clients WHERE client_id = ? AND is_deleted = FALSE";
+        Client client = jdbcTemplate.queryForObject(sql, this::mapClient, clientId);
+
+        if (client == null) return Optional.empty();
+
+        ClientReportDTO report = new ClientReportDTO();
+        report.setClient(client);
+        report.setOrders(findClientOrders(clientId));
+        report.setInvoices(findClientInvoices(clientId));
+        report.setGoods(findClientGoods(clientId));
+
+        return Optional.of(report);
+    }
+
+    private Client mapClient(ResultSet rs, int rowNum) throws SQLException {
+        Client client = new Client();
+        client.setClientId(rs.getLong("client_id"));
+        client.setName(rs.getString("name"));
+        client.setEmail(rs.getString("email"));
+        client.setPhone(rs.getString("phone"));
+        return client;
+    }
+
+    private List<ClientOrder> findClientOrders(Long clientId) {
+        String sql = "SELECT * FROM client_orders WHERE client_id = ? AND is_deleted = FALSE";
+        return jdbcTemplate.query(sql, this::mapClientOrder, clientId);
+    }
+
+    private ClientOrder mapClientOrder(ResultSet rs, int rowNum) throws SQLException {
+        ClientOrder order = new ClientOrder();
+        order.setClientOrderId(rs.getLong("client_order_id"));
+        order.setTotalAmount(rs.getDouble("total_amount"));
+
+        Timestamp orderDateTimestamp = rs.getTimestamp("order_date");
+        if (orderDateTimestamp != null) {
+            order.setOrderDate(new Date(orderDateTimestamp.getTime()));
+        } else {
+            order.setOrderDate(null);
+        }
+        return order;
+    }
+
+
+    private List<ClientInvoice> findClientInvoices(Long clientId) {
+        String sql = "SELECT * FROM client_invoices WHERE client_id = ? AND is_deleted = FALSE";
+        return jdbcTemplate.query(sql, this::mapClientInvoice, clientId);
+    }
+
+    private ClientInvoice mapClientInvoice(ResultSet rs, int rowNum) throws SQLException {
+        ClientInvoice invoice = new ClientInvoice();
+        invoice.setInvoiceId(rs.getLong("invoice_id"));
+        invoice.setInvoiceNumber(rs.getString("invoice_number"));
+        invoice.setTotalAmount(rs.getDouble("total_amount"));
+        return invoice;
+    }
+
+    private List<Goods> findClientGoods(Long clientId) {
+        String sql = """
+                SELECT g.* FROM goods g
+                JOIN client_orders o ON g.client_order_id = o.client_order_id
+                WHERE o.client_id = ? AND g.is_deleted = FALSE
+                """;
+        return jdbcTemplate.query(sql, this::mapGoods, clientId);
+    }
+
+    private Goods mapGoods(ResultSet rs, int rowNum) throws SQLException {
+        Goods goods = new Goods();
+        goods.setGoodsId(rs.getLong("goods_id"));
+        goods.setName(rs.getString("name"));
+        goods.setWeight(rs.getDouble("weight"));
+        return goods;
+    }
+
 }
