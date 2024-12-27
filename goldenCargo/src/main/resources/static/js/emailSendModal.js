@@ -10,10 +10,14 @@ document.getElementById("sendEmailButton").addEventListener("click", function ()
 
     loadingModal.show();
 
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
     fetch("/email/send-pdf", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken
         },
         body: JSON.stringify({
             to: email,

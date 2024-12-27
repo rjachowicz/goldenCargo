@@ -2,6 +2,7 @@ package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.Damage;
 import com.goldencargo.service.DamageService;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.IncidentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,26 +11,45 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/damages")
 public class DamageController {
 
+    private static final String ALIAS = "d";
     private final DamageService damageService;
     private final IncidentService incidentService;
+    private final GenericService genericService;
 
-    public DamageController(DamageService damageService, IncidentService incidentService) {
+    public DamageController(DamageService damageService, IncidentService incidentService, GenericService genericService) {
         this.damageService = damageService;
         this.incidentService = incidentService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllDamages(Model model) {
-        List<Damage> damages = damageService.getAllDamages();
+    public String getAllDamages(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "description") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
+        List<Damage> damages = genericService.getFilteredAndSortedEntities(
+                Damage.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
         model.addAttribute("damages", damages);
+        model.addAttribute("damage", new Damage());
+        model.addAttribute("incidents", incidentService.getAllIncidents());
         return "damages/main";
     }
+
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
@@ -46,13 +66,11 @@ public class DamageController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<Damage> damage = damageService.getDamageById(id);
-        if (damage.isPresent()) {
-            model.addAttribute("damage", damage.get());
-            model.addAttribute("incidents", incidentService.getAllIncidents());
-            return "damages/edit";
-        }
-        return "redirect:/damages";
+        Damage damage = damageService.getDamageById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid damage ID: " + id));
+        model.addAttribute("damage", damage);
+        model.addAttribute("incidents", incidentService.getAllIncidents());
+        return "damages/edit :: editDamageModal";
     }
 
     @PostMapping("/update/{id}")
@@ -63,18 +81,17 @@ public class DamageController {
 
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
-        Optional<Damage> damage = damageService.getDamageById(id);
-        if (damage.isPresent()) {
-            model.addAttribute("damage", damage.get());
-            return "damages/details";
-        }
-        return "redirect:/damages";
+        Damage damage = damageService.getDamageById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid damage ID: " + id));
+        model.addAttribute("damage", damage);
+        return "damages/details :: detailsDamageModal";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteDamage(@PathVariable Long id) {
-        return damageService.deleteDamage(id)
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (damageService.deleteDamage(id)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

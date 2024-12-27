@@ -35,7 +35,8 @@
                 <label class="form-label fw-bold text-dark">
                     <i class="fas fa-calendar-alt"></i> Date Issued
                 </label>
-                <p class="form-control-plaintext" th:text="${#dates.format(clientInvoice.dateIssued, 'yyyy-MM-dd')}"></p>
+                <p class="form-control-plaintext"
+                   th:text="${#dates.format(clientInvoice.dateIssued, 'yyyy-MM-dd')}"></p>
             </div>
             <div class="col-md-6">
                 <label class="form-label fw-bold text-dark">

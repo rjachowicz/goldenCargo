@@ -1,7 +1,7 @@
 <div th:fragment="editLocationModal">
     <div class="modal-header bg-warning text-dark">
         <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Location</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body">
         <form method="post" th:action="@{'/locations/update/' + ${location.locationId}}" th:object="${location}">
@@ -39,7 +39,9 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
-                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
+                </button>
             </div>
         </form>
     </div>

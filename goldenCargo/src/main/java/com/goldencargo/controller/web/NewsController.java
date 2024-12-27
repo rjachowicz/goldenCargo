@@ -1,6 +1,8 @@
 package com.goldencargo.controller.web;
 
+import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.News;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.NewsService;
 import com.goldencargo.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,34 +20,48 @@ public class NewsController {
 
     private final NewsService newsService;
     private final UserService userService;
+    private final GenericService genericService;
 
-    public NewsController(NewsService newsService, UserService userService) {
+    public NewsController(NewsService newsService, UserService userService, GenericService genericService) {
         this.newsService = newsService;
         this.userService = userService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllNews(Model model) {
-        List<News> newsList = newsService.getAllNews();
+    public String getAllNews(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "datePosted") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "desc") String sortLogic,
+            Model model) {
+
+        List<News> newsList = genericService.getFilteredAndSortedEntities(
+                News.class,
+                "n",
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
         model.addAttribute("newsList", newsList);
+        model.addAttribute("news", new News());
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("statuses", Status.values());
         return "news/main";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("news", new News());
-        model.addAttribute("users", userService.getAllUsers());
-        return "news/create";
-    }
-
     @PostMapping("/create")
-    public String createNews(@ModelAttribute News news) {
+    public String createNews(News news) {
         newsService.createNews(news);
         return "redirect:/news";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
         Optional<News> news = newsService.getNewsById(id);
         if (news.isPresent()) {
             model.addAttribute("news", news.get());
@@ -56,13 +72,13 @@ public class NewsController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateNews(@PathVariable Long id, @ModelAttribute News newsDetails) {
+    public String updateNews(@PathVariable Long id, News newsDetails) {
         newsService.updateNews(id, newsDetails);
         return "redirect:/news";
     }
 
     @GetMapping("/details/{id}")
-    public String showDetails(@PathVariable Long id, Model model) {
+    public String showDetails(@PathVariable("id") Long id, Model model) {
         Optional<News> news = newsService.getNewsById(id);
         if (news.isPresent()) {
             model.addAttribute("news", news.get());
@@ -72,7 +88,7 @@ public class NewsController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteLogistic(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
         return newsService.deleteNews(id)
                 ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

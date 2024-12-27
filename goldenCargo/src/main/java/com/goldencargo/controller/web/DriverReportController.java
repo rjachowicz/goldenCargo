@@ -17,11 +17,10 @@ import java.util.Optional;
 @RequestMapping("/driver-reports")
 public class DriverReportController {
 
+    private static final String ALIAS = "dr";
     private final DriverReportService driverReportService;
     private final DriverService driverService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "dr";
 
     public DriverReportController(DriverReportService driverReportService, DriverService driverService, GenericService genericService) {
         this.driverReportService = driverReportService;

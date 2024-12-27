@@ -1,7 +1,7 @@
 package com.goldencargo.service;
 
-import com.goldencargo.model.data.Status;
 import com.goldencargo.model.data.PaymentStatus;
+import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.repository.ClientOrderRepository;
 import org.junit.jupiter.api.BeforeEach;

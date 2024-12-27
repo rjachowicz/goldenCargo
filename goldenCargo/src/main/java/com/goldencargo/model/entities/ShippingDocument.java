@@ -35,6 +35,6 @@ public class ShippingDocument extends AuditableEntity {
     @Column(name = "issue_date", nullable = false)
     private Date issueDate;
 
-    @Column(name = "file_url", length = 255)
+    @Column(name = "file_url")
     private String fileUrl;
 }

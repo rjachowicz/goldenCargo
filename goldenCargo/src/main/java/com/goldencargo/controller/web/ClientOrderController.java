@@ -19,11 +19,10 @@ import java.util.Optional;
 @RequestMapping("/client-orders")
 public class ClientOrderController {
 
+    private static final String ALIAS = "co";
     private final ClientOrderService clientOrderService;
     private final ClientService clientService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "co";
 
     public ClientOrderController(ClientOrderService clientOrderService, ClientService clientService, GenericService genericService) {
         this.clientOrderService = clientOrderService;

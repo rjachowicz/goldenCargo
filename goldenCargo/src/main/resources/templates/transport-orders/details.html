@@ -18,7 +18,8 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user"></i> Client Order
                     </label>
-                    <p class="form-control-plaintext" th:text="${transportOrder.clientOrder?.client?.name ?: 'N/A'}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${transportOrder.clientOrder?.client?.name ?: 'N/A'}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
@@ -30,7 +31,8 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user-tie"></i> Assigned Driver
                     </label>
-                    <p class="form-control-plaintext" th:text="${transportOrder.assignedDriver?.user?.firstName ?: 'N/A'} + ' ' + ${transportOrder.assignedDriver?.user?.lastName ?: 'N/A'}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${transportOrder.assignedDriver?.user?.firstName ?: 'N/A'} + ' ' + ${transportOrder.assignedDriver?.user?.lastName ?: 'N/A'}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">

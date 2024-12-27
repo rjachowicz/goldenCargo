@@ -4,7 +4,8 @@
         <div class="col-md-6">
             <label class="form-label" for="vehicleType">Vehicle Type</label>
             <select class="form-select" id="vehicleType" th:field="*{vehicleType.vehicleTypeId}">
-                <option th:each="type : ${vehicleTypes}" th:text="${type.name}" th:value="${type.vehicleTypeId}"></option>
+                <option th:each="type : ${vehicleTypes}" th:text="${type.name}"
+                        th:value="${type.vehicleTypeId}"></option>
             </select>
         </div>
         <div class="col-md-6">

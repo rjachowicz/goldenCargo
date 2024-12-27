@@ -1,51 +1,82 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.entities.ShippingDocument;
+import com.goldencargo.service.DropboxService;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.ShippingDocumentService;
-import com.goldencargo.service.StorageService;
 import com.goldencargo.service.TransportService;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/shipping-documents")
 public class ShippingDocumentController {
 
+    private static final String ALIAS = "d";
     private final ShippingDocumentService shippingDocumentService;
     private final TransportService transportService;
-    private final StorageService storageService;
+    private final GenericService genericService;
+    private final DropboxService dropboxService;
 
-    public ShippingDocumentController(ShippingDocumentService shippingDocumentService, TransportService transportService, StorageService storageService) {
+    public ShippingDocumentController(ShippingDocumentService shippingDocumentService,
+                                      TransportService transportService,
+                                      GenericService genericService,
+                                      DropboxService dropboxService) {
         this.shippingDocumentService = shippingDocumentService;
         this.transportService = transportService;
-        this.storageService = storageService;
+        this.genericService = genericService;
+        this.dropboxService = dropboxService;
     }
 
     @GetMapping
-    public String getAllDocuments(Model model) {
-        List<ShippingDocument> documents = shippingDocumentService.getAllDocuments();
+    public String getAllDocuments(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "documentType") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
+
+        List<ShippingDocument> documents = genericService.getFilteredAndSortedEntities(
+                ShippingDocument.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
         model.addAttribute("shippingDocuments", documents);
+        model.addAttribute("shippingDocument", new ShippingDocument());
+        model.addAttribute("transports", transportService.getAllTransports());
         return "shipping-documents/main";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("shippingDocument", new ShippingDocument());
-        model.addAttribute("transports", transportService.getAllTransports());
-        return "shipping-documents/create";
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadDocument(@PathVariable Long id) {
+        ShippingDocument document = shippingDocumentService.getDocumentById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid document ID: " + id));
+
+        try {
+            InputStream fileStream = dropboxService.downloadFile(document.getFileUrl());
+            byte[] fileContent = fileStream.readAllBytes();
+            String fileName = document.getFileUrl().substring(document.getFileUrl().lastIndexOf("/") + 1);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .body(fileContent);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while downloading file: " + e.getMessage(), e);
+        }
     }
 
     @PostMapping("/create")
@@ -53,26 +84,27 @@ public class ShippingDocumentController {
                                  @RequestParam("file") MultipartFile file) {
         try {
             if (file != null && !file.isEmpty()) {
-                String fileUrl = storageService.uploadFile(file);
-                document.setFileUrl(fileUrl);
+                InputStream inputStream = file.getInputStream();
+                String dropboxPath = "/shipping/" + file.getOriginalFilename();
+                String uploadedFilePath = dropboxService.uploadFile(dropboxPath, inputStream);
+
+                document.setFileUrl(uploadedFilePath);
             }
             shippingDocumentService.createDocument(document);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "redirect:/shipping-documents/new?error=true";
         }
         return "redirect:/shipping-documents";
     }
 
-
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<ShippingDocument> document = shippingDocumentService.getDocumentById(id);
-        if (document.isPresent()) {
-            model.addAttribute("shippingDocument", document.get());
-            model.addAttribute("transports", transportService.getAllTransports());
-            return "shipping-documents/edit";
-        }
-        return "redirect:/shipping-documents";
+        ShippingDocument document = shippingDocumentService.getDocumentById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid document ID: " + id));
+        model.addAttribute("shippingDocument", document);
+        model.addAttribute("transports", transportService.getAllTransports());
+        return "shipping-documents/edit :: editShippingDocumentModal";
     }
 
     @PostMapping("/update/{id}")
@@ -81,53 +113,33 @@ public class ShippingDocumentController {
                                  @RequestParam("file") MultipartFile file) {
         try {
             if (file != null && !file.isEmpty()) {
-                String fileUrl = storageService.uploadFile(file);
-                documentDetails.setFileUrl(fileUrl);
+                InputStream inputStream = file.getInputStream();
+                String dropboxPath = "/uploads/" + file.getOriginalFilename();
+                String uploadedFilePath = dropboxService.uploadFile(dropboxPath, inputStream);
+
+                documentDetails.setFileUrl(uploadedFilePath);
             }
             shippingDocumentService.updateDocument(id, documentDetails);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "redirect:/shipping-documents/edit/" + id + "?error=true";
         }
         return "redirect:/shipping-documents";
     }
 
-
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
-        Optional<ShippingDocument> document = shippingDocumentService.getDocumentById(id);
-        document.ifPresent(value -> model.addAttribute("shippingDocument", value));
-        return "shipping-documents/details";
+        ShippingDocument document = shippingDocumentService.getDocumentById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid document ID: " + id));
+        model.addAttribute("shippingDocument", document);
+        return "shipping-documents/details :: detailsShippingDocumentModal";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteDocument(@PathVariable Long id) {
-        shippingDocumentService.deleteDocument(id);
-        return "redirect:/shipping-documents";
-    }
-
-    @GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadDocument(@PathVariable Long id) {
-        Optional<ShippingDocument> document = shippingDocumentService.getDocumentById(id);
-
-        if (document.isPresent()) {
-            String fileUrl = document.get().getFileUrl();
-            try {
-                Path filePath = Paths.get("/path/to/storage").resolve(fileUrl).normalize();
-                Resource resource = new UrlResource(filePath.toUri());
-
-                if (!resource.exists()) {
-                    throw new RuntimeException("File not found: " + fileUrl);
-                }
-                return ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                        .header(HttpHeaders.CONTENT_DISPOSITION,
-                                "attachment; filename=\"" + resource.getFilename() + "\"")
-                        .body(resource);
-            } catch (IOException e) {
-                throw new RuntimeException("Error loading file: " + fileUrl, e);
-            }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteDocument(@PathVariable Long id) {
+        if (shippingDocumentService.deleteDocument(id)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 }

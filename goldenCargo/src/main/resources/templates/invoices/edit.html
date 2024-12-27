@@ -1,59 +1,58 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Edit Invoice</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <h2>Edit Invoice</h2>
-    <form method="post" th:action="@{/invoices/update/{id}(id=${invoice.invoiceId})}" th:object="${invoice}">
-        <div class="mb-3">
-            <label class="form-label" for="invoiceNumber">Invoice Number</label>
-            <input class="form-control" id="invoiceNumber" required th:field="*{invoiceNumber}" type="text">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="invoiceType">Invoice Type</label>
-            <select class="form-control select2" id="invoiceType" required th:field="*{invoiceType}">
-                <option th:each="type : ${invoiceTypes}" th:text="${type}" th:value="${type}"></option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="dateIssued">Date Issued</label>
-            <input class="form-control" id="dateIssued" required th:field="*{dateIssued}" type="date">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="dueDate">Due Date</label>
-            <input class="form-control" id="dueDate" required th:field="*{dueDate}" type="date">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="totalAmount">Total Amount</label>
-            <input class="form-control" id="totalAmount" required step="0.01" th:field="*{totalAmount}" type="number">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="paymentStatus">Payment Status</label>
-            <select class="form-control select2" id="paymentStatus" required th:field="*{paymentStatus}">
-                <option th:each="status : ${paymentStatuses}" th:text="${status}" th:value="${status}"></option>
-            </select>
-        </div>
-        <button class="btn btn-success" type="submit">Save</button>
-        <a class="btn btn-secondary" href="/invoices">Back</a>
-    </form>
+<div th:fragment="createInvoiceModal">
+    <div class="modal-header bg-warning text-dark border-bottom">
+        <h5 class="modal-title">
+            <i class="fas fa-file-invoice-dollar"></i> Edit Invoice
+        </h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+    </div>
+    <div class="modal-body bg-light text-dark">
+        <form enctype="multipart/form-data" method="post" th:action="@{'/invoices/update/' + ${invoice.invoiceId}}"
+              th:object="${invoice}">
+            <input th:field="*{invoiceId}" type="hidden">
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="invoiceNumber">Invoice Number</label>
+                <input class="form-control" id="invoiceNumber" placeholder="Enter invoice number" required
+                       th:field="*{invoiceNumber}" type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="invoiceType">Invoice Type</label>
+                <select class="form-select" id="invoiceType" required th:field="*{invoiceType}">
+                    <option th:each="type : ${invoiceTypes}" th:text="${type}" th:value="${type}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="dateIssued">Date Issued</label>
+                <input class="form-control" id="dateIssued" placeholder="Select issue date" required
+                       th:field="*{dateIssued}" type="date">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="dueDate">Due Date</label>
+                <input class="form-control" id="dueDate" placeholder="Select due date" required th:field="*{dueDate}"
+                       type="date">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="totalAmount">Total Amount</label>
+                <input class="form-control" id="totalAmount" placeholder="Enter total amount" required step="0.01"
+                       th:field="*{totalAmount}" type="number">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="paymentStatus">Payment Status</label>
+                <select class="form-select" id="paymentStatus" required th:field="*{paymentStatus}">
+                    <option th:each="status : ${paymentStatuses}" th:text="${status}" th:value="${status}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="content">Replace Content</label>
+                <input accept=".pdf,.doc,.docx,.jpg,.png" class="form-control" id="content" name="file" type="file">
+            </div>
+            <div class="modal-footer mt-3">
+                <button class="btn btn-success" type="submit">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#invoiceType, #paymentStatus').select2({
-            placeholder: 'Select an option',
-            allowClear: true
-        });
-    });
-</script>
-</body>
-</html>

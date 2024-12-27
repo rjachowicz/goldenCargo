@@ -24,7 +24,8 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-alt"></i> Service Date
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(vehicleRepair.serviceDate, 'yyyy-MM-dd HH:mm')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(vehicleRepair.serviceDate, 'yyyy-MM-dd HH:mm')}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
@@ -54,7 +55,8 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-plus"></i> Next Service Due
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(vehicleRepair.nextServiceDue, 'yyyy-MM-dd HH:mm')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(vehicleRepair.nextServiceDue, 'yyyy-MM-dd HH:mm')}"></p>
                 </div>
             </div>
         </form>

@@ -15,11 +15,10 @@ import java.util.Optional;
 @RequestMapping("/technical-inspections")
 public class TechnicalInspectionController {
 
+    private static final String ALIAS = "ti";
     private final TechnicalInspectionService technicalInspectionService;
     private final VehicleService vehicleService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "ti";
 
     public TechnicalInspectionController(TechnicalInspectionService technicalInspectionService,
                                          VehicleService vehicleService,

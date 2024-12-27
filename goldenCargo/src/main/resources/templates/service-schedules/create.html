@@ -4,7 +4,8 @@
         <div class="col-md-6">
             <label class="form-label" for="vehicle"><i class="fas fa-car"></i> Vehicle</label>
             <select class="form-select" id="vehicle" th:field="*{vehicle.vehicleId}">
-                <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}" th:value="${vehicle.vehicleId}"></option>
+                <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}"
+                        th:value="${vehicle.vehicleId}"></option>
             </select>
         </div>
         <div class="col-md-6">
@@ -23,7 +24,9 @@
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+            <button class="btn btn-secondary" data-bs-target="#addScheduleForm" data-bs-toggle="collapse" type="button">
+                <i class="fas fa-times"></i> Cancel
+            </button>
         </div>
     </form>
 </div>

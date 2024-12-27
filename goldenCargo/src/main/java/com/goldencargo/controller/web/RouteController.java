@@ -18,11 +18,10 @@ import java.util.Optional;
 @RequestMapping("/routes")
 public class RouteController {
 
+    private static final String ALIAS = "r";
     private final RouteService routeService;
     private final LocationService locationService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "r";
 
     public RouteController(RouteService routeService, LocationService locationService, GenericService genericService) {
         this.routeService = routeService;

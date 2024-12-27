@@ -1,6 +1,8 @@
 const modalBody = document.getElementById('modalBody');
 const confirmDeleteButton = document.getElementById('confirmDeleteButton');
 const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
 function showDeleteModal(button) {
     const entityId = button.getAttribute('data-entity-id');
@@ -17,7 +19,15 @@ function updateModalMessage(message) {
 }
 
 function handleDelete(url) {
-    fetch(url, {method: 'DELETE'})
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            [csrfHeader]: csrfToken
+        }
+    })
         .then(response => {
             if (response.ok) {
                 updateModalMessage('Deleted successfully');
@@ -31,6 +41,7 @@ function handleDelete(url) {
             closeModal();
         });
 }
+
 
 function closeModal() {
     confirmDeleteButton.style.display = 'none';

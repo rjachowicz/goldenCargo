@@ -27,6 +27,9 @@ public class News extends AuditableEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "graphic")
+    private String graphic;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_posted", nullable = false)
     private Date datePosted;

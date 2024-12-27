@@ -20,12 +20,11 @@ import java.util.Optional;
 @RequestMapping("/orders")
 public class OrderController {
 
+    private static final String ALIAS = "o";
     private final OrderService orderService;
     private final ClientOrderService clientOrderService;
     private final TransportOrderService transportOrderService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "o";
 
     public OrderController(OrderService orderService,
                            ClientOrderService clientOrderService,
