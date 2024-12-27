@@ -42,7 +42,8 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-check"></i> Medical Certificate Expiry
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(driver.medicalCertificateExpiry, 'yyyy-MM-dd')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(driver.medicalCertificateExpiry, 'yyyy-MM-dd')}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">

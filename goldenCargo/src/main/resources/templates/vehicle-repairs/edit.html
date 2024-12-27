@@ -6,7 +6,8 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{'/vehicle-repairs/update/' + ${vehicleRepair.serviceId}}" th:object="${vehicleRepair}">
+        <form method="post" th:action="@{'/vehicle-repairs/update/' + ${vehicleRepair.serviceId}}"
+              th:object="${vehicleRepair}">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">

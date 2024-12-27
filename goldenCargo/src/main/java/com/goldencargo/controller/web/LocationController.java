@@ -15,9 +15,9 @@ import java.util.List;
 @RequestMapping("/locations")
 public class LocationController {
 
+    private static final String ALIAS = "l";
     private final LocationService locationService;
     private final GenericService genericService;
-    private static final String ALIAS = "l";
 
 
     public LocationController(LocationService locationService, GenericService genericService) {

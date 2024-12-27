@@ -18,7 +18,8 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user"></i> Driver
                     </label>
-                    <p class="form-control-plaintext" th:text="${driverVehicle.driver.user.firstName} + ' ' + ${driverVehicle.driver.user.lastName}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${driverVehicle.driver.user.firstName} + ' ' + ${driverVehicle.driver.user.lastName}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
@@ -30,13 +31,15 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-alt"></i> Assigned Date
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(driverVehicle.assignedDate, 'yyyy-MM-dd')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(driverVehicle.assignedDate, 'yyyy-MM-dd')}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-times"></i> End Date
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(driverVehicle.endDate, 'yyyy-MM-dd')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(driverVehicle.endDate, 'yyyy-MM-dd')}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">

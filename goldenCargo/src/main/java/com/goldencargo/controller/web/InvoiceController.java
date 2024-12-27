@@ -3,13 +3,18 @@ package com.goldencargo.controller.web;
 import com.goldencargo.model.data.InvoiceType;
 import com.goldencargo.model.data.PaymentStatus;
 import com.goldencargo.model.entities.Invoice;
+import com.goldencargo.service.DropboxService;
+import com.goldencargo.service.GenericService;
 import com.goldencargo.service.InvoiceService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,34 +23,63 @@ import java.util.Optional;
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
+    private final GenericService genericService;
+    private final DropboxService dropboxService;
 
-    public InvoiceController(InvoiceService invoiceService) {
+    public InvoiceController(InvoiceService invoiceService, GenericService genericService, DropboxService dropboxService) {
         this.invoiceService = invoiceService;
+        this.genericService = genericService;
+        this.dropboxService = dropboxService;
     }
 
     @GetMapping
-    public String getAllInvoices(Model model) {
-        List<Invoice> invoices = invoiceService.getAllInvoices();
-        model.addAttribute("invoices", invoices);
-        return "invoices/main";
-    }
+    public String getAllInvoices(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "invoiceNumber") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<Invoice> invoices = genericService.getFilteredAndSortedEntities(
+                Invoice.class,
+                "i",
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("invoices", invoices);
         model.addAttribute("invoice", new Invoice());
         model.addAttribute("invoiceTypes", InvoiceType.values());
         model.addAttribute("paymentStatuses", PaymentStatus.values());
-        return "invoices/create";
+        return "invoices/main";
     }
 
     @PostMapping("/create")
-    public String createInvoice(@ModelAttribute Invoice invoice) {
-        invoiceService.createInvoice(invoice);
+    public String createInvoice(
+            @ModelAttribute Invoice invoice,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            if (file != null && !file.isEmpty()) {
+                InputStream inputStream = file.getInputStream();
+                String dropboxPath = "/invoices/" + file.getOriginalFilename();
+                String uploadedFilePath = dropboxService.uploadFile(dropboxPath, inputStream);
+
+                invoice.setFileUrl(uploadedFilePath);
+            }
+            invoiceService.createInvoice(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/invoices/new?error=true";
+        }
         return "redirect:/invoices";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
         Optional<Invoice> invoice = invoiceService.getInvoiceById(id);
         if (invoice.isPresent()) {
             model.addAttribute("invoice", invoice.get());
@@ -57,19 +91,48 @@ public class InvoiceController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateInvoice(@PathVariable Long id, @ModelAttribute Invoice invoiceDetails) {
-        invoiceService.updateInvoice(id, invoiceDetails);
+    public String updateInvoice(
+            @PathVariable Long id,
+            @ModelAttribute Invoice invoiceDetails,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            if (file != null && !file.isEmpty()) {
+                InputStream inputStream = file.getInputStream();
+                String dropboxPath = "/invoices/" + file.getOriginalFilename();
+                String uploadedFilePath = dropboxService.uploadFile(dropboxPath, inputStream);
+                invoiceDetails.setFileUrl(uploadedFilePath);
+            }
+            invoiceService.updateInvoice(id, invoiceDetails);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/invoices/edit/" + id + "?error=true";
+        }
         return "redirect:/invoices";
     }
 
-    @GetMapping("/details/{id}")
-    public String showDetails(@PathVariable Long id, Model model) {
-        Optional<Invoice> invoice = invoiceService.getInvoiceById(id);
-        if (invoice.isPresent()) {
-            model.addAttribute("invoice", invoice.get());
-            return "invoices/details";
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadInvoice(@PathVariable Long id) {
+        Invoice invoice = invoiceService.getInvoiceById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid invoice ID: " + id));
+
+        try {
+            InputStream fileStream = dropboxService.downloadFile(invoice.getFileUrl());
+            byte[] fileContent = fileStream.readAllBytes();
+            String fileName = invoice.getFileUrl().substring(invoice.getFileUrl().lastIndexOf("/") + 1);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .body(fileContent);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while downloading file: " + e.getMessage(), e);
         }
-        return "redirect:/invoices";
+    }
+
+    @GetMapping("/details/{id}")
+    public String showDetails(@PathVariable("id") Long id, Model model) {
+        Optional<Invoice> invoice = invoiceService.getInvoiceById(id);
+        invoice.ifPresent(value -> model.addAttribute("invoice", value));
+        return "invoices/details";
     }
 
     @DeleteMapping("/delete/{id}")

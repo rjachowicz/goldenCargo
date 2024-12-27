@@ -16,10 +16,9 @@ import java.util.Optional;
 @RequestMapping("/clients")
 public class ClientController {
 
+    private static final String ALIAS = "c";
     private final ClientService clientService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "c";
 
     public ClientController(ClientService clientService, GenericService genericService) {
         this.clientService = clientService;

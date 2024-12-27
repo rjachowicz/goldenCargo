@@ -197,9 +197,9 @@ public class CreateReportRepository {
 
     public List<TechnicalInspectionDTO> findTechnicalInspections(Long vehicleId) {
         String sql = """
-            SELECT * FROM technical_inspections 
-            WHERE vehicle_id = ? AND is_deleted = FALSE
-        """;
+                    SELECT * FROM technical_inspections 
+                    WHERE vehicle_id = ? AND is_deleted = FALSE
+                """;
         return jdbcTemplate.query(sql, (rs, rowNum) -> new TechnicalInspectionDTO(
                 rs.getTimestamp("inspection_date"),
                 rs.getTimestamp("next_inspection_date"),
@@ -211,9 +211,9 @@ public class CreateReportRepository {
 
     public List<ServiceScheduleDTO> findServiceSchedules(Long vehicleId) {
         String sql = """
-            SELECT * FROM service_schedules 
-            WHERE vehicle_id = ? AND is_deleted = FALSE
-        """;
+                    SELECT * FROM service_schedules 
+                    WHERE vehicle_id = ? AND is_deleted = FALSE
+                """;
         return jdbcTemplate.query(sql, (rs, rowNum) -> new ServiceScheduleDTO(
                 rs.getTimestamp("scheduled_date"),
                 rs.getString("service_type"),
@@ -223,12 +223,12 @@ public class CreateReportRepository {
 
     public List<DriverVehicleDTO> findDriverHistory(Long vehicleId) {
         String sql = """
-            SELECT dv.assigned_date, dv.end_date, u.first_name, u.last_name, dv.notes 
-            FROM driver_vehicles dv
-            JOIN drivers d ON dv.driver_id = d.driver_id
-            JOIN users u ON d.user_id = u.user_id
-            WHERE dv.vehicle_id = ? AND dv.is_deleted = FALSE
-        """;
+                    SELECT dv.assigned_date, dv.end_date, u.first_name, u.last_name, dv.notes 
+                    FROM driver_vehicles dv
+                    JOIN drivers d ON dv.driver_id = d.driver_id
+                    JOIN users u ON d.user_id = u.user_id
+                    WHERE dv.vehicle_id = ? AND dv.is_deleted = FALSE
+                """;
         return jdbcTemplate.query(sql, (rs, rowNum) -> new DriverVehicleDTO(
                 rs.getTimestamp("assigned_date"),
                 rs.getTimestamp("end_date"),

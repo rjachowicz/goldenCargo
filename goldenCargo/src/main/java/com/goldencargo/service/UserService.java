@@ -1,7 +1,11 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.entities.Role;
 import com.goldencargo.model.entities.User;
+import com.goldencargo.model.entities.UserRole;
+import com.goldencargo.repository.RoleRepository;
 import com.goldencargo.repository.UserRepository;
+import com.goldencargo.repository.UserRoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +17,14 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -75,4 +83,20 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(rawPassword));
         userRepository.save(user);
     }
+
+    public void assignRoleToUser(User user, Long roleId) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        UserRole userRole = new UserRole(user, role);
+        userRoleRepository.save(userRole);
+    }
+
+    @Transactional
+    public void updateUserRole(Long userId, Long roleId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRoleRepository.deleteByUser(user);
+        assignRoleToUser(user, roleId);
+    }
+
 }

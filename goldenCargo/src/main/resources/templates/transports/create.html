@@ -4,7 +4,8 @@
         <div class="col-md-4">
             <label class="form-label" for="transportOrder">Transport Order</label>
             <select class="form-control" id="transportOrder" th:field="*{transportOrder.transportOrderId}">
-                <option th:each="order : ${transportOrders}" th:value="${order.transportOrderId}" th:text="${order.name}"></option>
+                <option th:each="order : ${transportOrders}" th:text="${order.name}"
+                        th:value="${order.transportOrderId}"></option>
             </select>
         </div>
         <div class="col-md-4">
@@ -18,7 +19,7 @@
         <div class="col-md-4">
             <label class="form-label" for="status">Status</label>
             <select class="form-control" id="status" th:field="*{status}">
-                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}"></option>
+                <option th:each="status : ${statuses}" th:text="${status.name()}" th:value="${status}"></option>
             </select>
         </div>
         <div class="col-md-12">

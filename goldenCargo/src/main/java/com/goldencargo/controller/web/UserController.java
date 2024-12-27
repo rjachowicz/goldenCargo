@@ -1,14 +1,9 @@
 package com.goldencargo.controller.web;
 
-import com.goldencargo.model.entities.PasswordResetToken;
 import com.goldencargo.model.entities.User;
-import com.goldencargo.service.EmailService;
-import com.goldencargo.service.GenericService;
-import com.goldencargo.service.PasswordResetTokenService;
-import com.goldencargo.service.UserService;
+import com.goldencargo.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +16,22 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
     private final GenericService genericService;
     private final EmailService emailService;
     private final PasswordResetTokenService passwordResetTokenService;
+    private final UserRoleService userRoleService;
 
-    public UserController(UserService userService,
+    public UserController(UserService userService, RoleService roleService,
                           GenericService genericService,
                           EmailService emailService,
-                          PasswordResetTokenService passwordResetTokenService) {
+                          PasswordResetTokenService passwordResetTokenService, UserRoleService userRoleService) {
         this.userService = userService;
+        this.roleService = roleService;
         this.genericService = genericService;
         this.emailService = emailService;
         this.passwordResetTokenService = passwordResetTokenService;
+        this.userRoleService = userRoleService;
     }
 
     @GetMapping
@@ -53,6 +52,7 @@ public class UserController {
                 sortLogic
         );
         model.addAttribute("users", users);
+        model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("statuses", User.UserStatus.values());
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("sortLogic", sortLogic);
@@ -67,8 +67,9 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String createUser(User user) {
-        userService.createUser(user);
+    public String createUser(@ModelAttribute User user, @RequestParam("roleId") Long roleId) {
+        User createdUser = userService.createUser(user);
+        userService.assignRoleToUser(createdUser, roleId);
         return "redirect:/users";
     }
 
@@ -78,6 +79,8 @@ public class UserController {
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
             model.addAttribute("statuses", User.UserStatus.values());
+            model.addAttribute("roles", roleService.getAllRoles());
+            model.addAttribute("userRoleId", userRoleService.getCurrentRoleId(user.get()));
             return "users/edit :: editUserModal";
         }
         return "redirect:/users";
@@ -86,8 +89,10 @@ public class UserController {
     @PostMapping("/update/{id}")
     public String updateUser(@PathVariable Long id,
                              @ModelAttribute User userDetails,
-                             @RequestParam(required = false) String newPassword) {
+                             @RequestParam(value = "newPassword", required = false) String newPassword,
+                             @RequestParam("roleId") Long roleId) {
         userService.updateUser(id, userDetails, newPassword);
+        userService.updateUserRole(id, roleId);
         return "redirect:/users";
     }
 

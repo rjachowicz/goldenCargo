@@ -18,11 +18,10 @@ import java.util.Optional;
 @RequestMapping("/service-schedules")
 public class ServiceScheduleController {
 
+    private static final String ALIAS = "s";
     private final ServiceScheduleService serviceScheduleService;
     private final VehicleService vehicleService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "s";
 
     public ServiceScheduleController(ServiceScheduleService serviceScheduleService, VehicleService vehicleService, GenericService genericService) {
         this.serviceScheduleService = serviceScheduleService;

@@ -1,14 +1,15 @@
 package com.goldencargo.config;
 
 import com.goldencargo.component.DateConverter;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-
+import com.goldencargo.service.DropboxService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -31,8 +32,8 @@ public class WebConfig implements WebMvcConfigurer {
             public boolean preHandle(HttpServletRequest request,
                                      HttpServletResponse response,
                                      Object handler) {
-                response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
-                response.setHeader("Pragma","no-cache");
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                response.setHeader("Pragma", "no-cache");
                 response.setDateHeader("Expires", 0);
                 return true;
             }

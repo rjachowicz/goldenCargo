@@ -16,10 +16,9 @@ import java.util.Optional;
 @RequestMapping("/vehicle-types")
 public class VehicleTypeController {
 
+    private static final String ALIAS = "vt";
     private final VehicleTypeService vehicleTypeService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "vt";
 
     public VehicleTypeController(VehicleTypeService vehicleTypeService, GenericService genericService) {
         this.vehicleTypeService = vehicleTypeService;

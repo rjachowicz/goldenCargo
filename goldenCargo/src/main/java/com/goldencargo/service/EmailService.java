@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
     private static final String SENDER = "robertjach74@gmail.com";
     private static final String FILE_TYP = ".pdf";
+    private final JavaMailSender mailSender;
 
 
     @Autowired

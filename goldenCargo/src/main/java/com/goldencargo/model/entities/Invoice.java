@@ -47,4 +47,7 @@ public class Invoice extends AuditableEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.NEW;
+
+    @Column(name = "file_url")
+    private String fileUrl;
 }

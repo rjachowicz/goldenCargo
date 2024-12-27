@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/users/forgot-password",
-                                "/users/reset-password**").permitAll()
+                                "/users/reset-password**",
+                                "/email/send-pdf").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -59,7 +60,13 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendRedirect("/access-denied");
+                        })
                 );
         return http.build();
     }
+
 }

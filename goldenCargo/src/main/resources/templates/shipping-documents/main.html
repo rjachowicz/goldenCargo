@@ -2,52 +2,130 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Shipping Documents</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <h1>Shipping Documents</h1>
-    <a class="btn btn-primary mb-3" href="/shipping-documents/new">Add New Document</a>
-
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Transport</th>
-            <th>Document Type</th>
-            <th>Document Number</th>
-            <th>Issue Date</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="shippingDocument : ${shippingDocuments}">
-            <td th:text="${shippingDocument.transport.transportOrder.name}"></td>
-            <td th:text="${shippingDocument.documentType}"></td>
-            <td th:text="${shippingDocument.documentNumber}"></td>
-            <td th:text="${#dates.format(shippingDocument.issueDate, 'yyyy-MM-dd HH:mm')}"></td>
-            <td>
-                <a class="btn btn-warning btn-sm"
-                   th:href="@{/shipping-documents/edit/{id}(id=${shippingDocument.documentId})}">Edit</a>
-                <a class="btn btn-info btn-sm"
-                   th:href="@{/shipping-documents/details/{id}(id=${shippingDocument.documentId})}">Details</a>
-                <a class="btn btn-success btn-sm"
-                   target="_blank"
-                   th:href="@{/shipping-documents/download/{id}(id=${shippingDocument.documentId})}">Download</a>
-                <form method="post" style="display:inline;"
-                      th:action="@{/shipping-documents/delete/{id}(id=${shippingDocument.documentId})}">
-                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<main>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
+            <div>
+                <h1 class="h3 mb-0"><i class="fas fa-file-alt"></i> Manage Shipping Documents</h1>
+                <p class="mb-0 text-muted">Easily view, create, and manage shipping documents.</p>
+            </div>
+            <div>
+                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button aria-controls="addDocumentForm" aria-expanded="false" class="btn btn-outline-success"
+                        data-bs-target="#addDocumentForm" data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-plus"></i> Add Document
+                </button>
+                <a class="btn btn-secondary" href="/shipping-documents"><i class="fas fa-redo"></i> Show All</a>
+            </div>
+        </div>
+        <div class="collapse mb-4" id="searchForm">
+            <div th:replace="~{/shipping-documents/search-sort}"></div>
+        </div>
+        <div class="collapse mb-4" id="addDocumentForm">
+            <div th:replace="~{shipping-documents/create :: createShippingDocumentForm}"></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>
+                        Transport
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='transport', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='transport', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Document Type
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='documentType', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='documentType', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Document Number
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='documentNumber', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='documentNumber', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>Issue Date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="shippingDocument : ${shippingDocuments}">
+                    <td th:text="${shippingDocument.transport.transportOrder.name}"></td>
+                    <td th:text="${shippingDocument.documentType}"></td>
+                    <td th:text="${shippingDocument.documentNumber}"></td>
+                    <td th:text="${#dates.format(shippingDocument.issueDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm"
+                                data-endpoint="shipping-documents/edit"
+                                data-modal-action
+                                data-modal-id="editShippingDocumentModal"
+                                th:attr="data-id=${shippingDocument.documentId}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                data-endpoint="shipping-documents/details"
+                                data-modal-action
+                                data-modal-id="detailsShippingDocumentModal"
+                                th:attr="data-id=${shippingDocument.documentId}">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-delete-url="/shipping-documents/delete/{id}"
+                                data-entity-type="shippingDocument"
+                                onclick="showDeleteModal(this)"
+                                th:attr="data-entity-id=${shippingDocument.documentId}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<div aria-hidden="true" class="modal fade" id="editShippingDocumentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div aria-hidden="true" class="modal fade" id="detailsShippingDocumentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
 </div>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
+<div th:replace="~{/helpers/footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
-<div th:replace="~{/helpers/footer}"></div>
+<script th:src="@{/js/modalScript.js}"></script>
 </body>
 </html>

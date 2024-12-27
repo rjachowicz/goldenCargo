@@ -27,7 +27,13 @@
                 <option th:each="status : ${statuses}" th:text="${status}" th:value="${status}"></option>
             </select>
         </div>
-        <button class="btn btn-success" type="submit">Save</button>
-        <a class="btn btn-secondary" href="/orders">Back</a>
+        <div class="col-md-12 d-flex">
+            <button class="btn btn-success me-2" type="submit">
+                <i class="fas fa-check"></i> Save
+            </button>
+            <button class="btn btn-secondary" data-bs-target="#addOrderForm" data-bs-toggle="collapse" type="button">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
     </form>
 </div>

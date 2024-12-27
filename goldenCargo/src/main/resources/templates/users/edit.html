@@ -8,65 +8,82 @@
     <div class="modal-body bg-light text-dark">
         <form method="post" th:action="@{/users/update/{id}(id=${user.userId})}" th:object="${user}">
             <div class="row g-3">
-                <!-- Existing User Fields -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user"></i> Username
                     </label>
-                    <input class="form-control" id="username" placeholder="Enter username" required th:field="*{username}" type="text">
+                    <input class="form-control" id="username" placeholder="Enter username" required
+                           th:field="*{username}" type="text">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-envelope"></i> Email
                     </label>
-                    <input class="form-control" id="email" placeholder="Enter email" required th:field="*{email}" type="email">
+                    <input class="form-control" id="email" placeholder="Enter email" required th:field="*{email}"
+                           type="email">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user-circle"></i> First Name
                     </label>
-                    <input class="form-control" id="firstName" placeholder="Enter first name" th:field="*{firstName}" type="text">
+                    <input class="form-control" id="firstName" placeholder="Enter first name" th:field="*{firstName}"
+                           type="text">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user-circle"></i> Last Name
                     </label>
-                    <input class="form-control" id="lastName" placeholder="Enter last name" th:field="*{lastName}" type="text">
+                    <input class="form-control" id="lastName" placeholder="Enter last name" th:field="*{lastName}"
+                           type="text">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-phone"></i> Phone Number
                     </label>
-                    <input class="form-control" id="phoneNumber" placeholder="Enter phone number" th:field="*{phoneNumber}" type="text">
+                    <input class="form-control" id="phoneNumber" placeholder="Enter phone number"
+                           th:field="*{phoneNumber}" type="text">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="fas fa-map-marker-alt"></i> Address
+                    </label>
+                    <textarea class="form-control" id="address" placeholder="Enter address"
+                              th:field="*{address}"></textarea>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-info-circle"></i> Status
                     </label>
                     <select class="form-control" id="status" th:field="*{status}">
-                        <option th:each="status : ${statuses}" th:selected="*{status} == ${status}" th:text="${status.name()}" th:value="${status}"></option>
+                        <option th:each="status : ${statuses}" th:selected="*{status} == ${status}"
+                                th:text="${status.name()}" th:value="${status}"></option>
                     </select>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-map-marker-alt"></i> Address
+                        <i class="fas fa-user-tag"></i> Role
                     </label>
-                    <textarea class="form-control" id="address" placeholder="Enter address" th:field="*{address}"></textarea>
+                    <select class="form-control" id="roles" name="roleId" required>
+                        <option th:each="role : ${roles}" th:selected="${role.roleId == userRoleId}"
+                                th:text="${#strings.substringAfter(role.name, 'ROLE_')}"
+                                th:value="${role.roleId}"></option>
+                    </select>
+                    <div class="invalid-feedback">Please select a role.</div>
                 </div>
-                <!-- Toggle Password Change -->
                 <div class="col-md-12 mt-3">
                     <button class="btn btn-outline-secondary" id="togglePasswordChange" type="button">
                         <i class="fas fa-key"></i> Change Password
                     </button>
                 </div>
-                <!-- Password Change Fields -->
                 <div class="col-md-12 mt-3 password-change d-none">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-lock"></i> New Password
                     </label>
                     <div class="input-group">
-                        <input class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password" type="password">
-                        <button class="btn btn-outline-secondary" id="togglePasswordVisibility" type="button">Show</button>
+                        <input class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password"
+                               type="password">
+                        <button class="btn btn-outline-secondary" id="togglePasswordVisibility" type="button">Show
+                        </button>
                     </div>
                 </div>
                 <div class="col-md-12 mt-3 password-change d-none">

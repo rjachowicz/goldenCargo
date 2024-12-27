@@ -18,12 +18,11 @@ import java.util.Optional;
 @RequestMapping("/driver-vehicles")
 public class DriverVehicleController {
 
+    private static final String ALIAS = "dv";
     private final DriverVehicleService driverVehicleService;
     private final DriverService driverService;
     private final VehicleService vehicleService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "dv";
 
     public DriverVehicleController(DriverVehicleService driverVehicleService,
                                    DriverService driverService,

@@ -60,19 +60,22 @@
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-plus"></i> Purchase Date
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(vehicle.purchaseDate, 'yyyy-MM-dd HH:mm')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(vehicle.purchaseDate, 'yyyy-MM-dd HH:mm')}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-check"></i> Last Service Date
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(vehicle.lastServiceDate, 'yyyy-MM-dd HH:mm')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(vehicle.lastServiceDate, 'yyyy-MM-dd HH:mm')}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-calendar-alt"></i> Next Service Due
                     </label>
-                    <p class="form-control-plaintext" th:text="${#dates.format(vehicle.nextServiceDue, 'yyyy-MM-dd HH:mm')}"></p>
+                    <p class="form-control-plaintext"
+                       th:text="${#dates.format(vehicle.nextServiceDue, 'yyyy-MM-dd HH:mm')}"></p>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">

@@ -29,14 +29,16 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Order Type</label>
                     <select class="form-select" th:field="*{orderType}">
-                        <option th:each="type : ${orderTypes}" th:selected="${type == order.orderType}" th:text="${type}"
+                        <option th:each="type : ${orderTypes}" th:selected="${type == order.orderType}"
+                                th:text="${type}"
                                 th:value="${type}"></option>
                     </select>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Status</label>
                     <select class="form-select" th:field="*{status}">
-                        <option th:each="status : ${statuses}" th:selected="${status == order.status}" th:text="${status}"
+                        <option th:each="status : ${statuses}" th:selected="${status == order.status}"
+                                th:text="${status}"
                                 th:value="${status}"></option>
                     </select>
                 </div>

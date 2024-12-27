@@ -6,7 +6,8 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/client-invoices/update/{id}(id=${clientInvoice.invoiceId})}" th:object="${clientInvoice}">
+        <form method="post" th:action="@{/client-invoices/update/{id}(id=${clientInvoice.invoiceId})}"
+              th:object="${clientInvoice}">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark" for="client">
@@ -54,7 +55,8 @@
                     <label class="form-label fw-bold text-dark" for="totalAmount">
                         <i class="fas fa-dollar-sign"></i> Total Amount
                     </label>
-                    <input class="form-control" id="totalAmount" required step="0.01" th:field="*{totalAmount}" type="number">
+                    <input class="form-control" id="totalAmount" required step="0.01" th:field="*{totalAmount}"
+                           type="number">
                 </div>
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-dark" for="paymentStatus">

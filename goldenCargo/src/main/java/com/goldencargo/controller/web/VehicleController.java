@@ -17,11 +17,10 @@ import java.util.Optional;
 @RequestMapping("/vehicles")
 public class VehicleController {
 
+    private static final String ALIAS = "v";
     private final VehicleService vehicleService;
     private final VehicleTypeService vehicleTypeService;
     private final GenericService genericService;
-
-    private static final String ALIAS = "v";
 
     public VehicleController(VehicleService vehicleService, VehicleTypeService vehicleTypeService, GenericService genericService) {
         this.vehicleService = vehicleService;
