@@ -25,6 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(dateConverter);
     }
 
+    @Bean
+    public DropboxService dropboxService() {
+        return new DropboxService("");
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HandlerInterceptor() {
