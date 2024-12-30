@@ -3,6 +3,7 @@ package com.goldencargo.controller.web;
 import com.goldencargo.model.entities.Goods;
 import com.goldencargo.service.ClientOrderService;
 import com.goldencargo.service.GoodsService;
+import com.goldencargo.service.GenericService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,26 +17,41 @@ import java.util.Optional;
 @RequestMapping("/goods")
 public class GoodsController {
 
+    private static final String ALIAS = "g";
     private final GoodsService goodsService;
     private final ClientOrderService clientOrderService;
+    private final GenericService genericService;
 
-    public GoodsController(GoodsService goodsService, ClientOrderService clientOrderService) {
+    public GoodsController(GoodsService goodsService, ClientOrderService clientOrderService, GenericService genericService) {
         this.goodsService = goodsService;
         this.clientOrderService = clientOrderService;
+        this.genericService = genericService;
     }
 
     @GetMapping
-    public String getAllGoods(Model model) {
-        List<Goods> goodsList = goodsService.getAllGoods();
-        model.addAttribute("goodsList", goodsList);
-        return "goods/main";
-    }
+    public String getAllGoods(
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "filterValue", required = false) String filterValue,
+            @RequestParam(value = "comparisonType", required = false, defaultValue = "like") String comparisonType,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "name") String sortBy,
+            @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
+            Model model) {
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+        List<Goods> goodsList = genericService.getFilteredAndSortedEntities(
+                Goods.class,
+                ALIAS,
+                filterType,
+                filterValue,
+                comparisonType,
+                sortBy,
+                sortLogic
+        );
+
+        model.addAttribute("goodsList", goodsList);
         model.addAttribute("goods", new Goods());
         model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
-        return "goods/create";
+
+        return "goods/main";
     }
 
     @PostMapping("/create")
@@ -50,7 +66,7 @@ public class GoodsController {
         if (goods.isPresent()) {
             model.addAttribute("goods", goods.get());
             model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
-            return "goods/edit";
+            return "goods/edit :: editGoodsModal";
         }
         return "redirect:/goods";
     }
@@ -64,17 +80,13 @@ public class GoodsController {
     @GetMapping("/details/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
         Optional<Goods> goods = goodsService.getGoodsById(id);
-        if (goods.isPresent()) {
-            model.addAttribute("goods", goods.get());
-            return "goods/details";
-        }
-        return "redirect:/goods";
+        goods.ifPresent(value -> model.addAttribute("goods", value));
+        return "goods/details :: detailsGoodsModal";
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteGoods(@PathVariable Long id) {
-        return goodsService.deleteGoods(id)
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        boolean isDeleted = goodsService.deleteGoods(id);
+        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

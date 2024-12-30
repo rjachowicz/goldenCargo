@@ -38,13 +38,55 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/logistics/**").hasRole("ADMIN")
-                        .requestMatchers("/login",
+                        .requestMatchers("/breakdowns/**")
+                        .hasAnyRole("ADMIN", "MANAGER", "DRIVER", "USER")
+
+                        .requestMatchers("/clients/**",
+                                "/client-invoices/**",
+                                "/drivers/**",
+                                "/driver-reports/**",
+                                "/goods/**",
+                                "/invoices/**",
+                                "/news/**",
+                                "/users/**")
+                        .hasAnyRole("ADMIN", "MANAGER")
+
+                        .requestMatchers("/client-orders/**",
+                                "/orders/**",
+                                "/shipping-documents/**")
+                        .hasAnyRole("ADMIN", "MANAGER", "LOGISTIC")
+
+                        .requestMatchers("/damages/**",
+                                "/incidents/**")
+                        .hasAnyRole("ADMIN", "DRIVER", "USER")
+
+                        .requestMatchers("/locations/**",
+                                "/routes/**",
+                                "/transports/**",
+                                "/transport-orders/**")
+                        .hasAnyRole("ADMIN", "LOGISTIC")
+
+                        .requestMatchers("/service-schedules/**",
+                                "/technical-inspections/**",
+                                "/vehicles/**",
+                                "/vehicle-repairs/**",
+                                "/vehicle-types/**")
+                        .hasAnyRole("ADMIN", "USER")
+
+                        .requestMatchers("/reports/**",
+                                "/email/**")
+                        .permitAll()
+
+                        .requestMatchers(
+                                "/login",
                                 "/css/**",
                                 "/js/**",
                                 "/users/forgot-password",
                                 "/users/reset-password**",
-                                "/email/send-pdf").permitAll()
+                                "/email/send-pdf",
+                                "/save-to-dropbox"
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

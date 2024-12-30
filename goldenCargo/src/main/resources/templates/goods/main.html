@@ -12,38 +12,91 @@
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-<div class="container mt-4">
-    <h2>Goods List</h2>
-    <a class="btn btn-primary mb-3" href="/goods/new">Create New Goods</a>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Client Order</th>
-            <th>Name</th>
-            <th>Weight</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="goods : ${goodsList}">
-            <td th:text="${goods.clientOrder.clientOrderId}"></td>
-            <td th:text="${goods.name}"></td>
-            <td th:text="${goods.weight}"></td>
-            <td>
-                <a class="btn btn-info btn-sm" th:href="@{/goods/details/{id}(id=${goods.goodsId})}">Details</a>
-                <a class="btn btn-primary btn-sm" th:href="@{/goods/edit/{id}(id=${goods.goodsId})}">Edit</a>
-                <button class="btn btn-danger btn-sm" data-delete-url="/goods/delete/{id}"
-                        data-entity-type="goods" onclick="showDeleteModal(this)"
-                        th:attr="data-entity-id=${goods.goodsId}">Delete
+<main>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
+            <div>
+                <h1 class="h3 mb-0"><i class="fa-solid fa-dolly"></i> Manage Goods</h1>
+                <p class="mb-0 text-muted">Easily view, edit, and manage goods.</p>
+            </div>
+            <div>
+                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
+                        data-bs-target="#searchForm"
+                        data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-search"></i> Search
                 </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+                <button aria-controls="addGoodsForm" aria-expanded="false" class="btn btn-outline-success"
+                        data-bs-target="#addGoodsForm"
+                        data-bs-toggle="collapse" type="button">
+                    <i class="fas fa-plus-circle"></i> Add Goods
+                </button>
+                <a class="btn btn-secondary" href="/goods"><i class="fas fa-redo"></i> Show All</a>
+            </div>
+        </div>
+        <div class="collapse mb-4" id="searchForm">
+            <div th:replace="~{/goods/search-sort}"></div>
+        </div>
+        <div class="collapse mb-4" id="addGoodsForm">
+            <div th:replace="~{/goods/create}"></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>Client Order</th>
+                    <th>Name</th>
+                    <th>Weight</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="goods : ${goodsList}">
+                    <td th:text="${goods.clientOrder.clientOrderId}"></td>
+                    <td th:text="${goods.name}"></td>
+                    <td th:text="${goods.weight}"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm"
+                                data-endpoint="goods/edit"
+                                data-modal-action
+                                data-modal-id="editGoodsModal"
+                                th:attr="data-id=${goods.goodsId}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                data-endpoint="goods/details"
+                                data-modal-action
+                                data-modal-id="detailsGoodsModal"
+                                th:attr="data-id=${goods.goodsId}">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-danger btn-sm" data-delete-url="/goods/delete/{id}"
+                                data-entity-type="goods" onclick="showDeleteModal(this)"
+                                th:attr="data-entity-id=${goods.goodsId}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div aria-hidden="true" aria-labelledby="editGoodsModalLabel" class="modal fade" id="editGoodsModal"
+         tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div aria-hidden="true" aria-labelledby="detailsGoodsModalLabel" class="modal fade" id="detailsGoodsModal"
+         tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+</main>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
+<div th:replace="~{/helpers/footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
-<div th:replace="~{/helpers/footer}"></div>
+<script th:src="@{/js/modalScript.js}"></script>
 </body>
 </html>
