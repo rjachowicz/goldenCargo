@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "goods")
 @Getter
@@ -18,10 +21,6 @@ public class Goods extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "goods_id")
     private Long goodsId;
-
-    @ManyToOne
-    @JoinColumn(name = "client_order_id", nullable = false)
-    private ClientOrder clientOrder;
 
     @Column(name = "name", length = 100, nullable = false)
     private String name;
@@ -37,4 +36,7 @@ public class Goods extends AuditableEntity {
 
     @Column(name = "special_handling_instructions", nullable = false)
     private String specialHandlingInstructions;
+
+    @ManyToMany(mappedBy = "goods")
+    private Set<ClientOrder> clientOrders = new HashSet<>();
 }

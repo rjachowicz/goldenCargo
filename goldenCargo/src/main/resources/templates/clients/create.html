@@ -25,6 +25,12 @@
             <label class="form-label" for="taxId">NIP</label>
             <input class="form-control" id="taxId" th:field="*{nip}" type="text">
         </div>
+        <div class="mb-3">
+            <label class="form-label" for="invoiceType">Invoice Type</label>
+            <select class="form-control" id="invoiceType" required th:field="*{invoiceType}">
+                <option th:each="type : ${invoiceTypes}" th:text="${type}" th:value="${type}"></option>
+            </select>
+        </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
             <button class="btn btn-secondary" data-bs-target="#addClientForm" data-bs-toggle="collapse" type="button">

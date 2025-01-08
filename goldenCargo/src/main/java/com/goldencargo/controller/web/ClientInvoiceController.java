@@ -23,6 +23,8 @@ public class ClientInvoiceController {
     private final ClientOrderService clientOrderService;
     private final GenericService genericService;
 
+    private static final String ALIAS = "ci";
+
     public ClientInvoiceController(ClientInvoiceService clientInvoiceService,
                                    ClientService clientService,
                                    ClientOrderService clientOrderService,
@@ -44,7 +46,7 @@ public class ClientInvoiceController {
 
         List<ClientInvoice> clientInvoices = genericService.getFilteredAndSortedEntities(
                 ClientInvoice.class,
-                "ci",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,

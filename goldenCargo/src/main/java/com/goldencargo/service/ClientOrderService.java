@@ -1,13 +1,13 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.repository.ClientOrderRepository;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ClientOrderService {
@@ -31,7 +31,6 @@ public class ClientOrderService {
         Optional<ClientOrder> clientOrder = clientOrderRepository.findById(id);
         clientOrder.ifPresent(order -> {
             Hibernate.initialize(order.getTransportOrders());
-            Hibernate.initialize(order.getGoods());
             Hibernate.initialize(order.getClientInvoices());
         });
         return clientOrder;
@@ -60,4 +59,17 @@ public class ClientOrderService {
         }
         return false;
     }
+
+    public List<ClientOrder> getClientOrdersWithGoods() {
+        return clientOrderRepository.getClientOrdersWithGoods();
+    }
+
+    public void updateClientOrderStatus(Long clientOrderId, Status status) {
+        Optional<ClientOrder> order = clientOrderRepository.findById(clientOrderId);
+        order.ifPresent(clientOrder -> {
+            clientOrder.setStatus(status);
+        });
+        clientOrderRepository.save(order.get());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.InvoiceType;
 import com.goldencargo.model.data.PaymentStatus;
 import com.goldencargo.model.data.Status;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,13 +43,22 @@ public class ClientOrder extends AuditableEntity {
     private Double totalAmount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status", nullable = false)
+    @Column(name = "payment_status")
     private PaymentStatus paymentStatus = PaymentStatus.NEW;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "invoice_type")
+    private InvoiceType invoiceType;
 
     @OneToMany(mappedBy = "clientOrder")
     private Set<TransportOrder> transportOrders = new HashSet<>();
 
-    @OneToMany(mappedBy = "clientOrder")
+    @ManyToMany
+    @JoinTable(
+            name = "client_order_goods",
+            joinColumns = @JoinColumn(name = "client_order_id"),
+            inverseJoinColumns = @JoinColumn(name = "goods_id")
+    )
     private Set<Goods> goods = new HashSet<>();
 
     @OneToMany(mappedBy = "clientOrder")

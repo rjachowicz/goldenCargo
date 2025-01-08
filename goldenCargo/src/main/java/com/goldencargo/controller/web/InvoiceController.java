@@ -26,6 +26,8 @@ public class InvoiceController {
     private final GenericService genericService;
     private final DropboxService dropboxService;
 
+    private static final String ALIAS = "i";
+
     public InvoiceController(InvoiceService invoiceService, GenericService genericService, DropboxService dropboxService) {
         this.invoiceService = invoiceService;
         this.genericService = genericService;
@@ -43,7 +45,7 @@ public class InvoiceController {
 
         List<Invoice> invoices = genericService.getFilteredAndSortedEntities(
                 Invoice.class,
-                "i",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,

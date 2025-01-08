@@ -16,6 +16,8 @@ import java.util.Optional;
 @RequestMapping("/transport-orders")
 public class TransportOrderController {
 
+    private static final String ALIAS = "t";
+
     private final TransportOrderService transportOrderService;
     private final ClientOrderService clientOrderService;
     private final DriverService driverService;
@@ -48,7 +50,7 @@ public class TransportOrderController {
 
         List<TransportOrder> transportOrders = genericService.getFilteredAndSortedEntities(
                 TransportOrder.class,
-                "t",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,

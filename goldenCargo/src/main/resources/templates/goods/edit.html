@@ -9,18 +9,6 @@
         <form method="post" th:action="@{/goods/update/{id}(id=${goods.goodsId})}" th:object="${goods}">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="clientOrder">
-                        <i class="fas fa-clipboard"></i> Client Order
-                    </label>
-                    <select class="form-control select2" id="clientOrder" th:field="*{clientOrder.clientOrderId}">
-                        <option th:each="order : ${clientOrders}"
-                                th:selected="${order.clientOrderId == goods.clientOrder.clientOrderId}"
-                                th:text="${order.clientOrderId}"
-                                th:value="${order.clientOrderId}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-6">
                     <label class="form-label fw-bold text-dark" for="name">
                         <i class="fas fa-box"></i> Name
                     </label>

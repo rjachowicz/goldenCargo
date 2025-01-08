@@ -1,5 +1,6 @@
 package com.goldencargo.controller.web;
 
+import com.goldencargo.model.data.InvoiceType;
 import com.goldencargo.model.entities.Client;
 import com.goldencargo.service.ClientService;
 import com.goldencargo.service.GenericService;
@@ -44,6 +45,7 @@ public class ClientController {
                 sortLogic
         );
         model.addAttribute("clients", clients);
+        model.addAttribute("invoiceTypes", InvoiceType.values());
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("sortLogic", sortLogic);
         model.addAttribute("client", new Client());
@@ -67,6 +69,7 @@ public class ClientController {
         Optional<Client> client = clientService.getClientById(id);
         if (client.isPresent()) {
             model.addAttribute("client", client.get());
+            model.addAttribute("invoiceTypes", InvoiceType.values());
             return "clients/edit :: editClientModal";
         }
         return "redirect:/clients";

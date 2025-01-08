@@ -36,6 +36,7 @@ public class ClientService {
             client.setPhone(clientDetails.getPhone());
             client.setEmail(clientDetails.getEmail());
             client.setNip(clientDetails.getNip());
+            client.setInvoiceType(clientDetails.getInvoiceType());
             client.setUpdatedAt(new java.util.Date());
             return clientRepository.save(client);
         });

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class GoodsService {
@@ -20,6 +21,10 @@ public class GoodsService {
         return goodsRepository.findByIsDeletedFalse();
     }
 
+    public List<Goods> getGoodsByIds(List<Long> ids) {
+        return goodsRepository.findAllById(ids);
+    }
+
     public Optional<Goods> getGoodsById(Long id) {
         return goodsRepository.findById(id);
     }
@@ -30,7 +35,6 @@ public class GoodsService {
 
     public Optional<Goods> updateGoods(Long id, Goods goodsDetails) {
         return goodsRepository.findById(id).map(goods -> {
-            goods.setClientOrder(goodsDetails.getClientOrder());
             goods.setName(goodsDetails.getName());
             goods.setDescription(goodsDetails.getDescription());
             goods.setWeight(goodsDetails.getWeight());
@@ -47,5 +51,13 @@ public class GoodsService {
             return true;
         }
         return false;
+    }
+
+    public double calculateTotalAmount(Set<Goods> goods) {
+        double sum = 0;
+        for (Goods good : goods) {
+            sum += good.getWeight();
+        }
+        return sum;
     }
 }

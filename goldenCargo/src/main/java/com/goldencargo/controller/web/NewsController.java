@@ -18,6 +18,8 @@ import java.util.Optional;
 @RequestMapping("/news")
 public class NewsController {
 
+    private static final String ALIAS = "n";
+
     private final NewsService newsService;
     private final UserService userService;
     private final GenericService genericService;
@@ -39,7 +41,7 @@ public class NewsController {
 
         List<News> newsList = genericService.getFilteredAndSortedEntities(
                 News.class,
-                "n",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,

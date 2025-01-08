@@ -22,7 +22,7 @@
         <div class="col-md-6">
             <label class="form-label" for="assignedVehicle">Assigned Vehicle</label>
             <select class="form-control" id="assignedVehicle" th:field="*{assignedVehicle.vehicleId}">
-                <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}"
+                <option th:each="vehicle : ${vehicles}" th:text="${vehicle.make} + ' | ' + ${vehicle.model} + ' | ' + ${vehicle.registrationNumber}"
                         th:value="${vehicle.vehicleId}"></option>
             </select>
         </div>

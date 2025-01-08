@@ -36,9 +36,18 @@ public class EmailController {
         List<ServiceScheduleDTO> serviceSchedules = reportService.getServiceSchedules(request.getVehicleId());
         List<DriverVehicleDTO> driverHistory = reportService.getDriverHistory(request.getVehicleId());
 
-        byte[] pdfContent = PdfGenerator.generateReportPdf(vehicleReport, clientReport, technicalInspections, serviceSchedules, driverHistory);
+        byte[] pdfContent = PdfGenerator.generateReportPdf(vehicleReport,
+                clientReport,
+                technicalInspections,
+                serviceSchedules,
+                driverHistory
+        );
 
-        emailService.sendEmailWithAttachment(request.getTo(), "Your Report", "Please find the attached report.", pdfContent);
+        emailService.sendEmailWithAttachment(request.getTo(),
+                "Your Report",
+                "Please find the attached report.",
+                pdfContent
+        );
 
         return ResponseEntity.ok("Email sent successfully!");
     }
