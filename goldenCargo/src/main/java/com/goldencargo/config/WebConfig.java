@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    String token = "sl.CEuUzbmTizUOwC4GAl7h84RDckHQXy_IkiJrse5TLofCEeUkj7zvsfnvFk_dY17wLzDwttlk8vf9NTLrGQq0hVFKhcg17IxA6qKwZviIGKWb-rex0hNW6yI2FS8O86OGMfnva9JDDPx_nrnI1s59HnQ";
+    String token = "";
 
     private final DateConverter dateConverter;
 
