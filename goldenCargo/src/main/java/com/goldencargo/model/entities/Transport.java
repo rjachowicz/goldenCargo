@@ -45,12 +45,4 @@ public class Transport extends AuditableEntity {
 
     @OneToMany(mappedBy = "transport")
     private Set<ShippingDocument> shippingDocuments = new HashSet<>();
-
-    @ManyToOne
-    @JoinColumn(name = "driver_id", nullable = false)
-    private Driver driver;
-
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = false)
-    private Vehicle vehicle;
 }

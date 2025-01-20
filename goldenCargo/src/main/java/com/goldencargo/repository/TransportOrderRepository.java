@@ -21,4 +21,6 @@ public interface TransportOrderRepository extends JpaRepository<TransportOrder, 
     @Query("SELECT u FROM TransportOrder u WHERE u.transportOrderId NOT IN (SELECT t.transportOrder.transportOrderId FROM Transport t) AND u.isDeleted = false")
     List<TransportOrder> findTransportOrdersNotAssignedToTransport();
 
+    @Query("SELECT u FROM TransportOrder u WHERE u.transportOrderId NOT IN (SELECT t.transportOrder.transportOrderId FROM Transport t) AND u.isDeleted = false AND u.status = 'NEW'")
+    List<TransportOrder> findTransportOrdersWithStatusNew();
 }

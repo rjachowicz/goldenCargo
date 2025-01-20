@@ -64,12 +64,8 @@ public class ClientOrderService {
         return clientOrderRepository.getClientOrdersWithGoods();
     }
 
-    public void updateClientOrderStatus(Long clientOrderId, Status status) {
-        Optional<ClientOrder> order = clientOrderRepository.findById(clientOrderId);
-        order.ifPresent(clientOrder -> {
-            clientOrder.setStatus(status);
-        });
-        clientOrderRepository.save(order.get());
+    public List<ClientOrder> getClientOrdersByIds(List<Long> ids) {
+        return clientOrderRepository.findAllById(ids);
     }
 
 }

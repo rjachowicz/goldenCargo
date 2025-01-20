@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class EmailRequestWithIds {
     private String to;
-    private Long vehicleId;
-    private Long clientId;
+    private Long transportId;
 }

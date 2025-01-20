@@ -631,3 +631,5 @@ VALUES (false, '2021-12-01 08:00:00', '2021-12-01 08:00:00', '2022-12-01 08:00:0
         'Ewa Wróbel', 'Uszkodzone lusterko boczne.', 'FAILED'),
        (false, '2021-12-15 13:30:00', '2021-12-15 13:30:00', '2022-12-15 13:30:00', '2021-12-15 13:30:00', 15,
         'Paweł Jankowski', 'Wszystkie systemy działają prawidłowo.', 'PASSED');
+
+INSERT INTO public.user_roles (role_id, user_id, assigned_at) VALUES (1, 1, '2025-01-08 16:16:50.000000');

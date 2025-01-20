@@ -1,6 +1,7 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.model.data.Status;
+import com.goldencargo.model.entities.Transport;
 import com.goldencargo.model.entities.TransportOrder;
 import com.goldencargo.service.*;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,19 +26,21 @@ public class TransportOrderController {
     private final VehicleService vehicleService;
     private final LocationService locationService;
     private final GenericService genericService;
+    private final TransportService transportService;
 
     public TransportOrderController(TransportOrderService transportOrderService,
                                     ClientOrderService clientOrderService,
                                     DriverService driverService,
                                     VehicleService vehicleService,
                                     LocationService locationService,
-                                    GenericService genericService) {
+                                    GenericService genericService, TransportService transportService) {
         this.transportOrderService = transportOrderService;
         this.clientOrderService = clientOrderService;
         this.driverService = driverService;
         this.vehicleService = vehicleService;
         this.locationService = locationService;
         this.genericService = genericService;
+        this.transportService = transportService;
     }
 
     @GetMapping
@@ -107,5 +111,37 @@ public class TransportOrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         boolean isDeleted = transportOrderService.deleteOrder(id);
         return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/new-transport-order")
+    public String showNewTransportOrder(Model model) {
+        model.addAttribute("transport", new Transport());
+        model.addAttribute("transportOrder", new TransportOrder());
+        model.addAttribute("locations", locationService.getAllLocations());
+        model.addAttribute("drivers", driverService.getAllDrivers());
+        model.addAttribute("vehicles", vehicleService.getAllVehicles());
+        model.addAttribute("clientOrders", clientOrderService.getClientOrdersWithGoods());
+        model.addAttribute("availableTransports", transportService.getAllTransports());
+        model.addAttribute("transportOrders", transportOrderService.getTransportOrders());
+        model.addAttribute("statuses", Status.values());
+
+        return "client-orders/new-transport-order";
+    }
+
+    @PostMapping("/new-transport-order")
+    public String createTransportOrder(
+            @ModelAttribute TransportOrder transportOrder,
+            @RequestParam(value = "selectedClientOrderIds", required = false) String selectedIds) {
+
+        if (selectedIds == null || selectedIds.isEmpty()) {
+            throw new IllegalArgumentException("No client orders selected");
+        }
+
+        List<Long> clientOrderIds = Arrays.stream(selectedIds.split(","))
+                .map(Long::valueOf)
+                .toList();
+        transportOrderService.createTransportOrdersForClientOrders(transportOrder, clientOrderIds);
+
+        return "redirect:/transport-orders/new-transport-order";
     }
 }

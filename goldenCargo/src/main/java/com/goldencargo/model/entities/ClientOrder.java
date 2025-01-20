@@ -11,7 +11,6 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,7 +49,7 @@ public class ClientOrder extends AuditableEntity {
     @Column(name = "invoice_type")
     private InvoiceType invoiceType;
 
-    @OneToMany(mappedBy = "clientOrder")
+    @ManyToMany(mappedBy = "clientOrders")
     private Set<TransportOrder> transportOrders = new HashSet<>();
 
     @ManyToMany
