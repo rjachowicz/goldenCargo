@@ -2,8 +2,13 @@ package com.goldencargo.controller.web;
 
 import com.goldencargo.model.data.PaymentStatus;
 import com.goldencargo.model.data.Status;
-import com.goldencargo.model.entities.*;
-import com.goldencargo.service.*;
+import com.goldencargo.model.entities.Client;
+import com.goldencargo.model.entities.ClientOrder;
+import com.goldencargo.model.entities.Goods;
+import com.goldencargo.service.ClientOrderService;
+import com.goldencargo.service.ClientService;
+import com.goldencargo.service.GenericService;
+import com.goldencargo.service.GoodsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,29 +26,15 @@ public class ClientOrderController {
     private final ClientService clientService;
     private final GenericService genericService;
     private final GoodsService goodsService;
-    private final TransportService transportService;
-    private final TransportOrderService transportOrderService;
-    private final DriverService driverService;
-    private final VehicleService vehicleService;
-    private final LocationService locationService;
 
     public ClientOrderController(ClientOrderService clientOrderService,
                                  ClientService clientService,
                                  GenericService genericService,
-                                 GoodsService goodsService,
-                                 TransportService transportService,
-                                 TransportOrderService transportOrderService,
-                                 DriverService driverService,
-                                 VehicleService vehicleService, LocationService locationService) {
+                                 GoodsService goodsService) {
         this.clientOrderService = clientOrderService;
         this.clientService = clientService;
         this.genericService = genericService;
         this.goodsService = goodsService;
-        this.transportService = transportService;
-        this.transportOrderService = transportOrderService;
-        this.driverService = driverService;
-        this.vehicleService = vehicleService;
-        this.locationService = locationService;
     }
 
     @GetMapping
@@ -123,21 +114,6 @@ public class ClientOrderController {
         return "client-orders/new-order";
     }
 
-    @GetMapping("/new-transport-order")
-    public String showNewTransportOrder(Model model) {
-        model.addAttribute("transport", new Transport());
-        model.addAttribute("transportOrder", new TransportOrder());
-        model.addAttribute("locations", locationService.getAllLocations());
-        model.addAttribute("drivers", driverService.getAllDrivers());
-        model.addAttribute("vehicles", vehicleService.getAllVehicles());
-        model.addAttribute("clientOrders", clientOrderService.getClientOrdersWithGoods());
-        model.addAttribute("availableTransports", transportService.getAllTransports());
-        model.addAttribute("transportOrders", transportOrderService.getAllOrders());
-        model.addAttribute("statuses", Status.values());
-
-        return "client-orders/new-transport-order";
-    }
-
     @PostMapping("/create-client")
     public String createClient(@ModelAttribute Client client) {
         clientService.createClient(client);
@@ -148,13 +124,6 @@ public class ClientOrderController {
     public String createGoods(@ModelAttribute Goods goods) {
         goodsService.createGoods(goods);
         return "redirect:/client-orders/new-order";
-    }
-
-    @PostMapping("/new-transport-order")
-    public String createTransportOrder(@ModelAttribute TransportOrder transportOrder) {
-        transportOrderService.createOrder(transportOrder);
-        clientOrderService.updateClientOrderStatus(transportOrder.getClientOrder().getClientOrderId(), Status.COMPLETED);
-        return "redirect:/client-orders/new-transport-order";
     }
 
     @PostMapping("/save")
@@ -175,7 +144,7 @@ public class ClientOrderController {
         clientOrder.setGoods(goods);
 
         clientOrderService.createClientOrder(clientOrder);
-        return "redirect:/client-orders/new-transport-order";
+        return "redirect:/transport-orders/new-transport-order";
     }
 
 }

@@ -47,4 +47,8 @@ public class TransportService {
         }
         return false;
     }
+
+    public Transport save(Transport transport) {
+        return transportRepository.save(transport);
+    }
 }

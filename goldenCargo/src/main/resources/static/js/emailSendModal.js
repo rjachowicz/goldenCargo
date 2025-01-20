@@ -1,7 +1,6 @@
 document.getElementById("sendEmailButton").addEventListener("click", function () {
     const email = document.getElementById("emailAddress").value;
-    const vehicleId = document.getElementById("vehicleId").value;
-    const clientId = document.getElementById("clientId").value;
+    const transportId = document.getElementById("transportId").value;
 
     const emailModal = bootstrap.Modal.getInstance(document.getElementById("emailModal"));
     const loadingModal = new bootstrap.Modal(document.getElementById("loadingModal"));
@@ -21,8 +20,7 @@ document.getElementById("sendEmailButton").addEventListener("click", function ()
         },
         body: JSON.stringify({
             to: email,
-            vehicleId: vehicleId,
-            clientId: clientId
+            transportId: transportId,
         })
     }).then(response => {
         loadingModal.hide();
