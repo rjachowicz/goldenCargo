@@ -71,19 +71,17 @@
                     <td th:text="${invoice.totalAmount}"></td>
                     <td th:text="${invoice.paymentStatus}"></td>
                     <td>
+                        <a class="btn btn-warning btn-sm"
+                           th:href="@{/check-invoice(clientOrderId=${invoice.clientOrder.clientOrderId}, clientId=${invoice.client.clientId})}">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </a>
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="client-invoices/edit"
                                 data-modal-action
                                 data-modal-id="editClientInvoiceModal"
                                 th:attr="data-id=${invoice.invoiceId}">
                             <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="btn btn-info btn-sm"
-                                data-endpoint="client-invoices/details"
-                                data-modal-action
-                                data-modal-id="detailsClientInvoiceModal"
-                                th:attr="data-id=${invoice.invoiceId}">
-                            <i class="fas fa-info-circle"></i> Details
                         </button>
                         <button class="btn btn-danger btn-sm" data-delete-url="/users/delete/{id}"
                                 data-entity-type="clientInvoice"

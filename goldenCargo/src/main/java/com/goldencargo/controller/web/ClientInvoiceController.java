@@ -58,7 +58,6 @@ public class ClientInvoiceController {
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("sortLogic", sortLogic);
         model.addAttribute("clientInvoice", new ClientInvoice());
-        model.addAttribute("clientInvoice", new ClientInvoice());
         model.addAttribute("clients", clientService.getAllClients());
         model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
         return "client-invoices/main";

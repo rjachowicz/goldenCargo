@@ -13,6 +13,9 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     List<Vehicle> findByIsDeletedFalse();
 
+    @Query("SELECT v FROM Vehicle v where v.status = 'AVAILABLE' and v.isDeleted is false")
+    List<Vehicle> findAvailableVehicle();
+
     @Modifying
     @Transactional
     @Query("UPDATE Vehicle b SET b.isDeleted = true WHERE b.vehicleId = :id")

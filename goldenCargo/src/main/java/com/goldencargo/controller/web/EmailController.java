@@ -1,7 +1,7 @@
 package com.goldencargo.controller.web;
 
 import com.goldencargo.component.EmailRequestWithIds;
-import com.goldencargo.component.ReportData;
+import com.goldencargo.model.dto.web.ReportDataDTO;
 import com.goldencargo.service.EmailService;
 import com.goldencargo.service.ReportService;
 import com.goldencargo.util.PdfGenerator;
@@ -27,9 +27,9 @@ public class EmailController {
 
     @PostMapping("/send-pdf")
     public ResponseEntity<String> sendPdfEmail(@RequestBody EmailRequestWithIds request) {
-        ReportData reportData = reportService.generateReport(request.getTransportId());
+        ReportDataDTO reportDataDTO = reportService.generateReport(request.getTransportId());
 
-        byte[] pdfContent = PdfGenerator.generateReportPdf(reportData);
+        byte[] pdfContent = PdfGenerator.generateReportPdf(reportDataDTO);
 
         emailService.sendEmailWithAttachment(request.getTo(),
                 "Your Report",

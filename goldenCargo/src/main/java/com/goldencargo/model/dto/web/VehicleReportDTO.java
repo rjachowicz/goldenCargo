@@ -1,4 +1,4 @@
-package com.goldencargo.model.dto;
+package com.goldencargo.model.dto.web;
 
 import com.goldencargo.model.entities.Incident;
 import com.goldencargo.model.entities.TransportOrder;

@@ -1,6 +1,7 @@
 package com.goldencargo.util;
 
-import com.goldencargo.component.ReportData;
+import com.goldencargo.model.dto.web.InvoiceDTO;
+import com.goldencargo.model.dto.web.ReportDataDTO;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -17,7 +18,7 @@ import java.io.ByteArrayOutputStream;
 
 public class PdfGenerator {
 
-    public static byte[] generateReportPdf(ReportData report) {
+    public static byte[] generateReportPdf(ReportDataDTO report) {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -28,7 +29,20 @@ public class PdfGenerator {
 
             document.setMargins(20, 20, 20, 20);
 
-            document.add(createTitleParagraph());
+            document.add(createTitleParagraph("Transport Report"));
+
+            document.add(createSectionHeader("Client Information"));
+            Table clientInformationTable = createTwoColumnTable();
+            addTwoColRow(clientInformationTable, "Client Name", report.getClientName());
+            addTwoColRow(clientInformationTable, "NIP", report.getClientNip());
+            addTwoColRow(clientInformationTable, "Phone", report.getClientPhone());
+            addTwoColRow(clientInformationTable, "Email", report.getClientEmail());
+            addTwoColRow(clientInformationTable, "Contact Person", report.getClientContactPerson());
+            addTwoColRow(clientInformationTable, "Address", report.getClientAddress());
+            addTwoColRow(clientInformationTable, "Order Date", report.getClientOrderDate());
+            addTwoColRow(clientInformationTable, "Payment Status", report.getClientOrderPaymentStatus());
+            addTwoColRow(clientInformationTable, "Total Amount", report.getClientOrderTotalAmount());
+            document.add(clientInformationTable);
 
             document.add(createSectionHeader("Transport Data"));
             Table transportTable = createTwoColumnTable();
@@ -104,9 +118,71 @@ public class PdfGenerator {
         return byteArrayOutputStream.toByteArray();
     }
 
+    public static byte[] generateInvoicePdf(InvoiceDTO invoice) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-    private static Paragraph createTitleParagraph() {
-        Paragraph paragraph = new Paragraph("Transport Report");
+        try (byteArrayOutputStream) {
+            PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+            Document document = new Document(pdfDocument, PageSize.A4);
+
+            document.setMargins(20, 20, 20, 20);
+
+            document.add(createTitleParagraph("Invoice"));
+
+            document.add(createSectionHeader("Invoice Information"));
+            Table invoiceTable = createTwoColumnTable();
+            addTwoColRow(invoiceTable, "Invoice Number", invoice.getInvoiceNumber());
+            addTwoColRow(invoiceTable, "Date Issued", safeToString(invoice.getDateIssued()));
+            addTwoColRow(invoiceTable, "Due Date", safeToString(invoice.getDueDate()));
+            addTwoColRow(invoiceTable, "Payment Status", invoice.getInvoicePaymentStatus());
+            addTwoColRow(invoiceTable, "Total Amount", safeToString(invoice.getInvoiceTotalAmount()));
+            addTwoColRow(invoiceTable, "Invoice Created At", safeToString(invoice.getInvoiceCreatedAt()));
+            document.add(invoiceTable);
+
+            document.add(createSectionHeader("Client Information"));
+            Table clientTable = createTwoColumnTable();
+            addTwoColRow(clientTable, "Client Name", invoice.getClientName());
+            addTwoColRow(clientTable, "NIP", invoice.getClientNip());
+            addTwoColRow(clientTable, "Address", invoice.getClientAddress());
+            addTwoColRow(clientTable, "Contact Person", invoice.getContactPerson());
+            addTwoColRow(clientTable, "Email", invoice.getClientEmail());
+            addTwoColRow(clientTable, "Phone", invoice.getClientPhone());
+            document.add(clientTable);
+
+            document.add(createSectionHeader("Client Order"));
+            Table orderTable = createTwoColumnTable();
+            addTwoColRow(orderTable, "Order ID", safeToString(invoice.getClientOrderId()));
+            addTwoColRow(orderTable, "Order Date", safeToString(invoice.getClientOrderDate()));
+            addTwoColRow(orderTable, "Order Total Amount", safeToString(invoice.getClientOrderTotalAmount()));
+            document.add(orderTable);
+
+            document.add(createSectionHeader("Transport Order"));
+            Table transportOrderTable = createTwoColumnTable();
+            addTwoColRow(transportOrderTable, "Transport Order ID", safeToString(invoice.getTransportOrderId()));
+            addTwoColRow(transportOrderTable, "Transport Order Name", invoice.getTransportOrderName());
+            addTwoColRow(transportOrderTable, "Scheduled Departure", safeToString(invoice.getScheduledDeparture()));
+            addTwoColRow(transportOrderTable, "Scheduled Arrival", safeToString(invoice.getScheduledArrival()));
+            document.add(transportOrderTable);
+
+            document.add(createSectionHeader("Transport Data"));
+            Table transportTable = createTwoColumnTable();
+            addTwoColRow(transportTable, "Transport ID", safeToString(invoice.getTransportId()));
+            addTwoColRow(transportTable, "Actual Departure", safeToString(invoice.getActualDeparture()));
+            addTwoColRow(transportTable, "Actual Arrival", safeToString(invoice.getActualArrival()));
+            addTwoColRow(transportTable, "Notes", invoice.getTransportNotes());
+            document.add(transportTable);
+
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return byteArrayOutputStream.toByteArray();
+    }
+
+
+    private static Paragraph createTitleParagraph(String title) {
+        Paragraph paragraph = new Paragraph(title);
         paragraph.setFontSize(16);
         paragraph.setBold();
         paragraph.setTextAlignment(TextAlignment.CENTER);

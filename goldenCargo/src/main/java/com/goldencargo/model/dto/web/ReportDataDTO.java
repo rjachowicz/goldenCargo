@@ -1,4 +1,4 @@
-package com.goldencargo.component;
+package com.goldencargo.model.dto.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReportData {
+public class ReportDataDTO {
 
     private Integer transportId;
     private String actualDeparture;
@@ -60,4 +60,15 @@ public class ReportData {
     private String driverName;
     private String driverPhone;
     private String driverEmail;
+    private String clientOrderDate;
+    private Integer clientOrderId;
+    private String clientOrderPaymentStatus;
+    private String clientOrderTotalAmount;
+    private Integer clientId;
+    private String clientName;
+    private String clientNip;
+    private String clientPhone;
+    private String clientEmail;
+    private String clientContactPerson;
+    private String clientAddress;
 }

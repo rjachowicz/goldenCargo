@@ -106,7 +106,7 @@ public class TransportController {
         TransportOrder transportOrder = transportOrderService.getOrderById(transportOrderId)
                 .orElseThrow(() -> new RuntimeException("Transport Order not found"));
 
-        transportOrder.setStatus(Status.COMPLETED);
+        transportOrderService.modifyDataStatuses(transportOrder);
         transport.setTransportOrder(transportOrder);
         transportOrderService.updateOrder(transportOrder.getTransportOrderId(), transportOrder);
 

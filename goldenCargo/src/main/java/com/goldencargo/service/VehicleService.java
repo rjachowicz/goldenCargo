@@ -21,6 +21,10 @@ public class VehicleService {
         return vehicleRepository.findByIsDeletedFalse();
     }
 
+    public List<Vehicle> findAvailableVehicle() {
+        return vehicleRepository.findAvailableVehicle();
+    }
+
     public Optional<Vehicle> getVehicleById(Long id) {
         return vehicleRepository.findById(id);
     }

@@ -1,8 +1,11 @@
 package com.goldencargo.service;
 
 import com.goldencargo.model.data.Status;
+import com.goldencargo.model.dto.api.TransportOrderDetailsDTO;
 import com.goldencargo.model.entities.ClientOrder;
+import com.goldencargo.model.entities.Driver;
 import com.goldencargo.model.entities.TransportOrder;
+import com.goldencargo.model.entities.Vehicle;
 import com.goldencargo.repository.TransportOrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +17,15 @@ import java.util.Optional;
 public class TransportOrderService {
 
     private final TransportOrderRepository transportOrderRepository;
+    private final DriverService driverService;
+    private final VehicleService vehicleService;
     private final ClientOrderService clientOrderService;
 
-    public TransportOrderService(TransportOrderRepository transportOrderRepository,
+    public TransportOrderService(TransportOrderRepository transportOrderRepository, DriverService driverService, VehicleService vehicleService,
                                  ClientOrderService clientOrderService) {
         this.transportOrderRepository = transportOrderRepository;
+        this.driverService = driverService;
+        this.vehicleService = vehicleService;
         this.clientOrderService = clientOrderService;
     }
 
@@ -26,7 +33,7 @@ public class TransportOrderService {
         return transportOrderRepository.findByIsDeletedFalse();
     }
 
-    public List<TransportOrder> getTransportOrders() {
+    public List<TransportOrder> findTransportOrdersWithStatusNew() {
         return transportOrderRepository.findTransportOrdersWithStatusNew();
     }
 
@@ -49,12 +56,21 @@ public class TransportOrderService {
     public void createTransportOrdersForClientOrders(TransportOrder transportOrder, List<Long> clientOrderIds) {
         List<ClientOrder> clientOrders = clientOrderService.getClientOrdersByIds(clientOrderIds);
         transportOrder.setClientOrders(new HashSet<>(clientOrders));
+        transportOrder.setStatus(Status.NEW);
+
+        Optional<Driver> driver = driverService.getDriverById(transportOrder.getAssignedDriver().getDriverId());
+        driver.get().setDriverStatus(Driver.DriverStatus.OCCUPIED);
+
+        Optional<Vehicle> vehicle = vehicleService.getVehicleById(transportOrder.getAssignedVehicle().getVehicleId());
+        vehicle.get().setStatus(Vehicle.VehicleStatus.OCCUPIED);
 
         transportOrderRepository.save(transportOrder);
         for (ClientOrder clientOrder : clientOrders) {
             clientOrder.setStatus(Status.COMPLETED);
             clientOrderService.updateClientOrder(clientOrder.getClientOrderId(), clientOrder);
         }
+        driverService.updateDriver(driver.get().getDriverId(), driver.get());
+        vehicleService.updateVehicle(vehicle.get().getVehicleId(), vehicle.get());
     }
 
     public boolean deleteOrder(Long id) {
@@ -80,6 +96,22 @@ public class TransportOrderService {
         target.setStatus(source.getStatus());
         target.setUpdatedAt(new java.util.Date());
         return target;
+    }
+
+    public void modifyDataStatuses(TransportOrder transportOrder) {
+        transportOrder.setStatus(Status.COMPLETED);
+
+        Optional<Driver> driver = driverService.getDriverById(transportOrder.getAssignedDriver().getDriverId());
+        driver.get().setDriverStatus(Driver.DriverStatus.AVAILABLE);
+        driverService.updateDriver(driver.get().getDriverId(), driver.get());
+
+        Optional<Vehicle> vehicle = vehicleService.getVehicleById(transportOrder.getAssignedVehicle().getVehicleId());
+        vehicle.get().setStatus(Vehicle.VehicleStatus.AVAILABLE);
+        vehicleService.updateVehicle(vehicle.get().getVehicleId(), vehicle.get());
+    }
+
+    public List<TransportOrderDetailsDTO> getTransportOrderApi() {
+        return transportOrderRepository.findAllTransportOrders();
     }
 
 }

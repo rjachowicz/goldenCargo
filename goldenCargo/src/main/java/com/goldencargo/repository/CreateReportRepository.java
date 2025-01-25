@@ -1,7 +1,7 @@
 package com.goldencargo.repository;
 
 import com.goldencargo.model.data.Status;
-import com.goldencargo.model.dto.*;
+import com.goldencargo.model.dto.web.*;
 import com.goldencargo.model.entities.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

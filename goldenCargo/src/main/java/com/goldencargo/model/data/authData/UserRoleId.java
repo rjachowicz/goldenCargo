@@ -1,4 +1,4 @@
-package com.goldencargo.model.data;
+package com.goldencargo.model.data.authData;
 
 import lombok.Getter;
 import lombok.Setter;

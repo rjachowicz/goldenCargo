@@ -118,11 +118,11 @@ public class TransportOrderController {
         model.addAttribute("transport", new Transport());
         model.addAttribute("transportOrder", new TransportOrder());
         model.addAttribute("locations", locationService.getAllLocations());
-        model.addAttribute("drivers", driverService.getAllDrivers());
-        model.addAttribute("vehicles", vehicleService.getAllVehicles());
+        model.addAttribute("drivers", driverService.findAvailableDrivers());
+        model.addAttribute("vehicles", vehicleService.findAvailableVehicle());
         model.addAttribute("clientOrders", clientOrderService.getClientOrdersWithGoods());
         model.addAttribute("availableTransports", transportService.getAllTransports());
-        model.addAttribute("transportOrders", transportOrderService.getTransportOrders());
+        model.addAttribute("transportOrders", transportOrderService.findTransportOrdersWithStatusNew());
         model.addAttribute("statuses", Status.values());
 
         return "client-orders/new-transport-order";

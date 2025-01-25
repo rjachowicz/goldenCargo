@@ -1,13 +1,13 @@
 package com.goldencargo.service;
 
-import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.ClientOrder;
 import com.goldencargo.repository.ClientOrderRepository;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientOrderService {

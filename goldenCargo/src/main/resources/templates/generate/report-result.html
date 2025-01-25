@@ -19,8 +19,13 @@
             <p class="mb-0 text-muted">Below is the detailed transport report with all associated data.</p>
         </div>
         <div class="d-flex gap-2">
+            <a class="btn btn-secondary"
+               th:href="@{/check-invoice(clientOrderId=${report.clientOrderId}, clientId=${report.clientId})}">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Create Invoice</span>
+            </a>
             <a class="btn btn-primary d-flex align-items-center gap-2"
-               th:href="@{/export-pdf(transportId=${report.transportId})}">
+               th:href="@{/export-report(transportId=${report.transportId})}">
                 <i class="fas fa-file-alt"></i>
                 <span>Download PDF</span>
             </a>
@@ -37,6 +42,67 @@
                     <span>Save to Dropbox</span>
                 </button>
             </form>
+        </div>
+    </div>
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-light text-dark">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-user me-2"></i>Client & Order
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Client Information</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Client Name</th>
+                            <td th:text="${report.clientName}"></td>
+                        </tr>
+                        <tr>
+                            <th>NIP</th>
+                            <td th:text="${report.clientNip}"></td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td th:text="${report.clientPhone}"></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td th:text="${report.clientEmail}"></td>
+                        </tr>
+                        <tr>
+                            <th>Contact Person</th>
+                            <td th:text="${report.clientContactPerson}"></td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td th:text="${report.clientAddress}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Client Order</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Order Date</th>
+                            <td th:text="${report.clientOrderDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>Payment Status</th>
+                            <td th:text="${report.clientOrderPaymentStatus}"></td>
+                        </tr>
+                        <tr>
+                            <th>Total Amount</th>
+                            <td th:text="${report.clientOrderTotalAmount}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <div class="card mb-4 shadow-sm border-0">
@@ -321,12 +387,12 @@
     </div>
 </main>
 
-<div aria-hidden="true" aria-labelledby="emailModalLabel" class="modal fade" id="emailModal" tabindex="-1">
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="emailModalLabel">Send Report via Email</h5>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="emailForm">
@@ -346,7 +412,7 @@
     </div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="loadingModalLabel" class="modal fade" id="loadingModal" tabindex="-1">
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
             <div class="modal-body">
@@ -359,7 +425,7 @@
     </div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="successModalLabel" class="modal fade" id="successModal" tabindex="-1">
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
             <div class="modal-body">

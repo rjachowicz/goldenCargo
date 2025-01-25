@@ -1,6 +1,6 @@
 package com.goldencargo.model.entities;
 
-import com.goldencargo.model.data.UserRoleId;
+import com.goldencargo.model.data.authData.UserRoleId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
