@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface TransportRepository extends JpaRepository<Transport, Long> {
 
+    @Query("SELECT t FROM Transport t where t.isDeleted is false and t.status = 'NEW'")
     List<Transport> findByIsDeletedFalse();
 
     @Modifying

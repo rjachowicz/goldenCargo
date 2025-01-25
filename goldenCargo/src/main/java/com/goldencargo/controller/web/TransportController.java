@@ -2,10 +2,12 @@ package com.goldencargo.controller.web;
 
 import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.Transport;
+import com.goldencargo.model.entities.TransportOrder;
 import com.goldencargo.service.GenericService;
 import com.goldencargo.service.TransportOrderService;
 import com.goldencargo.service.TransportService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/transports")
 public class TransportController {
+
+    private static final String ALIAS = "t";
 
     private final TransportService transportService;
     private final TransportOrderService transportOrderService;
@@ -41,7 +45,7 @@ public class TransportController {
 
         List<Transport> transports = genericService.getFilteredAndSortedEntities(
                 Transport.class,
-                "t",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,
@@ -92,4 +96,23 @@ public class TransportController {
         boolean isDeleted = transportService.deleteTransport(id);
         return isDeleted ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PostMapping(value = "/new-transport", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String createTransport(@RequestParam(value = "transportOrderId", required = false) Long transportOrderId,
+                                  @ModelAttribute Transport transport) {
+        if (transportOrderId == null) {
+            throw new RuntimeException("Transport Order ID is missing!");
+        }
+        TransportOrder transportOrder = transportOrderService.getOrderById(transportOrderId)
+                .orElseThrow(() -> new RuntimeException("Transport Order not found"));
+
+        transportOrderService.modifyDataStatuses(transportOrder);
+        transport.setTransportOrder(transportOrder);
+        transportOrderService.updateOrder(transportOrder.getTransportOrderId(), transportOrder);
+
+        transportService.createTransport(transport);
+
+        return "redirect:/transport-orders/new-transport-order";
+    }
+
 }

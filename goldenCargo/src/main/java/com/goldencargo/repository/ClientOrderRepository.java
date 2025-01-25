@@ -18,6 +18,7 @@ public interface ClientOrderRepository extends JpaRepository<ClientOrder, Long> 
     @Query("UPDATE ClientOrder b SET b.isDeleted = true WHERE b.clientOrderId = :id")
     void softDelete(@Param("id") Long id);
 
-    @Query("SELECT status, COUNT(clientOrderId) AS count FROM ClientOrder GROUP BY status ORDER BY count DESC")
-    List<Object[]> getOrderDistribution();
+    @Query("SELECT DISTINCT co FROM ClientOrder co LEFT JOIN FETCH co.goods where co.status = 'NEW'")
+    List<ClientOrder> getClientOrdersWithGoods();
+
 }

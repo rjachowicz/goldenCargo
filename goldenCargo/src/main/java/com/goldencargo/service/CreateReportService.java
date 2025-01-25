@@ -1,6 +1,6 @@
 package com.goldencargo.service;
 
-import com.goldencargo.model.dto.*;
+import com.goldencargo.model.dto.web.*;
 import com.goldencargo.model.entities.Client;
 import com.goldencargo.model.entities.Vehicle;
 import com.goldencargo.repository.CreateReportRepository;

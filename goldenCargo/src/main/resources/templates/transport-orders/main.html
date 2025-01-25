@@ -13,7 +13,7 @@
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
 <main>
-    <div class="container mt-4">
+    <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
             <div>
                 <h1 class="h3 mb-0"><i class="fas fa-truck"></i> Manage Transport Orders</h1>
@@ -43,7 +43,6 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>Client Order</th>
                     <th>Transport Name</th>
                     <th>Assigned Driver</th>
                     <th>Assigned Vehicle</th>
@@ -55,7 +54,6 @@
                 </thead>
                 <tbody>
                 <tr th:each="transportOrder : ${transportOrders}">
-                    <td th:text="${transportOrder.clientOrder.client.name}"></td>
                     <td th:text="${transportOrder.name}"></td>
                     <td th:text="${transportOrder.assignedDriver.user.firstName} + ' ' + ${transportOrder.assignedDriver.user.lastName}"></td>
                     <td th:text="${transportOrder.assignedVehicle.registrationNumber}"></td>
@@ -111,6 +109,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
 <script th:src="@{/js/modalScript.js}"></script>
-
 </body>
 </html>

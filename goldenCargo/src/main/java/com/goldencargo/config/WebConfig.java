@@ -14,6 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    String token = "";
+
     private final DateConverter dateConverter;
 
     public WebConfig(DateConverter dateConverter) {
@@ -27,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public DropboxService dropboxService() {
-        return new DropboxService("");
+        return new DropboxService(token);
     }
 
     @Override

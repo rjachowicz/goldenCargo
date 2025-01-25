@@ -92,6 +92,8 @@ public class User extends AuditableEntity {
     public enum UserStatus {
         NEW,
         ACTIVE,
+        AVAILABLE,
+        OCCUPIED,
         INACTIVE,
         BANED
     }

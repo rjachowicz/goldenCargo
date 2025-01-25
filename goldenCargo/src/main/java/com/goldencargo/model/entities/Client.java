@@ -1,5 +1,6 @@
 package com.goldencargo.model.entities;
 
+import com.goldencargo.model.data.InvoiceType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -40,4 +41,8 @@ public class Client extends AuditableEntity {
 
     @Column(name = "nip", length = 20, nullable = false)
     private String nip;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "invoice_type")
+    private InvoiceType invoiceType;
 }

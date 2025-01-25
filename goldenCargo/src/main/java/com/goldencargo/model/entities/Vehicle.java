@@ -82,6 +82,7 @@ public class Vehicle extends AuditableEntity {
     public enum VehicleStatus {
         NEW,
         AVAILABLE,
+        OCCUPIED,
         IN_SERVICE,
         ASSIGNED,
         MAINTENANCE

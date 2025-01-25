@@ -13,7 +13,7 @@
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
 <main>
-    <div class="container mt-4">
+    <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
             <div>
                 <h1 class="h3 mb-0"><i class="fa-solid fa-dolly"></i> Manage Goods</h1>
@@ -43,17 +43,21 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>Client Order</th>
                     <th>Name</th>
                     <th>Weight</th>
+                    <th>Dimensions</th>
+                    <th>Description</th>
+                    <th>Special Data</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="goods : ${goodsList}">
-                    <td th:text="${goods.clientOrder.clientOrderId}"></td>
                     <td th:text="${goods.name}"></td>
                     <td th:text="${goods.weight}"></td>
+                    <td th:text="${goods.dimensions}"></td>
+                    <td th:text="${goods.description}"></td>
+                    <td th:text="${goods.specialHandlingInstructions}"></td>
                     <td>
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="goods/edit"

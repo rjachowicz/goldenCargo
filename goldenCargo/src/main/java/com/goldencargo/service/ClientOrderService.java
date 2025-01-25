@@ -31,7 +31,6 @@ public class ClientOrderService {
         Optional<ClientOrder> clientOrder = clientOrderRepository.findById(id);
         clientOrder.ifPresent(order -> {
             Hibernate.initialize(order.getTransportOrders());
-            Hibernate.initialize(order.getGoods());
             Hibernate.initialize(order.getClientInvoices());
         });
         return clientOrder;
@@ -60,4 +59,13 @@ public class ClientOrderService {
         }
         return false;
     }
+
+    public List<ClientOrder> getClientOrdersWithGoods() {
+        return clientOrderRepository.getClientOrdersWithGoods();
+    }
+
+    public List<ClientOrder> getClientOrdersByIds(List<Long> ids) {
+        return clientOrderRepository.findAllById(ids);
+    }
+
 }

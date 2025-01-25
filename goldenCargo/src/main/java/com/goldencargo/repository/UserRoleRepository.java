@@ -1,6 +1,6 @@
 package com.goldencargo.repository;
 
-import com.goldencargo.model.data.UserRoleId;
+import com.goldencargo.model.data.authData.UserRoleId;
 import com.goldencargo.model.entities.User;
 import com.goldencargo.model.entities.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;

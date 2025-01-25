@@ -2,10 +2,14 @@ package com.goldencargo.controller.web;
 
 import com.goldencargo.model.data.InvoiceType;
 import com.goldencargo.model.data.PaymentStatus;
+import com.goldencargo.model.data.Status;
+import com.goldencargo.model.entities.ClientInvoice;
 import com.goldencargo.model.entities.Invoice;
-import com.goldencargo.service.DropboxService;
-import com.goldencargo.service.GenericService;
-import com.goldencargo.service.InvoiceService;
+import com.goldencargo.model.entities.Transport;
+import com.goldencargo.repository.ClientInvoiceRepository;
+import com.goldencargo.repository.InvoiceRepository;
+import com.goldencargo.repository.TransportRepository;
+import com.goldencargo.service.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +30,24 @@ public class InvoiceController {
     private final GenericService genericService;
     private final DropboxService dropboxService;
 
-    public InvoiceController(InvoiceService invoiceService, GenericService genericService, DropboxService dropboxService) {
+    private static final String ALIAS = "i";
+    private final TransportService transportService;
+    private final InvoiceRepository invoiceRepository;
+    private final TransportRepository transportRepository;
+    private final ClientInvoiceService clientInvoiceService;
+    private final ClientInvoiceRepository clientInvoiceRepository;
+
+    public InvoiceController(InvoiceService invoiceService, GenericService genericService, DropboxService dropboxService, TransportService transportService,
+                             InvoiceRepository invoiceRepository,
+                             TransportRepository transportRepository, ClientInvoiceService clientInvoiceService, ClientInvoiceRepository clientInvoiceRepository) {
         this.invoiceService = invoiceService;
         this.genericService = genericService;
         this.dropboxService = dropboxService;
+        this.transportService = transportService;
+        this.invoiceRepository = invoiceRepository;
+        this.transportRepository = transportRepository;
+        this.clientInvoiceService = clientInvoiceService;
+        this.clientInvoiceRepository = clientInvoiceRepository;
     }
 
     @GetMapping
@@ -43,7 +61,7 @@ public class InvoiceController {
 
         List<Invoice> invoices = genericService.getFilteredAndSortedEntities(
                 Invoice.class,
-                "i",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,
@@ -141,4 +159,22 @@ public class InvoiceController {
                 ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/pay")
+    public String payInvoice(@RequestParam Long invoiceId, @RequestParam Long transportId) {
+        Optional<ClientInvoice> invoice = clientInvoiceService.getClientInvoiceById(invoiceId);
+        if (invoice.isPresent()) {
+            invoice.get().setPaymentStatus(PaymentStatus.PAID);
+            clientInvoiceRepository.saveAndFlush(invoice.get());
+        }
+
+        Optional<Transport> transport = transportService.getTransportById(transportId);
+        if (transport.isPresent()) {
+            transport.get().setStatus(Status.COMPLETED);
+            transportRepository.saveAndFlush(transport.get());
+        }
+
+        return "redirect:/transport-orders/new-transport-order";
+    }
+
 }

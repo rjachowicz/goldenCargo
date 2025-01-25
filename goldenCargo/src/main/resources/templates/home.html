@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Golden Cargo - Home</title>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -11,145 +12,180 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="/css/styles.css" rel="stylesheet">
 </head>
-<body>
-<div th:replace="~{/helpers/navbar}"></div>
-<main>
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
-            <div>
-                <h1 class="h3 mb-0"><i class="fa-solid fa-house"></i> Main Dashboard</h1>
-                <p class="mb-0 text-muted">Easily view, edit, and manage data.</p>
-            </div>
-            <div>
-                <a class="btn btn-primary me-2" href="/files">
-                    <i class="fa-solid fa-database"></i> File Repository
+<body class="d-flex flex-column min-vh-100">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><i class="fas fa-truck"></i> GOLDEN CARGO</a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="ms-auto">
+                <a class="btn btn-primary" href="/login">
+                    <i class="fas fa-sign-in-alt"></i> Log In
                 </a>
-                <a class="btn btn-primary me-2" href="/create-report">
-                    <i class="fas fa-file-alt"></i> Generate Vehicle Report
-                </a>
-                <button aria-controls="addUserForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#addUserForm"
-                        data-bs-toggle="collapse" type="button">
-                    <i class="fa-solid fa-bell"></i> Send Notification
-                </button>
-            </div>
-        </div>
-        <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button aria-controls="charts" aria-selected="true" class="nav-link active" data-bs-target="#charts"
-                        data-bs-toggle="tab" id="charts-tab" role="tab" type="button">Charts
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button aria-controls="news" aria-selected="false" class="nav-link" data-bs-target="#news" data-bs-toggle="tab"
-                        id="news-tab" role="tab" type="button">News
-                </button>
-            </li>
-        </ul>
-
-        <div class="tab-content" id="dashboardTabsContent">
-            <div aria-labelledby="charts-tab" class="tab-pane fade show active" id="charts" role="tabpanel">
-                <div class="grid">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">User Roles</h5>
-                            <canvas id="userRolesChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Order Statuses</h5>
-                            <canvas id="orderStatusesChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Vehicle Statuses</h5>
-                            <canvas id="vehicleStatusesChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Message Statuses</h5>
-                            <canvas id="messageStatusesChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Incident Types</h5>
-                            <canvas id="incidentTypesChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Vehicle Repair Costs</h5>
-                            <canvas id="vehicleRepairChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Transport Statuses</h5>
-                            <canvas id="transportStatusChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Client Invoice Statuses</h5>
-                            <canvas id="clientInvoiceStatusChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div aria-labelledby="news-tab" class="tab-pane fade" id="news" role="tabpanel">
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    <div class="col" th:each="news : ${newsList}">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-center" th:text="${news.title}">News Title</h5>
-                                <p class="card-text" th:text="${news.content}">News content goes here...</p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                <small class="text-muted"
-                                       th:text="${#dates.format(news.datePosted, 'yyyy-MM-dd')}">Date</small>
-                                <small class="text-muted" th:text="${news.postedBy.username}">Author</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+</nav>
+<main class="container mt-5">
+    <div class="text-center py-5">
+        <h1>WELCOME TO GOLDEN CARGO</h1>
+        <p class="lead">Your trusted partner in logistics and freight forwarding solutions.</p>
+    </div>
+    <section class="mt-5">
+        <h1 class="text-center section-title">About Us</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow text-center p-4">
+                    <h4>Our Mission</h4>
+                    <p>To streamline logistics operations and help businesses achieve their goals with confidence.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow text-center p-4">
+                    <h4>Our Vision</h4>
+                    <p>Becoming the most trusted partner in global logistics solutions.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow text-center p-4">
+                    <h4>Our Values</h4>
+                    <p>Integrity, reliability, and innovation drive everything we do.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mt-5">
+        <h1 class="text-center section-title">Our Services</h1>
+        <div class="row text-center mt-4">
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-truck fa-3x mb-3"></i>
+                    <h4>Transportation</h4>
+                    <p>Efficient and timely delivery of goods across the country and beyond.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-warehouse fa-3x mb-3"></i>
+                    <h4>Warehousing</h4>
+                    <p>Secure and flexible storage solutions tailored to your needs.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-box-open fa-3x mb-3"></i>
+                    <h4>Packaging</h4>
+                    <p>High-quality packaging services to ensure the safety of your products.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mt-4">
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-truck-loading fa-3x mb-3"></i>
+                    <h4>Loading Services</h4>
+                    <p>Professional loading and unloading services to protect your cargo.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-globe fa-3x mb-3"></i>
+                    <h4>Global Shipping</h4>
+                    <p>International shipping solutions connecting businesses worldwide.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-handshake fa-3x mb-3"></i>
+                    <h4>Custom Solutions</h4>
+                    <p>Tailored logistics services to meet your specific business needs.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mt-4">
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                    <h4>Scheduling</h4>
+                    <p>Precise scheduling to ensure your logistics run smoothly and on time.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+                    <h4>Route Optimization</h4>
+                    <p>Advanced route planning for cost-effective and efficient deliveries.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h4>Customer Support</h4>
+                    <p>Dedicated support to assist you at every step of your logistics journey.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mt-4">
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-shield-alt fa-3x mb-3"></i>
+                    <h4>Insurance</h4>
+                    <p>Comprehensive cargo insurance for peace of mind during transit.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-chart-line fa-3x mb-3"></i>
+                    <h4>Performance Analytics</h4>
+                    <p>Data-driven insights to optimize your logistics operations.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <i class="fas fa-headset fa-3x mb-3"></i>
+                    <h4>24/7 Support</h4>
+                    <p>Round-the-clock assistance for all your logistics inquiries.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mt-5 py-5">
+        <h1 class="text-center section-title">What Our Clients Say</h1>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <blockquote class="blockquote">
+                        <p>Golden Cargo has transformed our logistics operations. Their team is professional and always
+                            delivers on time!</p>
+                        <footer class="blockquote-footer">John Doe, CEO of XYZ Ltd.</footer>
+                    </blockquote>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <blockquote class="blockquote">
+                        <p>Thanks to Golden Cargo, we’ve been able to focus on growing our business while they handle
+                            our logistics needs flawlessly.</p>
+                        <footer class="blockquote-footer">Jane Smith, Founder of ABC Inc.</footer>
+                    </blockquote>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-4">
+                    <blockquote class="blockquote">
+                        <p>Reliable, efficient, and affordable. Golden Cargo is our go-to partner for freight forwarding
+                            services.</p>
+                        <footer class="blockquote-footer">Emily Johnson, Operations Manager</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/mainChart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script id="userRolesLabels" type="application/json">[[${userRolesLabels}]]</script>
-<script id="userRolesData" type="application/json">[[${userRolesData}]]</script>
-
-<script id="orderStatusesLabels" type="application/json">[[${orderStatusesLabels}]]</script>
-<script id="orderStatusesData" type="application/json">[[${orderStatusesData}]]</script>
-
-<script id="vehicleStatusesLabels" type="application/json">[[${vehicleStatusesLabels}]]</script>
-<script id="vehicleStatusesData" type="application/json">[[${vehicleStatusesData}]]</script>
-
-<script id="messageStatusesLabels" type="application/json">[[${messageStatusesLabels}]]</script>
-<script id="messageStatusesData" type="application/json">[[${messageStatusesData}]]</script>
-
-<script id="incidentTypesLabels" type="application/json">[[${incidentTypesLabels}]]</script>
-<script id="incidentTypesData" type="application/json">[[${incidentTypesData}]]</script>
-
-<script id="vehicleRepairLabels" type="application/json">[[${vehicleRepairLabels}]]</script>
-<script id="vehicleRepairData" type="application/json">[[${vehicleRepairData}]]</script>
-
-<script id="transportStatusLabels" type="application/json">[[${transportStatusLabels}]]</script>
-<script id="transportStatusData" type="application/json">[[${transportStatusData}]]</script>
-
-<script id="clientInvoiceStatusLabels" type="application/json">[[${clientInvoiceStatusLabels}]]</script>
-<script id="clientInvoiceStatusData" type="application/json">[[${clientInvoiceStatusData}]]</script>
-
 <div th:replace="~{/helpers/footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -20,7 +20,7 @@ public class HomeController {
         this.newsService = newsService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/main")
     public String getDashboardData(Model model) {
         List<News> newsList = newsService.getAllNews();
 
@@ -50,13 +50,18 @@ public class HomeController {
 
         model.addAttribute("newsList", newsList);
 
-        return "home";
+        return "main";
     }
 
     @GetMapping("/access-denied")
     public String accessDenied(Model model) {
         model.addAttribute("message", "You do not have permission to access this resource.");
         return "/helpers/access-denied";
+    }
+
+    @GetMapping("/")
+    public String getHomePage() {
+        return "home";
     }
 
 }

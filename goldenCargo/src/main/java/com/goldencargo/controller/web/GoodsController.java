@@ -49,8 +49,6 @@ public class GoodsController {
 
         model.addAttribute("goodsList", goodsList);
         model.addAttribute("goods", new Goods());
-        model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
-
         return "goods/main";
     }
 
@@ -65,7 +63,6 @@ public class GoodsController {
         Optional<Goods> goods = goodsService.getGoodsById(id);
         if (goods.isPresent()) {
             model.addAttribute("goods", goods.get());
-            model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
             return "goods/edit :: editGoodsModal";
         }
         return "redirect:/goods";
@@ -87,6 +84,8 @@ public class GoodsController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteGoods(@PathVariable Long id) {
         boolean isDeleted = goodsService.deleteGoods(id);
-        return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return isDeleted
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

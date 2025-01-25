@@ -15,12 +15,17 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
+    private static final String ALIAS = "u";
+
     private final UserService userService;
     private final RoleService roleService;
     private final GenericService genericService;
     private final EmailService emailService;
     private final PasswordResetTokenService passwordResetTokenService;
     private final UserRoleService userRoleService;
+
+    private final static String URL = "http://localhost:8080/users/reset-password?token=";
+
 
     public UserController(UserService userService, RoleService roleService,
                           GenericService genericService,
@@ -44,7 +49,7 @@ public class UserController {
             Model model) {
         List<User> users = genericService.getFilteredAndSortedEntities(
                 User.class,
-                "u",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,
@@ -126,10 +131,9 @@ public class UserController {
         }
 
         String token = passwordResetTokenService.createTokenForUser(user);
-        String resetLink = "http://localhost:8080/users/reset-password?token=" + token;
 
         emailService.sendSimpleEmail(email, "Password Reset Request",
-                "Click the link to reset your password: " + resetLink);
+                "Click the link to reset your password: " + URL + token);
 
         model.addAttribute("successMessage", "A password reset link has been sent to your email.");
         return "users/forgot-password";

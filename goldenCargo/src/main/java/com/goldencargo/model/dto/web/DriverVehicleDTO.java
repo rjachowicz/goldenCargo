@@ -1,4 +1,4 @@
-package com.goldencargo.model.dto;
+package com.goldencargo.model.dto.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

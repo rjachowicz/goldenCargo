@@ -10,7 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface DriverRepository extends JpaRepository<Driver, Long> {
+
     List<Driver> findByIsDeletedFalse();
+
+    @Query("SELECT dr FROM Driver dr where dr.driverStatus = 'AVAILABLE' and dr.isDeleted is false")
+    List<Driver> findAvailableDrivers();
 
     @Modifying
     @Transactional

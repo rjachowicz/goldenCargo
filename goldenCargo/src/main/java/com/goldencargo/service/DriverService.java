@@ -21,6 +21,10 @@ public class DriverService {
         return driverRepository.findByIsDeletedFalse();
     }
 
+    public List<Driver> findAvailableDrivers() {
+        return driverRepository.findAvailableDrivers();
+    }
+
     public Optional<Driver> getDriverById(Long id) {
         return driverRepository.findById(id);
     }

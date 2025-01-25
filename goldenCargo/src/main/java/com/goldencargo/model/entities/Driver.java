@@ -64,6 +64,8 @@ public class Driver extends AuditableEntity {
     public enum DriverStatus {
         NEW,
         ACTIVE,
+        AVAILABLE,
+        OCCUPIED,
         INACTIVE
     }
 }

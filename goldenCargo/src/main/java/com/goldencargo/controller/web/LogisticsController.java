@@ -18,6 +18,8 @@ import java.util.Optional;
 @RequestMapping("/logistics")
 public class LogisticsController {
 
+    private static final String ALIAS = "l";
+
     private final LogisticsService logisticsService;
     private final UserService userService;
     private final GenericService genericService;
@@ -39,7 +41,7 @@ public class LogisticsController {
 
         List<Logistics> logistics = genericService.getFilteredAndSortedEntities(
                 Logistics.class,
-                "l",
+                ALIAS,
                 filterType,
                 filterValue,
                 comparisonType,

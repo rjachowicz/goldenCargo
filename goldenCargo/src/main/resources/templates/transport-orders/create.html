@@ -2,10 +2,12 @@
     <h4 class="h3 mb-3"><i class="fas fa-truck"></i> Add New Transport Order</h4>
     <form class="row g-3" method="post" th:action="@{/transport-orders/create}" th:object="${transportOrder}">
         <div class="col-md-6">
-            <label class="form-label" for="clientOrder">Client Order</label>
-            <select class="form-control" id="clientOrder" th:field="*{clientOrder.clientOrderId}">
-                <option th:each="clientOrder : ${clientOrders}" th:text="${clientOrder.client.name}"
-                        th:value="${clientOrder.clientOrderId}"></option>
+            <label class="form-label" for="clientOrders">Client Orders</label>
+            <select class="form-control" id="clientOrders" th:field="*{clientOrders}">
+                <option th:each="clientOrder : ${clientOrders}"
+                        th:text="${clientOrder.client.name}"
+                        th:value="${clientOrder.clientOrderId}">
+                </option>
             </select>
         </div>
         <div class="col-md-6">
@@ -15,14 +17,17 @@
         <div class="col-md-6">
             <label class="form-label" for="assignedDriver">Assigned Driver</label>
             <select class="form-control" id="assignedDriver" th:field="*{assignedDriver.driverId}">
-                <option th:each="driver : ${drivers}" th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"
-                        th:value="${driver.driverId}"></option>
+                <option th:each="driver : ${drivers}"
+                        th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"
+                        th:value="${driver.driverId}">
+                </option>
             </select>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="assignedVehicle">Assigned Vehicle</label>
             <select class="form-control" id="assignedVehicle" th:field="*{assignedVehicle.vehicleId}">
-                <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}"
+                <option th:each="vehicle : ${vehicles}"
+                        th:text="${vehicle.make} + ' | ' + ${vehicle.model} + ' | ' + ${vehicle.registrationNumber}"
                         th:value="${vehicle.vehicleId}"></option>
             </select>
         </div>

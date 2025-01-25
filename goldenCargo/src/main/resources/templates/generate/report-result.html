@@ -12,117 +12,387 @@
 </head>
 <body>
 <div th:replace="~{/helpers/navbar}"></div>
-<main>
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
-            <div>
-                <h1 class="h3 mb-0"><i class="fas fa-file-alt"></i> Report</h1>
-                <p class="mb-0 text-muted">Detailed report for the selected vehicle and client data.</p>
-            </div>
-            <div class="d-flex gap-2">
-                <a class="btn btn-primary d-flex align-items-center gap-2"
-                   th:href="@{/export-pdf(vehicleId=${report.vehicle.vehicleId}, clientId=${clientReport.client.clientId})}">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Download PDF</span>
-                </a>
-                <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-target="#emailModal"
-                        data-bs-toggle="modal">
-                    <i class="fa-solid fa-envelope"></i>
-                    <span>Send Email</span>
+<main class="container my-4">
+    <div class="d-flex justify-content-between align-items-center bg-light text-dark rounded px-4 py-3 mb-4 shadow-sm border">
+        <div>
+            <h1 class="h3 mb-0"><i class="fas fa-users"></i> Transport Data</h1>
+            <p class="mb-0 text-muted">Below is the detailed transport report with all associated data.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-secondary"
+               th:href="@{/check-invoice(clientOrderId=${report.clientOrderId}, clientId=${report.clientId})}">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Create Invoice</span>
+            </a>
+            <a class="btn btn-primary d-flex align-items-center gap-2"
+               th:href="@{/export-report(transportId=${report.transportId})}">
+                <i class="fas fa-file-alt"></i>
+                <span>Download PDF</span>
+            </a>
+            <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-target="#emailModal"
+                    data-bs-toggle="modal">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="hidden" name="transportId" th:value="${report.transportId}">
+                <span>Send Email</span>
+            </button>
+            <form enctype="multipart/form-data" method="post" th:action="@{/save-to-dropbox}" class="d-inline">
+                <input type="hidden" name="transportId" th:value="${report.transportId}">
+                <button type="submit" class="btn btn-success d-flex align-items-center gap-2">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Save to Dropbox</span>
                 </button>
-                <form enctype="multipart/form-data" method="post" th:action="@{/save-to-dropbox}" class="d-inline">
-                    <input type="hidden" name="vehicleId" th:value="${report.vehicle.vehicleId}">
-                    <input type="hidden" name="clientId" th:value="${clientReport.client.clientId}">
-                    <button type="submit" class="btn btn-success d-flex align-items-center gap-2">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Save to Dropbox</span>
-                    </button>
-                </form>
+            </form>
+        </div>
+    </div>
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-light text-dark">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-user me-2"></i>Client & Order
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Client Information</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Client Name</th>
+                            <td th:text="${report.clientName}"></td>
+                        </tr>
+                        <tr>
+                            <th>NIP</th>
+                            <td th:text="${report.clientNip}"></td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td th:text="${report.clientPhone}"></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td th:text="${report.clientEmail}"></td>
+                        </tr>
+                        <tr>
+                            <th>Contact Person</th>
+                            <td th:text="${report.clientContactPerson}"></td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td th:text="${report.clientAddress}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Client Order</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Order Date</th>
+                            <td th:text="${report.clientOrderDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>Payment Status</th>
+                            <td th:text="${report.clientOrderPaymentStatus}"></td>
+                        </tr>
+                        <tr>
+                            <th>Total Amount</th>
+                            <td th:text="${report.clientOrderTotalAmount}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="border p-4 bg-light rounded shadow-sm mb-4" th:if="${report}">
-            <h2><i class="fas fa-car"></i> Vehicle Report</h2>
-            <p><strong>Make:</strong> <span th:text="${report.vehicle.make}"></span></p>
-            <p><strong>Model:</strong> <span th:text="${report.vehicle.model}"></span></p>
-            <p><strong>Registration:</strong> <span th:text="${report.vehicle.registrationNumber}"></span></p>
-            <p><strong>Year:</strong> <span th:text="${report.vehicle.year}"></span></p>
-            <p><strong>Capacity:</strong> <span th:text="${report.vehicle.capacity}"></span> kg</p>
-            <p><strong>Mileage:</strong> <span th:text="${report.vehicle.mileage}"></span> km</p>
-            <hr>
-            <h3>Repairs</h3>
-            <ul>
-                <li th:each="repair : ${report.repairs}"
-                    th:text="'Date: ' + ${#dates.format(repair.serviceDate, 'yyyy-MM-dd')} + ', Cost: ' + ${repair.cost} + ' USD, Type: ' + ${repair.serviceType}">
-                </li>
-            </ul>
-            <hr>
-            <h3>Incidents</h3>
-            <ul>
-                <li th:each="incident : ${report.incidents}"
-                    th:text="'Date: ' + ${#dates.format(incident.date, 'yyyy-MM-dd')} + ', Type: ' + ${incident.incidentType} + ', Description: ' + ${incident.description}">
-                </li>
-            </ul>
-            <hr>
-            <h3>Technical Inspections</h3>
-            <ul>
-                <li th:each="inspection : ${technicalInspections}"
-                    th:text="'Date: ' + ${inspection.inspectionDate} + ', Result: ' + ${inspection.result} + ', Comments: ' + ${inspection.comments}">
-                </li>
-            </ul>
-            <hr>
-            <h3>Service Schedules</h3>
-            <ul>
-                <li th:each="schedule : ${serviceSchedules}"
-                    th:text="'Scheduled Date: ' + ${schedule.scheduledDate} + ', Type: ' + ${schedule.serviceType} + ', Status: ' + ${schedule.status}">
-                </li>
-            </ul>
-            <hr>
-            <h3>Driver History</h3>
-            <ul>
-                <li th:each="history : ${driverHistory}"
-                    th:text="'Driver: ' + ${history.firstName} + ' ' + ${history.lastName} + ', Assigned: ' + ${history.assignedDate} + ', End: ' + ${history.endDate}">
-                </li>
-            </ul>
+    </div>
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-light text-dark">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-truck-moving me-2"></i>Transport & Order
+            </h3>
         </div>
-
-        <div class="border p-4 bg-light rounded shadow-sm" th:if="${clientReport}">
-            <h2><i class="fas fa-user"></i> Client Report</h2>
-            <p><strong>Name:</strong> <span th:text="${clientReport.client.name}"></span></p>
-            <p><strong>Email:</strong> <span th:text="${clientReport.client.email}"></span></p>
-            <p><strong>Address:</strong> <span th:text="${clientReport.client.address}"></span></p>
-            <p><strong>Contact Person:</strong> <span th:text="${clientReport.client.contactPerson}"></span></p>
-            <p><strong>Phone:</strong> <span th:text="${clientReport.client.phone}"></span></p>
-            <hr>
-            <h3>Orders</h3>
-            <ul>
-                <li th:each="order : ${clientReport.orders}"
-                    th:text="'Order ID: ' + ${order.clientOrderId} + ', Amount: ' + ${order.totalAmount} + ' USD, Status: ' + ${order.status}">
-                </li>
-            </ul>
-            <hr>
-            <h3>Invoices</h3>
-            <ul>
-                <li th:each="invoice : ${clientReport.invoices}"
-                    th:text="'Invoice Number: ' + ${invoice.invoiceNumber} + ', Amount: ' + ${invoice.totalAmount} + ' USD, Status: ' + ${invoice.paymentStatus}">
-                </li>
-            </ul>
-            <hr>
-            <h3>Goods</h3>
-            <ul>
-                <li th:each="goods : ${clientReport.goods}"
-                    th:text="'Goods Name: ' + ${goods.name} + ', Weight: ' + ${goods.weight} + ' kg, Dimensions: ' + ${goods.dimensions}">
-                </li>
-            </ul>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Transport Data</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Actual Departure</th>
+                            <td th:text="${report.actualDeparture}"></td>
+                        </tr>
+                        <tr>
+                            <th>Actual Arrival</th>
+                            <td th:text="${report.actualArrival}"></td>
+                        </tr>
+                        <tr>
+                            <th>Notes</th>
+                            <td th:text="${report.notes}"></td>
+                        </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td th:text="${report.transportCreatedAt}"></td>
+                        </tr>
+                        <tr>
+                            <th>Updated At</th>
+                            <td th:text="${report.transportUpdatedAt}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Transport Order</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td th:text="${report.transportOrderName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Scheduled Departure</th>
+                            <td th:text="${report.scheduledDeparture}"></td>
+                        </tr>
+                        <tr>
+                            <th>Scheduled Arrival</th>
+                            <td th:text="${report.scheduledArrival}"></td>
+                        </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td th:text="${report.transportOrderCreatedAt}"></td>
+                        </tr>
+                        <tr>
+                            <th>Updated At</th>
+                            <td th:text="${report.transportOrderUpdatedAt}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-light text-dark">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-user me-2"></i>Driver & Vehicle
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Driver Information</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Driver Name</th>
+                            <td th:text="${report.driverName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td th:text="${report.driverPhone}"></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td th:text="${report.driverEmail}"></td>
+                        </tr>
+                        <tr>
+                            <th>License Number</th>
+                            <td th:text="${report.licenseNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th>License Category</th>
+                            <td th:text="${report.licenseCategory}"></td>
+                        </tr>
+                        <tr>
+                            <th>Hire Date</th>
+                            <td th:text="${report.hireDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth</th>
+                            <td th:text="${report.dateOfBirth}"></td>
+                        </tr>
+                        <tr>
+                            <th>Medical Certificate Expiry</th>
+                            <td th:text="${report.medicalCertificateExpiry}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Vehicle Information</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Make</th>
+                            <td th:text="${report.make}"></td>
+                        </tr>
+                        <tr>
+                            <th>Model</th>
+                            <td th:text="${report.model}"></td>
+                        </tr>
+                        <tr>
+                            <th>Registration Number</th>
+                            <td th:text="${report.registrationNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th>Capacity</th>
+                            <td th:text="${report.capacity}"></td>
+                        </tr>
+                        <tr>
+                            <th>Mileage</th>
+                            <td th:text="${report.mileage}"></td>
+                        </tr>
+                        <tr>
+                            <th>Year</th>
+                            <td th:text="${report.vehicleYear}"></td>
+                        </tr>
+                        <tr>
+                            <th>Last Service Date</th>
+                            <td th:text="${report.lastServiceDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>Next Service Due</th>
+                            <td th:text="${report.nextServiceDue}"></td>
+                        </tr>
+                        <tr>
+                            <th>Purchase Date</th>
+                            <td th:text="${report.purchaseDate}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-light text-dark">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-cogs me-2"></i>Vehicle Type
+            </h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm table-borderless">
+                <tbody>
+                <tr>
+                    <th>Vehicle Type Name</th>
+                    <td th:text="${report.vehicleTypeName}"></td>
+                </tr>
+                <tr>
+                    <th>Maximum Load</th>
+                    <td th:text="${report.maximumLoad}"></td>
+                </tr>
+                <tr>
+                    <th>Special Features</th>
+                    <td th:text="${report.specialFeatures}"></td>
+                </tr>
+                <tr>
+                    <th>Dimensions</th>
+                    <td th:text="${report.dimensions}"></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td th:text="${report.vehicleTypeDescription}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-header bg-light text-dark">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-map-marker-alt me-2"></i>Locations
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">Start Location</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td th:text="${report.startLocationName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td th:text="${report.startAddress}"></td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td th:text="${report.startCity}"></td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td th:text="${report.startState}"></td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td th:text="${report.startCountry}"></td>
+                        </tr>
+                        <tr>
+                            <th>Postal Code</th>
+                            <td th:text="${report.startPostalCode}"></td>
+                        </tr>
+                        <tr>
+                            <th>Latitude</th>
+                            <td th:text="${report.startLatitude}"></td>
+                        </tr>
+                        <tr>
+                            <th>Longitude</th>
+                            <td th:text="${report.startLongitude}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5 class="fw-semibold">End Location</h5>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td th:text="${report.endLocationName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td th:text="${report.endAddress}"></td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td th:text="${report.endCity}"></td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td th:text="${report.endState}"></td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td th:text="${report.endCountry}"></td>
+                        </tr>
+                        <tr>
+                            <th>Postal Code</th>
+                            <td th:text="${report.endPostalCode}"></td>
+                        </tr>
+                        <tr>
+                            <th>Latitude</th>
+                            <td th:text="${report.endLatitude}"></td>
+                        </tr>
+                        <tr>
+                            <th>Longitude</th>
+                            <td th:text="${report.endLongitude}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </main>
 
-<div aria-hidden="true" aria-labelledby="emailModalLabel" class="modal fade" id="emailModal" tabindex="-1">
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="emailModalLabel">Send Report via Email</h5>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="emailForm">
@@ -131,8 +401,7 @@
                         <input class="form-control" id="emailAddress" placeholder="Enter email address" required
                                type="email">
                     </div>
-                    <input id="vehicleId" th:value="${report.vehicle.vehicleId}" type="hidden"/>
-                    <input id="clientId" th:value="${clientReport.client.clientId}" type="hidden"/>
+                    <input name="transportId" id="transportId" th:value="${report.transportId}" type="hidden"/>
                 </form>
             </div>
             <div class="modal-footer">
@@ -143,7 +412,7 @@
     </div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="loadingModalLabel" class="modal fade" id="loadingModal" tabindex="-1">
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
             <div class="modal-body">
@@ -156,7 +425,7 @@
     </div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="successModalLabel" class="modal fade" id="successModal" tabindex="-1">
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
             <div class="modal-body">

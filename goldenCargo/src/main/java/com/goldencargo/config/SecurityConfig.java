@@ -38,8 +38,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/breakdowns/**")
-                        .hasAnyRole("ADMIN", "MANAGER", "DRIVER", "USER")
+                        .requestMatchers("/users/forgot-password**",
+                                "/users/reset-password**",
+                                "/reports/**",
+                                "/email/**",
+                                "/login**",
+                                "/css/**",
+                                "/js/**",
+                                "/save-to-dropbox",
+                                "/").permitAll()
+
+                        .requestMatchers("/breakdowns/**").hasAnyRole("ADMIN", "MANAGER", "DRIVER", "USER")
 
                         .requestMatchers("/clients/**",
                                 "/client-invoices/**",
@@ -48,50 +57,29 @@ public class SecurityConfig {
                                 "/goods/**",
                                 "/invoices/**",
                                 "/news/**",
-                                "/users/**")
-                        .hasAnyRole("ADMIN", "MANAGER")
+                                "/users/**").hasAnyRole("ADMIN", "MANAGER")
 
                         .requestMatchers("/client-orders/**",
                                 "/orders/**",
-                                "/shipping-documents/**")
-                        .hasAnyRole("ADMIN", "MANAGER", "LOGISTIC")
+                                "/shipping-documents/**").hasAnyRole("ADMIN", "MANAGER", "LOGISTIC")
 
-                        .requestMatchers("/damages/**",
-                                "/incidents/**")
-                        .hasAnyRole("ADMIN", "DRIVER", "USER")
+                        .requestMatchers("/damages/**", "/incidents/**").hasAnyRole("ADMIN", "DRIVER", "USER")
 
                         .requestMatchers("/locations/**",
                                 "/routes/**",
                                 "/transports/**",
-                                "/transport-orders/**")
-                        .hasAnyRole("ADMIN", "LOGISTIC")
+                                "/transport-orders/**").hasAnyRole("ADMIN", "LOGISTIC")
 
                         .requestMatchers("/service-schedules/**",
                                 "/technical-inspections/**",
                                 "/vehicles/**",
                                 "/vehicle-repairs/**",
-                                "/vehicle-types/**")
-                        .hasAnyRole("ADMIN", "USER")
-
-                        .requestMatchers("/reports/**",
-                                "/email/**")
-                        .permitAll()
-
-                        .requestMatchers(
-                                "/login",
-                                "/css/**",
-                                "/js/**",
-                                "/users/forgot-password",
-                                "/users/reset-password**",
-                                "/email/send-pdf",
-                                "/save-to-dropbox"
-                        ).permitAll()
-
+                                "/vehicle-types/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/main", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )

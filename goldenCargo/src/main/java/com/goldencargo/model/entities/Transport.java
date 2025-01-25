@@ -45,5 +45,4 @@ public class Transport extends AuditableEntity {
 
     @OneToMany(mappedBy = "transport")
     private Set<ShippingDocument> shippingDocuments = new HashSet<>();
-
 }

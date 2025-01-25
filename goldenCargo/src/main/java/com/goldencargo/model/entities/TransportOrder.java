@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "transport_orders")
@@ -22,9 +24,13 @@ public class TransportOrder extends AuditableEntity {
     @Column(name = "transport_order_id")
     private Long transportOrderId;
 
-    @ManyToOne
-    @JoinColumn(name = "client_order_id", nullable = false)
-    private ClientOrder clientOrder;
+    @ManyToMany
+    @JoinTable(
+            name = "transport_order_client_orders",
+            joinColumns = @JoinColumn(name = "transport_order_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_order_id")
+    )
+    private Set<ClientOrder> clientOrders = new HashSet<>();
 
     @Column(name = "transport_order_name")
     private String name;
@@ -56,7 +62,4 @@ public class TransportOrder extends AuditableEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status = Status.NEW;
-
-    @OneToOne(mappedBy = "transportOrder")
-    private Transport transport;
 }
