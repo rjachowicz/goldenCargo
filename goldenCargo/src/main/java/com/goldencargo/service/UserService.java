@@ -6,6 +6,7 @@ import com.goldencargo.model.entities.UserRole;
 import com.goldencargo.repository.RoleRepository;
 import com.goldencargo.repository.UserRepository;
 import com.goldencargo.repository.UserRoleRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,6 +98,11 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userRoleRepository.deleteByUser(user);
         assignRoleToUser(user, roleId);
+    }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
 }

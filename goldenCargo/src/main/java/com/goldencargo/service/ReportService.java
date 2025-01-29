@@ -5,6 +5,8 @@ import com.goldencargo.model.dto.web.ReportDataDTO;
 import com.goldencargo.model.entities.Report;
 import com.goldencargo.repository.ReportRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -17,10 +19,12 @@ public class ReportService {
 
     private final JdbcTemplate jdbcTemplate;
     private final ReportRepository reportRepository;
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    public ReportService(ReportRepository reportRepository, JdbcTemplate jdbcTemplate) {
+    public ReportService(ReportRepository reportRepository, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedJdbcTemplate) {
         this.reportRepository = reportRepository;
         this.jdbcTemplate = jdbcTemplate;
+        this.namedJdbcTemplate = namedJdbcTemplate;
     }
 
     public List<Report> getAllReports() {
@@ -175,6 +179,95 @@ public class ReportService {
         List<Map<String, Object>> results = jdbcTemplate.queryForList(query, clientOrderId, clientId);
         return mapToInvoiceData(results);
     }
+
+    public ReportDataDTO generateTransportOrderData(Long userId, String status) {
+        String query = """
+                SELECT t.transport_id,
+                                    t.actual_departure,
+                                    t.actual_arrival,
+                                    t.notes,
+                                    t.created_at   AS transport_created_at,
+                                    t.updated_at   AS transport_updated_at,
+                                    t2.transport_order_name,
+                                    t2.scheduled_departure,
+                                    t2.scheduled_arrival,
+                                    t2.created_at  AS transport_order_created_at,
+                                    t2.updated_at  AS transport_order_updated_at,
+                                    d.license_number,
+                                    d.license_category,
+                                    d.hire_date,
+                                    d.date_of_birth,
+                                    d.medical_certificate_expiry,
+                                    v.make,
+                                    v.model,
+                                    v.registration_number,
+                                    v.capacity,
+                                    v.mileage,
+                                    v.year         AS vehicle_year,
+                                    v.last_service_date,
+                                    v.next_service_due,
+                                    v.purchase_date,
+                                    vt.name        AS vehicle_type_name,
+                                    vt.maximum_load,
+                                    vt.special_features,
+                                    vt.dimensions,
+                                    vt.description AS vehicle_type_description,
+                                    l1.name        AS start_location_name,
+                                    l1.address     AS start_address,
+                                    l1.city        AS start_city,
+                                    l1.state       AS start_state,
+                                    l1.country     AS start_country,
+                                    l1.postal_code AS start_postal_code,
+                                    l1.latitude    AS start_latitude,
+                                    l1.longitude   AS start_longitude,
+                                    l2.name        AS end_location_name,
+                                    l2.address     AS end_address,
+                                    l2.city        AS end_city,
+                                    l2.state       AS end_state,
+                                    l2.country     AS end_country,
+                                    l2.postal_code AS end_postal_code,
+                                    l2.latitude    AS end_latitude,
+                                    l2.longitude   AS end_longitude,
+                                    u.first_name,
+                                    u.last_name,
+                                    u.phone_number,
+                                    u.email,
+                                    co.client_order_id,
+                                    co.order_date AS client_order_date,
+                                    co.payment_status AS client_order_payment_status,
+                                    co.total_amount AS client_order_total_amount,
+                                    c.client_id,
+                                    c.name AS client_name,
+                                    c.nip AS client_nip,
+                                    c.phone AS client_phone,
+                                    c.email AS client_email,
+                                    c.contact_person AS client_contact_person,
+                                    c.address AS client_address
+                FROM transports t
+                         JOIN transport_orders t2 ON t.transport_order_id = t2.transport_order_id
+                         LEFT JOIN drivers d ON t2.assigned_driver_id = d.driver_id
+                         LEFT JOIN vehicles v ON t2.assigned_vehicle_id = v.vehicle_id
+                         JOIN vehicle_types vt ON v.vehicle_type_id = vt.vehicle_type_id
+                         JOIN locations l1 ON t2.start_location_id = l1.location_id
+                         JOIN locations l2 ON t2.end_location_id = l2.location_id
+                         JOIN users u ON d.user_id = u.user_id
+                         JOIN transport_order_client_orders toco ON t2.transport_order_id = toco.transport_order_id
+                         JOIN client_orders co ON toco.client_order_id = co.client_order_id
+                         JOIN clients c ON co.client_id = c.client_id
+                WHERE (:userId IS NULL OR u.user_id = :userId)
+                  AND (:status IS NULL OR t.status = :status)
+                order by t.created_at limit 1;
+                """;
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("userId", userId);
+        parameters.addValue("status", status);
+
+        List<Map<String, Object>> results = namedJdbcTemplate.queryForList(query, parameters);
+
+        return mapToReportData(results);
+    }
+
 
     private InvoiceDTO mapToInvoiceData(List<Map<String, Object>> results) {
         if (results.isEmpty()) {
