@@ -1,6 +1,7 @@
 package com.goldencargo.repository;
 
 import com.goldencargo.model.dto.api.TransportOrderDetailsDTO;
+import com.goldencargo.model.dto.web.ReportDataDTO;
 import com.goldencargo.model.entities.TransportOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -40,7 +41,9 @@ public interface TransportOrderRepository extends JpaRepository<TransportOrder, 
                 JOIN tror.assignedVehicle v
                 JOIN tror.startLocation sl
                 JOIN tror.endLocation el
+                WHERE d.user.userId = :userId
+                AND (:status IS NULL OR tror.status = :status)
             """)
-    List<TransportOrderDetailsDTO> findAllTransportOrders();
+    List<TransportOrderDetailsDTO> findTransportOrders(@Param("userId") Long userId, @Param("status") String status);
 
 }
