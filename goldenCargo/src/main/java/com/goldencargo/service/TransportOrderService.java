@@ -110,8 +110,8 @@ public class TransportOrderService {
         vehicleService.updateVehicle(vehicle.get().getVehicleId(), vehicle.get());
     }
 
-    public List<TransportOrderDetailsDTO> getTransportOrders(Long userId, String status) {
-        return transportOrderRepository.findTransportOrders(userId, status);
+    public List<TransportOrderDetailsDTO> getTransportOrders(Long userId) {
+        return transportOrderRepository.findTransportOrders(userId);
     }
 
 }

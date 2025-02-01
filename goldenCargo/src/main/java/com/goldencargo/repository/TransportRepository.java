@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TransportRepository extends JpaRepository<Transport, Long> {
 
@@ -18,4 +19,7 @@ public interface TransportRepository extends JpaRepository<Transport, Long> {
     @Transactional
     @Query("UPDATE Transport b SET b.isDeleted = true WHERE b.transportId = :id")
     void softDelete(@Param("id") Long id);
+
+    @Query("SELECT t FROM Transport t where t.isDeleted is false and t.transportOrder.transportOrderId = :id")
+    Optional<Transport> findByTransportOrder(Long id);
 }
