@@ -1,9 +1,11 @@
 package com.goldencargo.controller.web;
 
+import com.goldencargo.config.FcmService;
 import com.goldencargo.model.data.Status;
 import com.goldencargo.model.entities.Transport;
 import com.goldencargo.model.entities.TransportOrder;
 import com.goldencargo.service.*;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,13 +29,14 @@ public class TransportOrderController {
     private final LocationService locationService;
     private final GenericService genericService;
     private final TransportService transportService;
+    private final FcmService fcmService;
 
     public TransportOrderController(TransportOrderService transportOrderService,
                                     ClientOrderService clientOrderService,
                                     DriverService driverService,
                                     VehicleService vehicleService,
                                     LocationService locationService,
-                                    GenericService genericService, TransportService transportService) {
+                                    GenericService genericService, TransportService transportService, FcmService fcmService) {
         this.transportOrderService = transportOrderService;
         this.clientOrderService = clientOrderService;
         this.driverService = driverService;
@@ -41,6 +44,7 @@ public class TransportOrderController {
         this.locationService = locationService;
         this.genericService = genericService;
         this.transportService = transportService;
+        this.fcmService = fcmService;
     }
 
     @GetMapping
@@ -131,7 +135,7 @@ public class TransportOrderController {
     @PostMapping("/new-transport-order")
     public String createTransportOrder(
             @ModelAttribute TransportOrder transportOrder,
-            @RequestParam(value = "selectedClientOrderIds", required = false) String selectedIds) {
+            @RequestParam(value = "selectedClientOrderIds", required = false) String selectedIds) throws FirebaseMessagingException {
 
         if (selectedIds == null || selectedIds.isEmpty()) {
             throw new IllegalArgumentException("No client orders selected");
@@ -141,7 +145,7 @@ public class TransportOrderController {
                 .map(Long::valueOf)
                 .toList();
         transportOrderService.createTransportOrdersForClientOrders(transportOrder, clientOrderIds);
-
+        fcmService.sendAlert(transportOrder.getAssignedDriver().getDriverId());
         return "redirect:/transport-orders/new-transport-order";
     }
 }

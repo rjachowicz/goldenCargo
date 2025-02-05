@@ -89,6 +89,10 @@ public class User extends AuditableEntity {
     @OneToMany(mappedBy = "postedBy", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<News> newsPosts = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FcmToken> fcmTokens = new HashSet<>();
+
+
     public enum UserStatus {
         NEW,
         ACTIVE,
