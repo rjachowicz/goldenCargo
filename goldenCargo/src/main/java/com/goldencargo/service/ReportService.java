@@ -1,5 +1,6 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.dto.api.ReportDTO;
 import com.goldencargo.model.dto.api.TransportOrderAdvancedDetailsDTO;
 import com.goldencargo.model.dto.api.TransportOrderWithTransportDTO;
 import com.goldencargo.model.dto.web.InvoiceDTO;
@@ -295,6 +296,10 @@ public class ReportService {
         this.reportRepository = reportRepository;
         this.jdbcTemplate = jdbcTemplate;
         this.namedJdbcTemplate = namedJdbcTemplate;
+    }
+
+    public List<ReportDTO> getReportsByUser(Long userId){
+        return reportRepository.getReportsByUserId(userId);
     }
 
     public List<Report> getAllReports() {

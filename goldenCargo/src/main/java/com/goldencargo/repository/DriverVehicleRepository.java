@@ -1,5 +1,6 @@
 package com.goldencargo.repository;
 
+import com.goldencargo.model.dto.api.VehicleDTO;
 import com.goldencargo.model.entities.Driver;
 import com.goldencargo.model.entities.DriverVehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +21,17 @@ public interface DriverVehicleRepository extends JpaRepository<DriverVehicle, Lo
 
     @Query("SELECT d FROM Driver d WHERE d.driverId NOT IN (SELECT dv.driver.driverId FROM DriverVehicle dv WHERE dv.endDate IS NULL) AND d.isDeleted = false")
     List<Driver> findDriversWithoutVehicles();
+
+    @Query("""
+               SELECT new com.goldencargo.model.dto.api.VehicleDTO(v.vehicleId, v.registrationNumber)
+               FROM Vehicle v
+               WHERE v.isDeleted = false
+                 AND v.driverVehicles is not empty
+                 AND v IN (
+                   SELECT dv.vehicle FROM DriverVehicle dv WHERE dv.driver.driverId = :driverId
+                 )
+            """)
+    List<VehicleDTO> findVehiclesByDriverId(@Param("driverId") Long driverId);
+
 
 }

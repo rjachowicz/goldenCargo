@@ -1,6 +1,8 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.dto.api.IncidentDTO;
 import com.goldencargo.model.entities.Incident;
+import com.goldencargo.model.entities.User;
 import com.goldencargo.repository.IncidentRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,10 @@ public class IncidentService {
 
     public IncidentService(IncidentRepository incidentRepository) {
         this.incidentRepository = incidentRepository;
+    }
+
+    public List<IncidentDTO> getIncidentsByReportedBy(Long userId) {
+        return incidentRepository.getIncidentsByReportedBy(userId);
     }
 
     public List<Incident> getAllIncidents() {
