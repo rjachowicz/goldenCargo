@@ -1,7 +1,9 @@
 package com.goldencargo.service;
 
+import com.goldencargo.model.dto.api.VehicleDTO;
 import com.goldencargo.model.entities.Driver;
 import com.goldencargo.model.entities.DriverVehicle;
+import com.goldencargo.model.entities.Vehicle;
 import com.goldencargo.repository.DriverVehicleRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ public class DriverVehicleService {
 
     public List<DriverVehicle> getAllDriverVehicles() {
         return driverVehicleRepository.findByIsDeletedFalse();
+    }
+
+    public List<VehicleDTO> getVehiclesForDriver(Long driverId) {
+        return driverVehicleRepository.findVehiclesByDriverId(driverId);
     }
 
     public Optional<DriverVehicle> getDriverVehicleById(Long id) {

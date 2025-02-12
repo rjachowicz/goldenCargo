@@ -18,7 +18,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -58,28 +60,32 @@ public class ApiTransportOrderController {
         return reportService.generateTransportOrderDataWithTransport(userByUsername.getUserId(), Status.PENDING.toString());
     }
 
-    @PostMapping(value = "/start-transport", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> startTransport(@RequestBody TransportOrderCreateRequest request) {
+    @PostMapping(value = "/start-transport", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> startTransport(@RequestBody TransportOrderCreateRequest request) {
 
         Optional<TransportOrder> transportOrderOpt = transportOrderService.getOrderById(request.getTransportOrderId());
         if (transportOrderOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transport order not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Transport order not found"));
         }
 
         transportService.startTransport(request, transportOrderOpt);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Transport started successfully");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap("message", "Transport started successfully"));
     }
 
-    @PostMapping(value = "/end-transport", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> finishTransport(@RequestBody TransportOrderCreateRequest request) {
+    @PostMapping(value = "/end-transport", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> finishTransport(@RequestBody TransportOrderCreateRequest request) {
 
         Optional<Transport> transportOrderOpt = transportService.findByTransportOrderId(request.getTransportOrderId());
         if (transportOrderOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transport order not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Transport order not found"));
         }
 
         transportService.endTransport(request, transportOrderOpt);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Transport ended successfully");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap("message", "Transport ended successfully"));
     }
 
 
