@@ -1,84 +1,94 @@
 <div th:fragment="editClientInvoiceModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-file-invoice"></i> Edit Client Invoice
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-file-invoice"></i> Edit Client Invoice</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/client-invoices/update/{id}(id=${clientInvoice.invoiceId})}"
-              th:object="${clientInvoice}">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="client">
-                        <i class="fas fa-user"></i> Client
-                    </label>
-                    <select class="form-control select2" id="client" th:field="*{client.clientId}">
-                        <option th:each="client : ${clients}"
-                                th:selected="${client.clientId == clientInvoice.client.clientId}"
-                                th:text="${client.name}"
-                                th:value="${client.clientId}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="clientOrder">
-                        <i class="fas fa-list"></i> Client Order
-                    </label>
-                    <select class="form-control select2" id="clientOrder" th:field="*{clientOrder.clientOrderId}">
-                        <option th:each="order : ${clientOrders}"
-                                th:selected="${order.clientOrderId == clientInvoice.clientOrder.clientOrderId}"
-                                th:text="${order.clientOrderId}"
-                                th:value="${order.clientOrderId}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="invoiceNumber">
-                        <i class="fas fa-hashtag"></i> Invoice Number
-                    </label>
-                    <input class="form-control" id="invoiceNumber" required th:field="*{invoiceNumber}" type="text">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="dateIssued">
-                        <i class="fas fa-calendar-alt"></i> Date Issued
-                    </label>
-                    <input class="form-control" id="dateIssued" required th:field="*{dateIssued}" type="date">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="dueDate">
-                        <i class="fas fa-calendar-check"></i> Due Date
-                    </label>
-                    <input class="form-control" id="dueDate" required th:field="*{dueDate}" type="date">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="totalAmount">
-                        <i class="fas fa-dollar-sign"></i> Total Amount
-                    </label>
-                    <input class="form-control" id="totalAmount" required step="0.01" th:field="*{totalAmount}"
-                           type="number">
-                </div>
-                <div class="col-md-12">
-                    <label class="form-label fw-bold text-dark" for="paymentStatus">
-                        <i class="fas fa-money-bill-wave"></i> Payment Status
-                    </label>
-                    <select class="form-control" id="paymentStatus" th:field="*{paymentStatus}">
-                        <option th:each="status : ${T(com.goldencargo.model.data.PaymentStatus).values()}"
-                                th:selected="${status.name() == clientInvoice.paymentStatus.name()}"
-                                th:text="${status}"
-                                th:value="${status}">
-                        </option>
-                    </select>
-                </div>
+        <form class="row g-3 needs-validation" method="post"
+              th:action="@{/client-invoices/update/{id}(id=${clientInvoice.invoiceId})}" th:object="${clientInvoice}"
+              novalidate>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" for="client">
+                    <i class="fas fa-user"></i> Client
+                </label>
+                <select class="form-select select2" id="client" th:field="*{client.clientId}" required>
+                    <option value="" disabled selected>Select a client</option>
+                    <option th:each="client : ${clients}" th:text="${client.name}"
+                            th:value="${client.clientId}"></option>
+                </select>
+                <div class="invalid-feedback">Please select a client.</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" for="clientOrder">
+                    <i class="fas fa-list"></i> Client Order
+                </label>
+                <select class="form-select select2" id="clientOrder" th:field="*{clientOrder.clientOrderId}" required>
+                    <option value="" disabled selected>Select a client order</option>
+                    <option th:each="order : ${clientOrders}" th:text="${order.clientOrderId}"
+                            th:value="${order.clientOrderId}"></option>
+                </select>
+                <div class="invalid-feedback">Please select a client order.</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" for="invoiceNumber">
+                    <i class="fas fa-hashtag"></i> Invoice Number
+                </label>
+                <input class="form-control" id="invoiceNumber" placeholder="Enter invoice number" required
+                       th:field="*{invoiceNumber}" type="text">
+                <div class="invalid-feedback">Please enter an invoice number.</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" for="dateIssued">
+                    <i class="fas fa-calendar-alt"></i> Date Issued
+                </label>
+                <input class="form-control" id="dateIssued" required th:field="*{dateIssued}" type="date"
+                       th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">Date Issued cannot be in the future.</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" for="dueDate">
+                    <i class="fas fa-calendar-check"></i> Due Date
+                </label>
+                <input class="form-control" id="dueDate" required th:field="*{dueDate}" type="date"
+                       th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">Due Date cannot be in the past.</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" for="totalAmount">
+                    <i class="fas fa-dollar-sign"></i> Total Amount
+                </label>
+                <input class="form-control" id="totalAmount" placeholder="Enter total amount" required step="0.01"
+                       min="0" th:field="*{totalAmount}" type="number">
+                <div class="invalid-feedback">Please enter a total amount.</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" for="paymentStatus">
+                    <i class="fas fa-money-bill-wave"></i> Payment Status
+                </label>
+                <select class="form-select" id="paymentStatus" th:field="*{paymentStatus}" required>
+                    <option value="" disabled selected>Select payment status</option>
+                    <option th:each="status : ${T(com.goldencargo.model.data.PaymentStatus).values()}"
+                            th:text="${status}" th:value="${status}"></option>
+                </select>
+                <div class="invalid-feedback">Please select a payment status.</div>
             </div>
             <div class="modal-footer mt-4 bg-light">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save Changes
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save Changes</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
                 </button>
             </div>
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var dateIssuedInput = document.getElementById("dateIssued");
+        var dueDateInput = document.getElementById("dueDate");
+        if (dateIssuedInput && dueDateInput) {
+            dateIssuedInput.addEventListener("change", function () {
+                dueDateInput.min = dateIssuedInput.value;
+            });
+        }
+    });
+</script>

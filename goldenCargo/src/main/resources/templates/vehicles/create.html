@@ -1,54 +1,71 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-truck"></i> Add New Vehicle</h4>
-    <form class="row g-3" method="post" th:action="@{/vehicles/create}" th:object="${vehicle}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/vehicles/create}" th:object="${vehicle}"
+          novalidate>
         <div class="col-md-6">
             <label class="form-label" for="vehicleType">Vehicle Type</label>
-            <select class="form-select" id="vehicleType" th:field="*{vehicleType.vehicleTypeId}">
+            <select class="form-select" id="vehicleType" th:field="*{vehicleType.vehicleTypeId}" required>
+                <option value="" disabled selected>Select a vehicle type</option>
                 <option th:each="type : ${vehicleTypes}" th:text="${type.name}"
                         th:value="${type.vehicleTypeId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a vehicle type.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="registrationNumber">Registration Number</label>
             <input class="form-control" id="registrationNumber" required th:field="*{registrationNumber}" type="text">
+            <div class="invalid-feedback">Please enter a registration number.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="make">Make</label>
-            <input class="form-control" id="make" th:field="*{make}" type="text">
+            <input class="form-control" id="make" required th:field="*{make}" type="text">
+            <div class="invalid-feedback">Please enter a make.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="model">Model</label>
-            <input class="form-control" id="model" th:field="*{model}" type="text">
+            <input class="form-control" id="model" required th:field="*{model}" type="text">
+            <div class="invalid-feedback">Please enter a model.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="year">Year</label>
-            <input class="form-control" id="year" th:field="*{year}" type="number">
+            <input class="form-control" id="year" required th:field="*{year}" type="number" min="1900">
+            <div class="invalid-feedback">Please enter a valid year.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="capacity">Capacity</label>
-            <input class="form-control" id="capacity" step="0.01" th:field="*{capacity}" type="number">
+            <input class="form-control" id="capacity" required step="0.01" th:field="*{capacity}" type="number" min="0">
+            <div class="invalid-feedback">Please enter a capacity.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="status">Status</label>
-            <select class="form-select" id="status" th:field="*{status}">
+            <select class="form-select" id="status" th:field="*{status}" required>
+                <option value="" disabled selected>Select status</option>
                 <option th:each="status : ${statuses}" th:text="${status}" th:value="${status}"></option>
             </select>
+            <div class="invalid-feedback">Please select a status.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="purchaseDate">Purchase Date</label>
-            <input class="form-control" id="purchaseDate" th:field="*{purchaseDate}" type="date">
+            <input class="form-control" id="purchaseDate" required th:field="*{purchaseDate}" type="date"
+                   th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a purchase date (not in the future).</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="lastServiceDate">Last Service Date</label>
-            <input class="form-control" id="lastServiceDate" th:field="*{lastServiceDate}" type="date">
+            <input class="form-control" id="lastServiceDate" required th:field="*{lastServiceDate}" type="date"
+                   th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a last service date (not in the future).</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="nextServiceDue">Next Service Due</label>
-            <input class="form-control" id="nextServiceDue" th:field="*{nextServiceDue}" type="date">
+            <input class="form-control" id="nextServiceDue" required th:field="*{nextServiceDue}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a next service due date (not in the past).</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="mileage">Mileage</label>
-            <input class="form-control" id="mileage" th:field="*{mileage}" type="number">
+            <input class="form-control" id="mileage" required th:field="*{mileage}" type="number" min="0">
+            <div class="invalid-feedback">Please enter a mileage.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>

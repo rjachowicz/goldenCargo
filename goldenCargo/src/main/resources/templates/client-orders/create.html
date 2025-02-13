@@ -1,33 +1,44 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-file-invoice"></i> Add New Client Order</h4>
-    <form class="row g-3" method="post" th:action="@{/client-orders/create}" th:object="${clientOrder}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/client-orders/create}" th:object="${clientOrder}"
+          novalidate>
         <div class="col-md-6">
             <label class="form-label" for="client">Client</label>
-            <select class="form-control select2" id="client" th:field="*{client.clientId}">
+            <select class="form-control select2" id="client" th:field="*{client.clientId}" required>
+                <option value="" disabled selected>Select a client</option>
                 <option th:each="client : ${clients}" th:text="${client.name}" th:value="${client.clientId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a client.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="orderDate">Order Date</label>
-            <input class="form-control" id="orderDate" required th:field="*{orderDate}" type="date">
+            <input class="form-control" id="orderDate" required th:field="*{orderDate}" type="date"
+                   th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select an order date (not in the future).</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="status">Status</label>
-            <select class="form-select" id="status" th:field="*{status}">
+            <select class="form-select" id="status" th:field="*{status}" required>
+                <option value="" disabled selected>Select status</option>
                 <option th:each="status : ${T(com.goldencargo.model.data.Status).values()}" th:text="${status}"
                         th:value="${status}"></option>
             </select>
+            <div class="invalid-feedback">Please select a status.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="totalAmount">Total Amount</label>
-            <input class="form-control" id="totalAmount" required step="0.01" th:field="*{totalAmount}" type="number">
+            <input class="form-control" id="totalAmount" required step="0.01" th:field="*{totalAmount}" type="number"
+                   min="0">
+            <div class="invalid-feedback">Please enter the total amount.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="paymentStatus">Payment Status</label>
-            <select class="form-select" id="paymentStatus" th:field="*{paymentStatus}">
+            <select class="form-select" id="paymentStatus" th:field="*{paymentStatus}" required>
+                <option value="" disabled selected>Select payment status</option>
                 <option th:each="status : ${T(com.goldencargo.model.data.PaymentStatus).values()}" th:text="${status}"
                         th:value="${status}"></option>
             </select>
+            <div class="invalid-feedback">Please select a payment status.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit">

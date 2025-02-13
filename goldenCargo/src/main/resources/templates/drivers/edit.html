@@ -1,66 +1,62 @@
 <div th:fragment="editDriverModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Driver
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Driver</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/drivers/update/{id}(id=${driver.driverId})}" th:object="${driver}">
+        <form method="post" th:action="@{/drivers/update/{id}(id=${driver.driverId})}" th:object="${driver}"
+              class="needs-validation" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-user"></i> User
-                    </label>
-                    <select class="form-control select2" id="user" th:field="*{user.userId}">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-user"></i> User</label>
+                    <select class="form-control select2" id="user" th:field="*{user.userId}" required>
+                        <option value="" disabled selected>Select a user</option>
                         <option th:each="user : ${users}" th:selected="${user.userId == driver.user.userId}"
-                                th:text="${user.firstName} + ' ' + ${user.lastName}" th:value="${user.userId}"></option>
+                                th:text="${user.firstName + ' ' + user.lastName}" th:value="${user.userId}"></option>
                     </select>
+                    <div class="invalid-feedback">Please select a user.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-id-card"></i> License Number
-                    </label>
-                    <input class="form-control" id="licenseNumber" placeholder="Enter license number" required th:field="*{licenseNumber}"
-                           type="text">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-id-card"></i> License Number</label>
+                    <input class="form-control" id="licenseNumber" placeholder="Enter license number" required
+                           th:field="*{licenseNumber}" type="text">
+                    <div class="invalid-feedback">Please enter a license number.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-tags"></i> License Category
-                    </label>
-                    <input class="form-control" id="licenseCategory" placeholder="Enter license category" th:field="*{licenseCategory}"
-                           type="text">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-tags"></i> License Category</label>
+                    <input class="form-control" id="licenseCategory" placeholder="Enter license category" required
+                           th:field="*{licenseCategory}" type="text">
+                    <div class="invalid-feedback">Please enter a license category.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-calendar-alt"></i> Hire Date
-                    </label>
-                    <input class="form-control" id="hireDate" required th:field="*{hireDate}" type="date">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-calendar-alt"></i> Hire Date</label>
+                    <input class="form-control" id="hireDate" required th:field="*{hireDate}" type="date"
+                           th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                    <div class="invalid-feedback">Please select a hire date.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-calendar-check"></i> Medical Certificate Expiry
-                    </label>
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-calendar-check"></i> Medical
+                        Certificate Expiry</label>
                     <input class="form-control" id="medicalCertificateExpiry" required
-                           th:field="*{medicalCertificateExpiry}" type="date">
+                           th:field="*{medicalCertificateExpiry}" type="date"
+                           th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                    <div class="invalid-feedback">Please select a medical certificate expiry date.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-info-circle"></i> Driver Status
-                    </label>
-                    <select class="form-control" id="driverStatus" th:field="*{driverStatus}">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-info-circle"></i> Driver Status</label>
+                    <select class="form-control" id="driverStatus" th:field="*{driverStatus}" required>
+                        <option value="" disabled selected>Select status</option>
                         <option th:each="status : ${T(com.goldencargo.model.entities.Driver.DriverStatus).values()}"
-                                th:selected="${status.name() == driver.driverStatus.name()}"
-                                th:text="${status}" th:value="${status}"></option>
+                                th:selected="${status.name() == driver.driverStatus.name()}" th:text="${status}"
+                                th:value="${status}"></option>
                     </select>
+                    <div class="invalid-feedback">Please select a driver status.</div>
                 </div>
             </div>
             <div class="modal-footer mt-4 bg-light">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
                 </button>
             </div>
         </form>

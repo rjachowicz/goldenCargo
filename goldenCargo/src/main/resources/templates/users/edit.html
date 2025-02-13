@@ -6,58 +6,79 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/users/update/{id}(id=${user.userId})}" th:object="${user}">
+        <form method="post" th:action="@{/users/update/{id}(id=${user.userId})}" th:object="${user}" class="needs-validation" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user"></i> Username
                     </label>
-                    <input class="form-control" id="username" placeholder="Enter username" required
+                    <input class="form-control" id="username" placeholder="Enter username" required maxlength="50"
                            th:field="*{username}" type="text">
+                    <div class="invalid-feedback">
+                        Please provide a username (max 50 characters).
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-envelope"></i> Email
                     </label>
-                    <input class="form-control" id="email" placeholder="Enter email" required th:field="*{email}"
-                           type="email">
+                    <input class="form-control" id="email" placeholder="Enter email" required maxlength="100"
+                           th:field="*{email}" type="email">
+                    <div class="invalid-feedback">
+                        Please provide a valid email address (max 100 characters).
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user-circle"></i> First Name
                     </label>
-                    <input class="form-control" id="firstName" placeholder="Enter first name" th:field="*{firstName}"
-                           type="text">
+                    <input class="form-control" id="firstName" placeholder="Enter first name" required maxlength="50"
+                           th:field="*{firstName}" type="text">
+                    <div class="invalid-feedback">
+                        Please provide a first name (max 50 characters).
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-user-circle"></i> Last Name
                     </label>
-                    <input class="form-control" id="lastName" placeholder="Enter last name" th:field="*{lastName}"
-                           type="text">
+                    <input class="form-control" id="lastName" placeholder="Enter last name" required maxlength="50"
+                           th:field="*{lastName}" type="text">
+                    <div class="invalid-feedback">
+                        Please provide a last name (max 50 characters).
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-phone"></i> Phone Number
                     </label>
-                    <input class="form-control" id="phoneNumber" placeholder="Enter phone number"
-                           th:field="*{phoneNumber}" type="text">
+                    <input class="form-control" id="phoneNumber" placeholder="Enter phone number" required maxlength="20"
+                           pattern="^\+?[1-9]\d{1,14}$" th:field="*{phoneNumber}" type="text">
+                    <div class="invalid-feedback">
+                        Please provide a valid phone number in E.164 format (e.g., +123456789).
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-map-marker-alt"></i> Address
                     </label>
-                    <textarea class="form-control" id="address" placeholder="Enter address"
-                              th:field="*{address}"></textarea>
+                    <textarea class="form-control" id="address" placeholder="Enter address" required
+                              pattern="^[#.0-9a-zA-Z\\s,-]+$" th:field="*{address}"></textarea>
+                    <div class="invalid-feedback">
+                        Please provide a valid address (letters, numbers, spaces, and punctuation only).
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
                         <i class="fas fa-info-circle"></i> Status
                     </label>
-                    <select class="form-control" id="status" th:field="*{status}">
+                    <select class="form-control" id="status" required th:field="*{status}">
                         <option th:each="status : ${statuses}" th:selected="*{status} == ${status}"
                                 th:text="${status.name()}" th:value="${status}"></option>
                     </select>
+                    <div class="invalid-feedback">
+                        Please select a status.
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark">
@@ -68,7 +89,9 @@
                                 th:text="${#strings.substringAfter(role.name, 'ROLE_')}"
                                 th:value="${role.roleId}"></option>
                     </select>
-                    <div class="invalid-feedback">Please select a role.</div>
+                    <div class="invalid-feedback">
+                        Please select a role.
+                    </div>
                 </div>
                 <div class="col-md-12 mt-3">
                     <button class="btn btn-outline-secondary" id="togglePasswordChange" type="button">
@@ -82,8 +105,10 @@
                     <div class="input-group">
                         <input class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password"
                                type="password">
-                        <button class="btn btn-outline-secondary" id="togglePasswordVisibility" type="button">Show
-                        </button>
+                        <button class="btn btn-outline-secondary" id="togglePasswordVisibility" type="button">Show</button>
+                    </div>
+                    <div class="invalid-feedback">
+                        Please provide a new password.
                     </div>
                 </div>
                 <div class="col-md-12 mt-3 password-change d-none">

@@ -1,43 +1,39 @@
 <div th:fragment="editDriverReportModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Driver Report
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Driver Report</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
         <form method="post" th:action="@{/driver-reports/update/{id}(id=${driverReport.driverReportId})}"
-              th:object="${driverReport}">
+              th:object="${driverReport}" class="needs-validation" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="driver">
-                        <i class="fas fa-user"></i> Driver
-                    </label>
-                    <select class="form-control select2" id="driver" th:field="*{driver.driverId}">
+                    <label class="form-label fw-bold text-dark" for="driver"><i class="fas fa-user"></i> Driver</label>
+                    <select class="form-control select2" id="driver" th:field="*{driver.driverId}" required>
+                        <option value="" disabled selected>Select a driver</option>
                         <option th:each="driver : ${drivers}"
                                 th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"
                                 th:value="${driver.driverId}"></option>
                     </select>
+                    <div class="invalid-feedback">Please select a driver.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark" for="date">
-                        <i class="fas fa-calendar-alt"></i> Date
-                    </label>
-                    <input class="form-control" id="date" required th:field="*{date}" type="date">
+                    <label class="form-label fw-bold text-dark" for="date"><i class="fas fa-calendar-alt"></i>
+                        Date</label>
+                    <input class="form-control" id="date" required th:field="*{date}" type="date"
+                           th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                    <div class="invalid-feedback">Please select a date.</div>
                 </div>
                 <div class="col-md-12">
-                    <label class="form-label fw-bold text-dark" for="content">
-                        <i class="fas fa-align-left"></i> Content
-                    </label>
-                    <textarea class="form-control" id="content" th:field="*{content}"></textarea>
+                    <label class="form-label fw-bold text-dark" for="content"><i class="fas fa-align-left"></i> Content</label>
+                    <textarea class="form-control" id="content" required th:field="*{content}"></textarea>
+                    <div class="invalid-feedback">Please enter content.</div>
                 </div>
             </div>
             <div class="modal-footer mt-4 bg-light">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
                 </button>
             </div>
         </form>

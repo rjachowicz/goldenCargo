@@ -4,44 +4,62 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body">
-        <form method="post" th:action="@{'/news/update/' + ${news.newsId}}" th:object="${news}">
+        <form method="post" th:action="@{'/news/update/' + ${news.newsId}}" th:object="${news}" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" id="title" required th:field="*{title}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a title.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="content">Content</label>
                 <textarea class="form-control" id="content" required rows="5" th:field="*{content}"></textarea>
+                <div class="invalid-feedback">
+                    Please provide the content.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="datePosted">Date Posted</label>
                 <input class="form-control" id="datePosted" required
                        th:field="*{datePosted}"
                        th:value="${#dates.format(news.datePosted, 'yyyy-MM-dd')}"
+                       th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
                        type="date">
+                <div class="invalid-feedback">
+                    Please select a valid date (today or later).
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="graphic">Graphic URL</label>
                 <input class="form-control" id="graphic" th:field="*{graphic}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a valid URL if applicable.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="postedBy">Posted By</label>
-                <select class="form-control select2" id="postedBy" th:field="*{postedBy.userId}">
-                    <option th:checked="${user.userId == news.postedBy.userId}" th:each="user : ${users}"
-                            th:text="${user.username}" th:value="${user.userId}">
+                <select class="form-control select2" id="postedBy" required th:field="*{postedBy.userId}">
+                    <option value="" disabled>Select user</option>
+                    <option th:each="user : ${users}"
+                            th:attr="selected=${user.userId == news.postedBy.userId}"
+                            th:text="${user.username}"
+                            th:value="${user.userId}">
                     </option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select a user.
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
-                    Cancel
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                    <i class="fas fa-times"></i> Cancel
                 </button>
             </div>
         </form>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script>

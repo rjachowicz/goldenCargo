@@ -1,25 +1,32 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-truck-loading"></i> Add New Vehicle Type</h4>
-    <form class="row g-3" method="post" th:action="@{/vehicle-types/create}" th:object="${vehicleType}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/vehicle-types/create}" th:object="${vehicleType}"
+          novalidate>
         <div class="col-md-6">
             <label class="form-label" for="name">Name</label>
             <input class="form-control" id="name" required th:field="*{name}" type="text">
+            <div class="invalid-feedback">Please provide a name.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="maximumLoad">Maximum Load</label>
-            <input class="form-control" id="maximumLoad" th:field="*{maximumLoad}" type="number">
+            <input class="form-control" id="maximumLoad" required th:field="*{maximumLoad}" type="number" min="0"
+                   step="0.01">
+            <div class="invalid-feedback">Please provide a maximum load.</div>
         </div>
         <div class="col-md-12">
             <label class="form-label" for="description">Description</label>
-            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+            <textarea class="form-control" id="description" required th:field="*{description}"></textarea>
+            <div class="invalid-feedback">Please provide a description.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="dimensions">Dimensions</label>
-            <input class="form-control" id="dimensions" th:field="*{dimensions}" type="text">
+            <input class="form-control" id="dimensions" required th:field="*{dimensions}" type="text">
+            <div class="invalid-feedback">Please provide dimensions.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="specialFeatures">Special Features</label>
-            <input class="form-control" id="specialFeatures" th:field="*{specialFeatures}">
+            <input class="form-control" id="specialFeatures" required th:field="*{specialFeatures}" type="text">
+            <div class="invalid-feedback">Please provide special features.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>

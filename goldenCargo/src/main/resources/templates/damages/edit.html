@@ -4,34 +4,45 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body">
-        <form method="post" th:action="@{'/damages/update/' + ${damage.damageId}}" th:object="${damage}">
+        <form class="needs-validation row g-3" novalidate method="post"
+              th:action="@{'/damages/update/' + ${damage.damageId}}" th:object="${damage}">
             <div class="mb-3">
                 <label class="form-label" for="incident">Incident</label>
-                <select class="form-control select2" id="incident" th:field="*{incident.incidentId}">
+                <select class="form-select select2" id="incident" th:field="*{incident.incidentId}" required>
+                    <option value="" disabled selected>Select an incident</option>
                     <option th:each="incident : ${incidents}"
                             th:selected="${incident.incidentId == damage.incident.incidentId}"
                             th:text="${incident.incidentType}"
-                            th:value="${incident.incidentId}"></option>
+                            th:value="${incident.incidentId}">
+                    </option>
                 </select>
+                <div class="invalid-feedback">Please select an incident.</div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                <textarea class="form-control" id="description" placeholder="Enter description" required
+                          th:field="*{description}"></textarea>
+                <div class="invalid-feedback">Please provide a description.</div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="repairCost">Repair Cost</label>
-                <input class="form-control" id="repairCost" step="0.01" th:field="*{repairCost}" type="number">
+                <input class="form-control" id="repairCost" step="0.01" min="0" placeholder="Enter repair cost" required
+                       th:field="*{repairCost}" type="number">
+                <div class="invalid-feedback">Please enter a valid repair cost.</div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="insuranceClaim">Insurance Claim</label>
-                <select class="form-control" id="insuranceClaim" th:field="*{insuranceClaim}">
+                <select class="form-select" id="insuranceClaim" th:field="*{insuranceClaim}" required>
+                    <option value="" disabled selected>Select an option</option>
                     <option th:selected="${damage.insuranceClaim}" value="true">Yes</option>
                     <option th:selected="${!damage.insuranceClaim}" value="false">No</option>
                 </select>
+                <div class="invalid-feedback">Please select an insurance claim option.</div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="claimNumber">Claim Number</label>
-                <input class="form-control" id="claimNumber" th:field="*{claimNumber}" type="text">
+                <input class="form-control" id="claimNumber" placeholder="Enter claim number" th:field="*{claimNumber}"
+                       type="text">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
@@ -42,3 +53,22 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        $('#incident').select2({
+            placeholder: 'Select an incident',
+            allowClear: true
+        });
+    });
+</script>

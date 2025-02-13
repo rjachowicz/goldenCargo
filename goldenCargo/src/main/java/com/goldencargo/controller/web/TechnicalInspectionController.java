@@ -4,6 +4,7 @@ import com.goldencargo.model.entities.TechnicalInspection;
 import com.goldencargo.service.GenericService;
 import com.goldencargo.service.TechnicalInspectionService;
 import com.goldencargo.service.VehicleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -85,9 +86,10 @@ public class TechnicalInspectionController {
         return "technical-inspections/details";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteInspection(@PathVariable Long id) {
-        technicalInspectionService.deleteInspection(id);
-        return "redirect:/technical-inspections";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteInspection(@PathVariable Long id) {
+        boolean isDeleted = technicalInspectionService.deleteInspection(id);
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+
 }

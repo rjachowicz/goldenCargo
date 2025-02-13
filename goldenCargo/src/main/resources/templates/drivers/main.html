@@ -21,13 +21,11 @@
             </div>
             <div>
                 <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
-                <button aria-controls="addDriverForm" aria-expanded="false" class="btn btn-outline-success"
-                        data-bs-target="#addDriverForm"
-                        data-bs-toggle="collapse" type="button">
+                <button aria-controls="addDriverForm" aria-expanded="false" class="btn btn-outline-success me-2"
+                        data-bs-target="#addDriverForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Driver
                 </button>
                 <a class="btn btn-secondary" href="/drivers"><i class="fas fa-redo"></i> Show All</a>
@@ -40,39 +38,105 @@
             <div th:replace="~{/drivers/create}"></div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-light">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light align-middle">
                 <tr>
-                    <th>User</th>
-                    <th>License Number</th>
-                    <th>License Category</th>
-                    <th>Hire Date</th>
-                    <th>Medical Certificate Expiry</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        User
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='user.firstName', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='user.firstName', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        License Number
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='licenseNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='licenseNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        License Category
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='licenseCategory', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='licenseCategory', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Hire Date
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/drivers(sortBy='hireDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/drivers(sortBy='hireDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Medical Certificate Expiry
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='medicalCertificateExpiry', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='medicalCertificateExpiry', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Status
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='driverStatus', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/drivers(sortBy='driverStatus', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="driver : ${drivers}">
-                    <td th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"></td>
-                    <td th:text="${driver.licenseNumber}"></td>
-                    <td th:text="${driver.licenseCategory}"></td>
-                    <td th:text="${#dates.format(driver.hireDate, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#dates.format(driver.medicalCertificateExpiry, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${driver.driverStatus}"></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm"
-                                data-endpoint="drivers/edit"
-                                data-modal-action
-                                data-modal-id="editDriverModal"
-                                th:attr="data-id=${driver.driverId}">
+                    <td class="text-center align-middle"
+                        th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"></td>
+                    <td class="text-center align-middle" th:text="${driver.licenseNumber}"></td>
+                    <td class="text-center align-middle" th:text="${driver.licenseCategory}"></td>
+                    <td class="text-center align-middle" th:text="${#dates.format(driver.hireDate, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle"
+                        th:text="${#dates.format(driver.medicalCertificateExpiry, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle" th:text="${driver.driverStatus}"></td>
+                    <td class="text-center align-middle">
+                        <button class="btn btn-warning btn-sm" data-endpoint="drivers/edit" data-modal-action
+                                data-modal-id="editDriverModal" th:attr="data-id=${driver.driverId}">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-info btn-sm"
-                                data-endpoint="drivers/details"
-                                data-modal-action
-                                data-modal-id="detailsDriverModal"
-                                th:attr="data-id=${driver.driverId}">
+                        <button class="btn btn-info btn-sm" data-endpoint="drivers/details" data-modal-action
+                                data-modal-id="detailsDriverModal" th:attr="data-id=${driver.driverId}">
                             <i class="fas fa-info-circle"></i> Details
                         </button>
                         <button class="btn btn-danger btn-sm" data-delete-url="/drivers/delete/{id}"
@@ -103,6 +167,7 @@
 <div th:replace="~{/helpers/footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
+<script src="/js/validFormScript.js"></script>
 <script th:src="@{/js/modalScript.js}"></script>
 </body>
 </html>

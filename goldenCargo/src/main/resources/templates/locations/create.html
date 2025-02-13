@@ -1,38 +1,62 @@
 <div th:fragment="createLocationModal">
     <div class="border p-4">
         <h4 class="h3 mb-3"><i class="fas fa-map-marker-alt"></i> Add New Location</h4>
-        <form class="row g-3" method="post" th:action="@{/locations/create}" th:object="${location}">
+        <form class="row g-3 needs-validation" method="post" th:action="@{/locations/create}" th:object="${location}" novalidate>
             <div class="col-md-4">
                 <label class="form-label" for="name">Name</label>
                 <input class="form-control" id="name" required th:field="*{name}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a name.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="address">Address</label>
-                <input class="form-control" id="address" th:field="*{address}" type="text">
+                <input class="form-control" id="address" required th:field="*{address}" type="text">
+                <div class="invalid-feedback">
+                    Please provide an address.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="city">City</label>
-                <input class="form-control" id="city" th:field="*{city}" type="text">
+                <input class="form-control" id="city" required th:field="*{city}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a city.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="state">State</label>
-                <input class="form-control" id="state" th:field="*{state}" type="text">
+                <input class="form-control" id="state" required th:field="*{state}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a state.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="country">Country</label>
-                <input class="form-control" id="country" th:field="*{country}" type="text">
+                <input class="form-control" id="country" required th:field="*{country}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a country.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="postalCode">Postal Code</label>
-                <input class="form-control" id="postalCode" th:field="*{postalCode}" type="text">
+                <input class="form-control" id="postalCode" required th:field="*{postalCode}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a postal code.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="latitude">Latitude</label>
-                <input class="form-control" id="latitude" th:field="*{latitude}" type="text">
+                <input class="form-control" id="latitude" required th:field="*{latitude}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a latitude.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="longitude">Longitude</label>
-                <input class="form-control" id="longitude" th:field="*{longitude}" type="text">
+                <input class="form-control" id="longitude" required th:field="*{longitude}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a longitude.
+                </div>
             </div>
             <div class="col-md-12 d-flex">
                 <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>

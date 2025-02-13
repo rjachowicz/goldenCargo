@@ -23,6 +23,7 @@ public class UserController {
     private final EmailService emailService;
     private final PasswordResetTokenService passwordResetTokenService;
     private final UserRoleService userRoleService;
+    private static final String SEARCH_VALUE = "like";
 
     private final static String URL = "http://localhost:8080/users/reset-password?token=";
 
@@ -43,7 +44,6 @@ public class UserController {
     public String getAllUsers(
             @RequestParam(value = "filterType", required = false) String filterType,
             @RequestParam(value = "filterValue", required = false) String filterValue,
-            @RequestParam(value = "comparisonType", required = false) String comparisonType,
             @RequestParam(value = "sortBy", required = false, defaultValue = "username") String sortBy,
             @RequestParam(value = "sortLogic", required = false, defaultValue = "asc") String sortLogic,
             Model model) {
@@ -52,7 +52,7 @@ public class UserController {
                 ALIAS,
                 filterType,
                 filterValue,
-                comparisonType,
+                SEARCH_VALUE,
                 sortBy,
                 sortLogic
         );

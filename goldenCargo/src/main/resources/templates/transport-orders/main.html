@@ -21,13 +21,11 @@
             </div>
             <div>
                 <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
-                <button aria-controls="addTransportOrderForm" aria-expanded="false" class="btn btn-outline-success"
-                        data-bs-target="#addTransportOrderForm"
-                        data-bs-toggle="collapse" type="button">
+                <button aria-controls="addTransportOrderForm" aria-expanded="false" class="btn btn-outline-success me-2"
+                        data-bs-target="#addTransportOrderForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Transport Order
                 </button>
                 <a class="btn btn-secondary" href="/transport-orders"><i class="fas fa-redo"></i> Show All</a>
@@ -40,43 +38,115 @@
             <div th:replace="~{/transport-orders/create}"></div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-light">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light align-middle">
                 <tr>
-                    <th>Transport Name</th>
-                    <th>Assigned Driver</th>
-                    <th>Assigned Vehicle</th>
-                    <th>Scheduled Departure</th>
-                    <th>Scheduled Arrival</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Transport Name
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='name', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='name', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Assigned Driver
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='assignedDriver.user.firstName', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='assignedDriver.user.firstName', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Assigned Vehicle
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='assignedVehicle.registrationNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='assignedVehicle.registrationNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Scheduled Departure
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='scheduledDeparture', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='scheduledDeparture', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Scheduled Arrival
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='scheduledArrival', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='scheduledArrival', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Status
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='status', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/transport-orders(sortBy='status', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="transportOrder : ${transportOrders}">
-                    <td th:text="${transportOrder.name}"></td>
-                    <td th:text="${transportOrder.assignedDriver.user.firstName} + ' ' + ${transportOrder.assignedDriver.user.lastName}"></td>
-                    <td th:text="${transportOrder.assignedVehicle.registrationNumber}"></td>
-                    <td th:text="${#dates.format(transportOrder.scheduledDeparture, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td th:text="${#dates.format(transportOrder.scheduledArrival, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td th:text="${transportOrder.status}"></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" data-endpoint="transport-orders/edit"
-                                data-modal-action
+                    <td th:text="${transportOrder.name}" class="text-center align-middle"></td>
+                    <td th:text="${transportOrder.assignedDriver.user.firstName} + ' ' + ${transportOrder.assignedDriver.user.lastName}"
+                        class="text-center align-middle"></td>
+                    <td th:text="${transportOrder.assignedVehicle.registrationNumber}"
+                        class="text-center align-middle"></td>
+                    <td th:text="${#dates.format(transportOrder.scheduledDeparture, 'yyyy-MM-dd HH:mm')}"
+                        class="text-center align-middle"></td>
+                    <td th:text="${#dates.format(transportOrder.scheduledArrival, 'yyyy-MM-dd HH:mm')}"
+                        class="text-center align-middle"></td>
+                    <td th:text="${transportOrder.status}" class="text-center align-middle"></td>
+                    <td class="text-center align-middle">
+                        <button class="btn btn-warning btn-sm" data-endpoint="transport-orders/edit" data-modal-action
                                 data-modal-id="editTransportOrderModal"
                                 th:attr="data-id=${transportOrder.transportOrderId}">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-info btn-sm"
-                                data-endpoint="transport-orders/details"
-                                data-modal-action
+                        <button class="btn btn-info btn-sm" data-endpoint="transport-orders/details" data-modal-action
                                 data-modal-id="detailsTransportOrderModal"
                                 th:attr="data-id=${transportOrder.transportOrderId}">
                             <i class="fas fa-info-circle"></i> Details
                         </button>
                         <button class="btn btn-danger btn-sm" data-delete-url="/transport-orders/delete/{id}"
-                                data-entity-type="transportOrder"
-                                onclick="showDeleteModal(this)"
+                                data-entity-type="transportOrder" onclick="showDeleteModal(this)"
                                 th:attr="data-entity-id=${transportOrder.transportOrderId}">
                             <i class="fas fa-trash"></i> Delete
                         </button>
@@ -87,27 +157,23 @@
         </div>
     </div>
     <div aria-hidden="true" aria-labelledby="editTransportOrderModalLabel" class="modal fade"
-         id="editTransportOrderModal"
-         tabindex="-1">
+         id="editTransportOrderModal" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content">
-            </div>
+            <div class="modal-content"></div>
         </div>
     </div>
     <div aria-hidden="true" aria-labelledby="detailsTransportOrderModalLabel" class="modal fade"
-         id="detailsTransportOrderModal"
-         tabindex="-1">
+         id="detailsTransportOrderModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            </div>
+            <div class="modal-content"></div>
         </div>
     </div>
     <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 </main>
-<div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <div th:replace="~{/helpers/footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
+<script src="/js/validFormScript.js"></script>
 <script th:src="@{/js/modalScript.js}"></script>
 </body>
 </html>

@@ -1,74 +1,89 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-truck"></i> Add New Transport Order</h4>
-    <form class="row g-3" method="post" th:action="@{/transport-orders/create}" th:object="${transportOrder}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/transport-orders/create}"
+          th:object="${transportOrder}" novalidate>
         <div class="col-md-6">
             <label class="form-label" for="clientOrders">Client Orders</label>
-            <select class="form-control" id="clientOrders" th:field="*{clientOrders}">
-                <option th:each="clientOrder : ${clientOrders}"
-                        th:text="${clientOrder.client.name}"
-                        th:value="${clientOrder.clientOrderId}">
-                </option>
+            <select class="form-control" id="clientOrders" th:field="*{clientOrders}" required>
+                <option value="" disabled selected>Select a client order</option>
+                <option th:each="clientOrder : ${clientOrders}" th:text="${clientOrder.client.name}"
+                        th:value="${clientOrder.clientOrderId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a client order.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="name">Transport Name</label>
             <input class="form-control" id="name" required th:field="*{name}" type="text">
+            <div class="invalid-feedback">Please enter a transport name.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="assignedDriver">Assigned Driver</label>
-            <select class="form-control" id="assignedDriver" th:field="*{assignedDriver.driverId}">
-                <option th:each="driver : ${drivers}"
-                        th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"
-                        th:value="${driver.driverId}">
-                </option>
+            <select class="form-control" id="assignedDriver" th:field="*{assignedDriver.driverId}" required>
+                <option value="" disabled selected>Select a driver</option>
+                <option th:each="driver : ${drivers}" th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"
+                        th:value="${driver.driverId}"></option>
             </select>
+            <div class="invalid-feedback">Please select an assigned driver.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="assignedVehicle">Assigned Vehicle</label>
-            <select class="form-control" id="assignedVehicle" th:field="*{assignedVehicle.vehicleId}">
+            <select class="form-control" id="assignedVehicle" th:field="*{assignedVehicle.vehicleId}" required>
+                <option value="" disabled selected>Select a vehicle</option>
                 <option th:each="vehicle : ${vehicles}"
                         th:text="${vehicle.make} + ' | ' + ${vehicle.model} + ' | ' + ${vehicle.registrationNumber}"
                         th:value="${vehicle.vehicleId}"></option>
             </select>
+            <div class="invalid-feedback">Please select an assigned vehicle.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="startLocation">Start Location</label>
-            <select class="form-control" id="startLocation" th:field="*{startLocation.locationId}">
+            <select class="form-control" id="startLocation" th:field="*{startLocation.locationId}" required>
+                <option value="" disabled selected>Select a start location</option>
                 <option th:each="location : ${locations}" th:text="${location.name}"
                         th:value="${location.locationId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a start location.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="endLocation">End Location</label>
-            <select class="form-control" id="endLocation" th:field="*{endLocation.locationId}">
+            <select class="form-control" id="endLocation" th:field="*{endLocation.locationId}" required>
+                <option value="" disabled selected>Select an end location</option>
                 <option th:each="location : ${locations}" th:text="${location.name}"
                         th:value="${location.locationId}"></option>
             </select>
+            <div class="invalid-feedback">Please select an end location.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="scheduledDeparture">Scheduled Departure</label>
-            <input class="form-control" id="scheduledDeparture" th:field="*{scheduledDeparture}" type="date">
+            <input class="form-control" id="scheduledDeparture" required th:field="*{scheduledDeparture}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a scheduled departure date.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="scheduledArrival">Scheduled Arrival</label>
-            <input class="form-control" id="scheduledArrival" th:field="*{scheduledArrival}" type="date">
-        </div>
-        <div class="col-md-6">
-            <label class="form-label" for="status">Status</label>
-            <select class="form-control" id="status" th:field="*{status}">
-                <option th:each="status : ${statuses}" th:text="${status}" th:value="${status}"></option>
-            </select>
+            <input class="form-control" id="scheduledArrival" required th:field="*{scheduledArrival}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a scheduled arrival date.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit">
                 <i class="fas fa-check"></i> Save
             </button>
-            <button class="btn btn-secondary"
-                    data-bs-target="#addTransportOrderForm"
-                    data-bs-toggle="collapse"
+            <button class="btn btn-secondary" data-bs-target="#addTransportOrderForm" data-bs-toggle="collapse"
                     type="button">
                 <i class="fas fa-times"></i> Cancel
             </button>
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const departureInput = document.getElementById("scheduledDeparture");
+        const arrivalInput = document.getElementById("scheduledArrival");
+        if (departureInput && arrivalInput) {
+            departureInput.addEventListener("change", function () {
+                arrivalInput.min = departureInput.value;
+            });
+        }
+    });
+</script>

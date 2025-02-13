@@ -6,36 +6,53 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/routes/update/{id}(id=${route.routeId})}" th:object="${route}">
+        <form method="post" th:action="@{/routes/update/{id}(id=${route.routeId})}" th:object="${route}" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label class="form-label" for="startLocation">Start Location</label>
-                <select class="form-control" id="startLocation" th:field="*{startLocation.locationId}">
+                <select class="form-control" id="startLocation" th:field="*{startLocation.locationId}" required>
+                    <option value="" disabled>Select a start location</option>
                     <option th:each="location : ${locations}"
                             th:selected="${location.locationId == route.startLocation.locationId}"
                             th:text="${location.name}"
                             th:value="${location.locationId}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select a start location.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="endLocation">End Location</label>
-                <select class="form-control" id="endLocation" th:field="*{endLocation.locationId}">
+                <select class="form-control" id="endLocation" th:field="*{endLocation.locationId}" required>
+                    <option value="" disabled>Select an end location</option>
                     <option th:each="location : ${locations}"
                             th:selected="${location.locationId == route.endLocation.locationId}"
                             th:text="${location.name}"
                             th:value="${location.locationId}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select an end location.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="distance">Distance (km)</label>
-                <input class="form-control" id="distance" step="0.01" th:field="*{distance}" type="number">
+                <input class="form-control" id="distance" step="0.01" th:field="*{distance}" type="number" required>
+                <div class="invalid-feedback">
+                    Please enter the distance in km.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="estimatedTime">Estimated Time (hours)</label>
-                <input class="form-control" id="estimatedTime" step="0.01" th:field="*{estimatedTime}" type="number">
+                <input class="form-control" id="estimatedTime" step="0.01" th:field="*{estimatedTime}" type="number" required>
+                <div class="invalid-feedback">
+                    Please enter the estimated time in hours.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="preferredRoute">Preferred Route</label>
-                <textarea class="form-control" id="preferredRoute" th:field="*{preferredRoute}"></textarea>
+                <textarea class="form-control" id="preferredRoute" th:field="*{preferredRoute}" required></textarea>
+                <div class="invalid-feedback">
+                    Please provide the preferred route.
+                </div>
             </div>
             <div class="modal-footer mt-3">
                 <button class="btn btn-success" type="submit">

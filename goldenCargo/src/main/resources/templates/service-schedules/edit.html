@@ -1,55 +1,50 @@
 <div th:fragment="editServiceScheduleModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Service Schedule
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Service Schedule</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/service-schedules/update/{id}(id=${serviceSchedule.scheduleId})}"
-              th:object="${serviceSchedule}">
+        <form class="row g-3 needs-validation" method="post"
+              th:action="@{/service-schedules/update/{id}(id=${serviceSchedule.scheduleId})}"
+              th:object="${serviceSchedule}" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-car"></i> Vehicle
-                    </label>
-                    <select class="form-control" id="vehicle" th:field="*{vehicle.vehicleId}">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-car"></i> Vehicle</label>
+                    <select class="form-select" id="vehicle" th:field="*{vehicle.vehicleId}" required>
+                        <option value="" disabled selected>Select a vehicle</option>
                         <option th:each="vehicle : ${vehicles}"
                                 th:selected="${vehicle.vehicleId == serviceSchedule.vehicle.vehicleId}"
-                                th:text="${vehicle.registrationNumber}"
-                                th:value="${vehicle.vehicleId}"></option>
+                                th:text="${vehicle.registrationNumber}" th:value="${vehicle.vehicleId}"></option>
                     </select>
+                    <div class="invalid-feedback">Please select a vehicle.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-calendar-alt"></i> Scheduled Date
-                    </label>
-                    <input class="form-control" id="scheduledDate" required th:field="*{scheduledDate}" type="date">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-calendar-alt"></i> Scheduled
+                        Date</label>
+                    <input class="form-control" id="scheduledDate" required th:field="*{scheduledDate}" type="date"
+                           th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                    <div class="invalid-feedback">Please select a scheduled date (today or later).</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-tools"></i> Service Type
-                    </label>
-                    <input class="form-control" id="serviceType" required th:field="*{serviceType}" type="text">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-tools"></i> Service Type</label>
+                    <input class="form-control" id="serviceType" required th:field="*{serviceType}" type="text"
+                           placeholder="Enter service type">
+                    <div class="invalid-feedback">Please enter a service type.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-info-circle"></i> Status
-                    </label>
-                    <select class="form-control" id="status" th:field="*{status}">
-                        <option th:each="status : ${statuses}"
-                                th:selected="${status == serviceSchedule.status}"
-                                th:text="${status}"
-                                th:value="${status}"></option>
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-info-circle"></i> Status</label>
+                    <select class="form-select" id="status" required th:field="*{status}">
+                        <option value="" disabled selected>Select status</option>
+                        <option th:each="status : ${statuses}" th:selected="${status == serviceSchedule.status}"
+                                th:text="${status}" th:value="${status}"></option>
                     </select>
+                    <div class="invalid-feedback">Please select a status.</div>
                 </div>
             </div>
             <div class="modal-footer mt-4 bg-light">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
                 </button>
             </div>
         </form>
