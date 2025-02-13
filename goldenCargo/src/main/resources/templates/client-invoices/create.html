@@ -1,58 +1,70 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-file-invoice-dollar"></i> Create Client Invoice</h4>
-    <form class="row g-3" method="post" th:action="@{/client-invoices/create}" th:object="${clientInvoice}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/client-invoices/create}"
+          th:object="${clientInvoice}" novalidate>
         <div class="col-md-6">
             <label class="form-label fw-bold" for="client">
                 <i class="fas fa-user"></i> Client
             </label>
-            <select class="form-control select2" id="client" th:field="*{client.clientId}">
+            <select class="form-select select2" id="client" th:field="*{client.clientId}" required>
+                <option value="" disabled selected>Select a client</option>
                 <option th:each="client : ${clients}" th:text="${client.name}" th:value="${client.clientId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a client.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label fw-bold" for="clientOrder">
                 <i class="fas fa-list"></i> Client Order
             </label>
-            <select class="form-control select2" id="clientOrder" th:field="*{clientOrder.clientOrderId}">
+            <select class="form-select select2" id="clientOrder" th:field="*{clientOrder.clientOrderId}" required>
+                <option value="" disabled selected>Select a client order</option>
                 <option th:each="order : ${clientOrders}" th:text="${order.clientOrderId}"
-                        th:value="${order.clientOrderId}">
-                </option>
+                        th:value="${order.clientOrderId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a client order.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label fw-bold" for="invoiceNumber">
                 <i class="fas fa-hashtag"></i> Invoice Number
             </label>
-            <input class="form-control" id="invoiceNumber" placeholder="Enter invoice number" required th:field="*{invoiceNumber}"
-                   type="text">
+            <input class="form-control" id="invoiceNumber" placeholder="Enter invoice number" required
+                   th:field="*{invoiceNumber}" type="text">
+            <div class="invalid-feedback">Please enter an invoice number.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label fw-bold" for="dateIssued">
                 <i class="fas fa-calendar-alt"></i> Date Issued
             </label>
-            <input class="form-control" id="dateIssued" required th:field="*{dateIssued}" type="date">
+            <input class="form-control" id="dateIssued" required th:field="*{dateIssued}" type="date"
+                   th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Date Issued cannot be in the future.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label fw-bold" for="dueDate">
                 <i class="fas fa-calendar-check"></i> Due Date
             </label>
-            <input class="form-control" id="dueDate" required th:field="*{dueDate}" type="date">
+            <input class="form-control" id="dueDate" required th:field="*{dueDate}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Due Date cannot be in the past.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label fw-bold" for="totalAmount">
                 <i class="fas fa-dollar-sign"></i> Total Amount
             </label>
-            <input class="form-control" id="totalAmount" placeholder="Enter total amount" required step="0.01" th:field="*{totalAmount}"
-                   type="number">
+            <input class="form-control" id="totalAmount" placeholder="Enter total amount" required step="0.01" min="0"
+                   th:field="*{totalAmount}" type="number">
+            <div class="invalid-feedback">Please enter a total amount.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label fw-bold" for="paymentStatus">
                 <i class="fas fa-money-bill-wave"></i> Payment Status
             </label>
-            <select class="form-control" id="paymentStatus" th:field="*{paymentStatus}">
+            <select class="form-select" id="paymentStatus" th:field="*{paymentStatus}" required>
+                <option value="" disabled selected>Select payment status</option>
                 <option th:each="status : ${T(com.goldencargo.model.data.PaymentStatus).values()}" th:text="${status}"
                         th:value="${status}"></option>
             </select>
+            <div class="invalid-feedback">Please select a payment status.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit">
@@ -64,3 +76,14 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var dateIssuedInput = document.getElementById("dateIssued");
+        var dueDateInput = document.getElementById("dueDate");
+        if (dateIssuedInput && dueDateInput) {
+            dateIssuedInput.addEventListener("change", function () {
+                dueDateInput.min = dateIssuedInput.value;
+            });
+        }
+    });
+</script>

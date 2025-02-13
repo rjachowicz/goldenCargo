@@ -1,50 +1,53 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-user"></i> Add New Driver</h4>
-    <form class="row g-3" method="post" th:action="@{/drivers/create}" th:object="${driver}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/drivers/create}" th:object="${driver}"
+          novalidate>
         <div class="col-md-6">
             <label class="form-label" for="user">User</label>
-            <select class="form-control select2" id="user" th:field="*{user.userId}">
+            <select class="form-control select2" id="user" th:field="*{user.userId}" required>
+                <option value="" disabled selected>Select a user</option>
                 <option th:each="user : ${users}" th:text="${user.firstName + ' ' + user.lastName}"
-                        th:value="${user.userId}">
-                </option>
+                        th:value="${user.userId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a user.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="licenseNumber">License Number</label>
-            <input class="form-control" id="licenseNumber" placeholder="Enter license number" required th:field="*{licenseNumber}"
-                   type="text">
+            <input class="form-control" id="licenseNumber" placeholder="Enter license number" required
+                   th:field="*{licenseNumber}" type="text">
+            <div class="invalid-feedback">Please enter a license number.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="licenseCategory">License Category</label>
-            <input class="form-control" id="licenseCategory" placeholder="Enter license category" th:field="*{licenseCategory}"
-                   type="text">
+            <input class="form-control" id="licenseCategory" placeholder="Enter license category" required
+                   th:field="*{licenseCategory}" type="text">
+            <div class="invalid-feedback">Please enter a license category.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="hireDate">Hire Date</label>
-            <input class="form-control" id="hireDate" required th:field="*{hireDate}" type="date">
+            <input class="form-control" id="hireDate" required th:field="*{hireDate}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a hire date.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="medicalCertificateExpiry">Medical Certificate Expiry</label>
             <input class="form-control" id="medicalCertificateExpiry" required th:field="*{medicalCertificateExpiry}"
-                   type="date">
+                   type="date" th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a medical certificate expiry date.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="driverStatus">Driver Status</label>
-            <select class="form-control" id="driverStatus" th:field="*{driverStatus}">
+            <select class="form-control" id="driverStatus" th:field="*{driverStatus}" required>
+                <option value="" disabled selected>Select status</option>
                 <option th:each="status : ${T(com.goldencargo.model.entities.Driver.DriverStatus).values()}"
-                        th:text="${status}" th:value="${status}">
-                </option>
+                        th:text="${status}" th:value="${status}"></option>
             </select>
+            <div class="invalid-feedback">Please select a driver status.</div>
         </div>
         <div class="col-md-12 d-flex">
-            <button class="btn btn-success me-2" type="submit">
-                <i class="fas fa-check"></i> Save
-            </button>
-            <button class="btn btn-secondary"
-                    data-bs-target="#addDriverForm"
-                    data-bs-toggle="collapse"
-                    type="button">
-                <i class="fas fa-times"></i> Cancel
+            <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
+            <button class="btn btn-secondary" data-bs-target="#addDriverForm" data-bs-toggle="collapse" type="button"><i
+                    class="fas fa-times"></i> Cancel
             </button>
         </div>
     </form>

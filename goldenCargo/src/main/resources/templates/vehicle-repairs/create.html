@@ -1,36 +1,47 @@
 <div class="border p-4">
-    <h4 class="h3 mb-3"><i class="fas fa-tools"></i> Add New Vehicle Repair</h4>
-    <form class="row g-3" method="post" th:action="@{/vehicle-repairs/create}" th:object="${vehicleRepair}">
+    <h4 class="h3 mb-3"><i class="fas fa-truck-loading"></i> Add New Vehicle Repair</h4>
+    <form class="row g-3 needs-validation" method="post" th:action="@{/vehicle-repairs/create}"
+          th:object="${vehicleRepair}" novalidate>
         <div class="col-md-6">
             <label class="form-label" for="vehicle">Vehicle</label>
-            <select class="form-select" id="vehicle" th:field="*{vehicle.vehicleId}">
+            <select class="form-select" id="vehicle" th:field="*{vehicle.vehicleId}" required>
+                <option value="" disabled selected>Select a vehicle</option>
                 <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}"
                         th:value="${vehicle.vehicleId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a vehicle.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="serviceDate">Service Date</label>
-            <input class="form-control" id="serviceDate" th:field="*{serviceDate}" type="date">
+            <input class="form-control" id="serviceDate" required th:field="*{serviceDate}" type="date"
+                   th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a service date (not in the future).</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="serviceType">Service Type</label>
-            <input class="form-control" id="serviceType" th:field="*{serviceType}" type="text">
+            <input class="form-control" id="serviceType" required th:field="*{serviceType}" type="text">
+            <div class="invalid-feedback">Please enter a service type.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="cost">Cost</label>
-            <input class="form-control" id="cost" step="0.01" th:field="*{cost}" type="number">
+            <input class="form-control" id="cost" required step="0.01" th:field="*{cost}" type="number" min="0">
+            <div class="invalid-feedback">Please enter the cost.</div>
         </div>
         <div class="col-md-12">
             <label class="form-label" for="description">Description</label>
-            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+            <textarea class="form-control" id="description" required th:field="*{description}"></textarea>
+            <div class="invalid-feedback">Please enter a description.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="serviceCenter">Service Center</label>
-            <input class="form-control" id="serviceCenter" th:field="*{serviceCenter}" type="text">
+            <input class="form-control" id="serviceCenter" required th:field="*{serviceCenter}" type="text">
+            <div class="invalid-feedback">Please enter the service center.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="nextServiceDue">Next Service Due</label>
-            <input class="form-control" id="nextServiceDue" th:field="*{nextServiceDue}" type="date">
+            <input class="form-control" id="nextServiceDue" required th:field="*{nextServiceDue}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a next service due date (not in the past).</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
@@ -40,3 +51,14 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var serviceDateInput = document.getElementById("serviceDate");
+        var nextServiceDueInput = document.getElementById("nextServiceDue");
+        if (serviceDateInput && nextServiceDueInput) {
+            serviceDateInput.addEventListener("change", function () {
+                nextServiceDueInput.min = serviceDateInput.value;
+            });
+        }
+    });
+</script>

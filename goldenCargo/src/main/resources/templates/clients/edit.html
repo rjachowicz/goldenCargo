@@ -1,62 +1,55 @@
 <div th:fragment="editClientModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Client
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Client</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/clients/update/{id}(id=${client.clientId})}" th:object="${client}">
+        <form class="row g-3 needs-validation" method="post" th:action="@{/clients/update/{id}(id=${client.clientId})}"
+              th:object="${client}" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Name</label>
-                    <label>
-                        <input class="form-control" required th:field="*{name}" type="text">
-                    </label>
+                    <input class="form-control" required th:field="*{name}" type="text">
+                    <div class="invalid-feedback">Please enter the client's name.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Address</label>
-                    <label>
-                        <input class="form-control" th:field="*{address}" type="text">
-                    </label>
+                    <input class="form-control" required th:field="*{address}" type="text">
+                    <div class="invalid-feedback">Please enter the address.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Contact Person</label>
-                    <label>
-                        <input class="form-control" th:field="*{contactPerson}" type="text">
-                    </label>
+                    <input class="form-control" required th:field="*{contactPerson}" type="text">
+                    <div class="invalid-feedback">Please enter the contact person.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Phone</label>
-                    <label>
-                        <input class="form-control" th:field="*{phone}" type="text">
-                    </label>
+                    <input class="form-control" required th:field="*{phone}" type="text">
+                    <div class="invalid-feedback">Please enter a phone number.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Email</label>
-                    <label>
-                        <input class="form-control" th:field="*{email}" type="email">
-                    </label>
+                    <input class="form-control" required th:field="*{email}" type="email">
+                    <div class="invalid-feedback">Please enter a valid email address.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">NIP</label>
-                    <label>
-                        <input class="form-control" th:field="*{nip}" type="text">
-                    </label>
+                    <input class="form-control" required th:field="*{nip}" type="text">
+                    <div class="invalid-feedback">Please enter the NIP.</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="invoiceType">Invoice Type</label>
-                    <select class="form-control" id="invoiceType" required th:field="*{invoiceType}">
+                    <select class="form-select" id="invoiceType" required th:field="*{invoiceType}">
+                        <option value="" disabled selected>Select invoice type</option>
                         <option th:each="type : ${invoiceTypes}" th:text="${type}" th:value="${type}"></option>
                     </select>
+                    <div class="invalid-feedback">Please select an invoice type.</div>
                 </div>
             </div>
             <div class="modal-footer mt-4 bg-light">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
                 </button>
             </div>
         </form>

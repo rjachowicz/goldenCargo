@@ -1,43 +1,62 @@
 <div th:fragment="editGoodsModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Goods
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Goods</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/goods/update/{id}(id=${goods.goodsId})}" th:object="${goods}">
+        <form class="needs-validation" novalidate method="post" th:action="@{/goods/update/{id}(id=${goods.goodsId})}"
+              th:object="${goods}">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark" for="name">
                         <i class="fas fa-box"></i> Name
                     </label>
-                    <input class="form-control" id="name" placeholder="Enter name" required th:field="*{name}" type="text">
+                    <input class="form-control" id="name" placeholder="Enter name" required th:field="*{name}"
+                           type="text">
+                    <div class="invalid-feedback">
+                        Please provide a name.
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark" for="description">
                         <i class="fas fa-file-alt"></i> Description
                     </label>
-                    <textarea class="form-control" id="description" placeholder="Enter description" th:field="*{description}"></textarea>
+                    <textarea class="form-control" id="description" placeholder="Enter description" required
+                              th:field="*{description}"></textarea>
+                    <div class="invalid-feedback">
+                        Please provide a description.
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark" for="weight">
                         <i class="fas fa-weight"></i> Weight
                     </label>
-                    <input class="form-control" id="weight" placeholder="Enter weight" required th:field="*{weight}" type="number">
+                    <input class="form-control" id="weight" placeholder="Enter weight" required th:field="*{weight}"
+                           type="number" min="0">
+                    <div class="invalid-feedback">
+                        Please provide a weight.
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold text-dark" for="dimensions">
                         <i class="fas fa-ruler-combined"></i> Dimensions
                     </label>
-                    <input class="form-control" id="dimensions" placeholder="Enter dimensions" th:field="*{dimensions}" type="text">
+                    <input class="form-control" id="dimensions" placeholder="Enter dimensions" required
+                           th:field="*{dimensions}" type="text">
+                    <div class="invalid-feedback">
+                        Please provide dimensions.
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-dark" for="specialHandlingInstructions">
                         <i class="fas fa-exclamation-circle"></i> Special Handling Instructions
                     </label>
-                    <textarea class="form-control" id="specialHandlingInstructions" placeholder="Enter special handling instructions" required
+                    <textarea class="form-control" id="specialHandlingInstructions"
+                              placeholder="Enter special handling instructions" required
                               th:field="*{specialHandlingInstructions}"></textarea>
+                    <div class="invalid-feedback">
+                        Please provide special handling instructions.
+                    </div>
                 </div>
             </div>
             <div class="modal-footer mt-4 bg-light">

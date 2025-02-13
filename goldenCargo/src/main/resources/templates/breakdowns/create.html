@@ -1,34 +1,70 @@
 <div th:fragment="createBreakdownForm">
     <div class="border p-4 bg-light rounded shadow-sm">
-        <h4 class="h5 mb-3"><i class="fas fa-tools"></i> Create Breakdown</h4>
-        <form method="post" th:action="@{/breakdowns/create}" th:object="${breakdown}">
+        <h4 class="h3 mb-3"><i class="fas fa-tools"></i> Create Breakdown</h4>
+        <form class="row g-3 needs-validation" method="post" th:action="@{/breakdowns/create}" th:object="${breakdown}"
+              novalidate>
             <div class="mb-3">
                 <label class="form-label" for="incident">Incident</label>
-                <select class="form-control" id="incident" required th:field="*{incident.incidentId}">
+                <select class="form-select select2" id="incident" required th:field="*{incident.incidentId}">
+                    <option value="" disabled selected>Select an incident</option>
                     <option th:each="incident : ${incidents}" th:text="${incident.incidentType}"
                             th:value="${incident.incidentId}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select an incident.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" id="description" placeholder="Enter breakdown description" required
                           th:field="*{description}"></textarea>
+                <div class="invalid-feedback">
+                    Please provide a description.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="repairCost">Repair Cost</label>
-                <input class="form-control" id="repairCost" placeholder="Enter repair cost" required step="0.01"
+                <input class="form-control" id="repairCost" placeholder="Enter repair cost" required step="0.01" min="0"
                        th:field="*{repairCost}" type="number">
+                <div class="invalid-feedback">
+                    Please enter a valid repair cost.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="repairDate">Repair Date</label>
                 <input class="form-control" id="repairDate" placeholder="Select repair date" required
-                       th:field="*{repairDate}" type="date">
+                       th:field="*{repairDate}" type="date"
+                       th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">
+                    Please select a valid repair date (cannot be in the past).
+                </div>
             </div>
-            <button class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
-            <button class="btn btn-secondary" data-bs-target="#addBreakdownForm" data-bs-toggle="collapse"
-                    type="button">
-                <i class="fas fa-times"></i> Cancel
-            </button>
+            <div class="col-12 d-flex">
+                <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
+                <button class="btn btn-secondary" data-bs-target="#addBreakdownForm" data-bs-toggle="collapse"
+                        type="button">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        $('#incident').select2({
+            placeholder: 'Select an incident',
+            allowClear: true
+        });
+    });
+</script>

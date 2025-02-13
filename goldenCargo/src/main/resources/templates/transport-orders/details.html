@@ -1,84 +1,64 @@
 <div th:fragment="detailsTransportOrderModal">
     <div class="modal-header bg-info text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-info-circle"></i> Transport Order Details
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-info-circle"></i> Transport Order Details</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
         <form>
             <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-id-badge"></i> ID
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-id-badge"></i> ID</label>
                     <p class="form-control-plaintext" th:text="${transportOrder.transportOrderId}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-user"></i> Client Order
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-user"></i> Client Order</label>
                     <p class="form-control-plaintext"
-                       th:text="${transportOrder.clientOrder?.client?.name ?: 'N/A'}"></p>
+                       th:text="${#lists.isEmpty(transportOrder.clientOrders) ? 'N/A' : transportOrder.clientOrders[0].client.name}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-tag"></i> Transport Name
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-tag"></i> Transport Name</label>
                     <p class="form-control-plaintext" th:text="${transportOrder.name}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-user-tie"></i> Assigned Driver
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-user-tie"></i> Assigned Driver</label>
                     <p class="form-control-plaintext"
-                       th:text="${transportOrder.assignedDriver?.user?.firstName ?: 'N/A'} + ' ' + ${transportOrder.assignedDriver?.user?.lastName ?: 'N/A'}"></p>
+                       th:text="${transportOrder.assignedDriver?.user?.firstName + ' ' + transportOrder.assignedDriver?.user?.lastName}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-car"></i> Assigned Vehicle
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-car"></i> Assigned Vehicle</label>
                     <p class="form-control-plaintext"
                        th:text="${transportOrder.assignedVehicle.registrationNumber}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-map-marker-alt"></i> Start Location
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-map-marker-alt"></i> Start
+                        Location</label>
                     <p class="form-control-plaintext" th:text="${transportOrder.startLocation.name}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-map-marker-alt"></i> End Location
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-map-marker-alt"></i> End
+                        Location</label>
                     <p class="form-control-plaintext" th:text="${transportOrder.endLocation.name}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-calendar-alt"></i> Scheduled Departure
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-calendar-alt"></i> Scheduled Departure</label>
                     <p class="form-control-plaintext"
                        th:text="${#dates.format(transportOrder.scheduledDeparture, 'yyyy-MM-dd')}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-calendar-alt"></i> Scheduled Arrival
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-calendar-alt"></i> Scheduled
+                        Arrival</label>
                     <p class="form-control-plaintext"
                        th:text="${#dates.format(transportOrder.scheduledArrival, 'yyyy-MM-dd')}"></p>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-info-circle"></i> Status
-                    </label>
+                <div class="col-md-6 text-center align-middle">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-info-circle"></i> Status</label>
                     <p class="form-control-plaintext" th:text="${transportOrder.status}"></p>
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer bg-light">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-            <i class="fas fa-times"></i> Close
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i> Close
         </button>
     </div>
 </div>

@@ -1,41 +1,64 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-tools"></i> Add New Technical Inspection</h4>
-    <form class="row g-3" method="post" th:action="@{/technical-inspections/create}" th:object="${technicalInspection}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/technical-inspections/create}"
+          th:object="${technicalInspection}" novalidate>
         <div class="col-md-6">
             <label class="form-label" for="vehicle">Vehicle</label>
-            <select class="form-select" id="vehicle" th:field="*{vehicle.vehicleId}">
+            <select class="form-select" id="vehicle" th:field="*{vehicle.vehicleId}" required>
+                <option value="" disabled selected>Select a vehicle</option>
                 <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}"
                         th:value="${vehicle.vehicleId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a vehicle.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="inspectionDate">Inspection Date</label>
-            <input class="form-control" id="inspectionDate" required th:field="*{inspectionDate}" type="date">
+            <input class="form-control" id="inspectionDate" required th:field="*{inspectionDate}" type="date"
+                   th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a valid inspection date (not in the future).</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="result">Result</label>
-            <select class="form-select" id="result" th:field="*{result}">
+            <select class="form-select" id="result" required th:field="*{result}">
+                <option value="" disabled selected>Select result</option>
                 <option th:each="result : ${results}" th:text="${result}" th:value="${result}"></option>
             </select>
+            <div class="invalid-feedback">Please select a result.</div>
         </div>
         <div class="col-md-12">
             <label class="form-label" for="comments">Comments</label>
-            <textarea class="form-control" id="comments" th:field="*{comments}"></textarea>
+            <textarea class="form-control" id="comments" required th:field="*{comments}"
+                      placeholder="Enter comments"></textarea>
+            <div class="invalid-feedback">Please enter comments.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="nextInspectionDate">Next Inspection Date</label>
-            <input class="form-control" id="nextInspectionDate" th:field="*{nextInspectionDate}" type="date">
+            <input class="form-control" id="nextInspectionDate" required th:field="*{nextInspectionDate}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select a valid next inspection date (not in the past).</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="inspectorName">Inspector Name</label>
-            <input class="form-control" id="inspectorName" th:field="*{inspectorName}" type="text">
+            <input class="form-control" id="inspectorName" required th:field="*{inspectorName}" type="text"
+                   placeholder="Enter inspector name">
+            <div class="invalid-feedback">Please enter the inspector's name.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
             <button class="btn btn-secondary" data-bs-target="#addInspectionForm" data-bs-toggle="collapse"
-                    type="button">
-                <i class="fas fa-times"></i> Cancel
+                    type="button"><i class="fas fa-times"></i> Cancel
             </button>
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var inspectionDateInput = document.getElementById("inspectionDate");
+        var nextInspectionDateInput = document.getElementById("nextInspectionDate");
+        if (inspectionDateInput && nextInspectionDateInput) {
+            inspectionDateInput.addEventListener("change", function () {
+                nextInspectionDateInput.min = inspectionDateInput.value;
+            });
+        }
+    });
+</script>

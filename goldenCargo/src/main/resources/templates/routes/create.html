@@ -1,32 +1,51 @@
 <div th:fragment="createRouteForm">
     <div class="border p-4 bg-light rounded shadow-sm">
         <h4 class="h5 mb-3"><i class="fas fa-map-marker-alt"></i> Add New Route</h4>
-        <form method="post" th:action="@{/routes/create}" th:object="${route}">
+        <form method="post" th:action="@{/routes/create}" th:object="${route}" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label class="form-label" for="startLocation">Start Location</label>
-                <select class="form-control" id="startLocation" th:field="*{startLocation.locationId}">
-                    <option th:each="location : ${locations}" th:text="${location.name}"
+                <select class="form-control" id="startLocation" th:field="*{startLocation.locationId}" required>
+                    <option value="" disabled selected>Select a start location</option>
+                    <option th:each="location : ${locations}"
+                            th:text="${location.name}"
                             th:value="${location.locationId}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select a start location.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="endLocation">End Location</label>
-                <select class="form-control" id="endLocation" th:field="*{endLocation.locationId}">
-                    <option th:each="location : ${locations}" th:text="${location.name}"
+                <select class="form-control" id="endLocation" th:field="*{endLocation.locationId}" required>
+                    <option value="" disabled selected>Select an end location</option>
+                    <option th:each="location : ${locations}"
+                            th:text="${location.name}"
                             th:value="${location.locationId}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select an end location.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="distance">Distance (km)</label>
-                <input class="form-control" id="distance" step="0.01" th:field="*{distance}" type="number">
+                <input class="form-control" id="distance" step="0.01" th:field="*{distance}" type="number" required>
+                <div class="invalid-feedback">
+                    Please enter the distance in km.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="estimatedTime">Estimated Time (hours)</label>
-                <input class="form-control" id="estimatedTime" step="0.01" th:field="*{estimatedTime}" type="number">
+                <input class="form-control" id="estimatedTime" step="0.01" th:field="*{estimatedTime}" type="number" required>
+                <div class="invalid-feedback">
+                    Please enter the estimated time in hours.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="preferredRoute">Preferred Route</label>
-                <textarea class="form-control" id="preferredRoute" th:field="*{preferredRoute}"></textarea>
+                <textarea class="form-control" id="preferredRoute" th:field="*{preferredRoute}" required></textarea>
+                <div class="invalid-feedback">
+                    Please provide the preferred route.
+                </div>
             </div>
             <button class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
             <button class="btn btn-secondary" data-bs-target="#addRouteForm" data-bs-toggle="collapse" type="button">

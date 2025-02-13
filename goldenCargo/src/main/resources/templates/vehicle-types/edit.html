@@ -1,56 +1,47 @@
 <div th:fragment="editVehicleTypeModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Vehicle Type
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Vehicle Type</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
         <form method="post" th:action="@{/vehicle-types/update/{id}(id=${vehicleType.vehicleTypeId})}"
-              th:object="${vehicleType}">
+              th:object="${vehicleType}" class="needs-validation" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-tag"></i> Name
-                    </label>
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-tag"></i> Name</label>
                     <input class="form-control" id="name" placeholder="Enter name" required th:field="*{name}"
                            type="text">
+                    <div class="invalid-feedback">Please enter a name.</div>
                 </div>
                 <div class="col-md-12">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-info-circle"></i> Description
-                    </label>
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-info-circle"></i> Description</label>
                     <textarea class="form-control" id="description" placeholder="Enter description"
                               th:field="*{description}"></textarea>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-weight-hanging"></i> Maximum Load
-                    </label>
-                    <input class="form-control" id="maximumLoad" placeholder="Enter maximum load"
-                           th:field="*{maximumLoad}" type="number">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-weight-hanging"></i> Maximum
+                        Load</label>
+                    <input class="form-control" id="maximumLoad" placeholder="Enter maximum load" required
+                           th:field="*{maximumLoad}" type="number" min="0" step="0.01">
+                    <div class="invalid-feedback">Please enter a maximum load.</div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-ruler"></i> Dimensions
-                    </label>
-                    <input class="form-control" id="dimensions" placeholder="Enter dimensions" th:field="*{dimensions}"
-                           type="text">
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-ruler"></i> Dimensions</label>
+                    <input class="form-control" id="dimensions" placeholder="Enter dimensions" required
+                           th:field="*{dimensions}" type="text">
+                    <div class="invalid-feedback">Please enter dimensions.</div>
                 </div>
                 <div class="col-md-12">
-                    <label class="form-label fw-bold text-dark">
-                        <i class="fas fa-tools"></i> Special Features
-                    </label>
-                    <textarea class="form-control" id="specialFeatures" placeholder="Enter special features"
+                    <label class="form-label fw-bold text-dark"><i class="fas fa-tools"></i> Special Features</label>
+                    <textarea class="form-control" id="specialFeatures" placeholder="Enter special features" required
                               th:field="*{specialFeatures}"></textarea>
+                    <div class="invalid-feedback">Please enter special features.</div>
                 </div>
             </div>
             <div class="modal-footer mt-4 bg-light">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
                 </button>
             </div>
         </form>

@@ -1,8 +1,6 @@
 <div th:fragment="detailsClientOrderModal">
     <div class="modal-header bg-info text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-info-circle"></i> Client Order Details
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-info-circle"></i> Client Order Details</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
@@ -40,7 +38,7 @@
                 <table class="table table-bordered">
                     <thead class="table-light">
                     <tr>
-                        <th>Client Order</th>
+                        <th>Transport Order ID</th>
                         <th>Assigned Driver</th>
                         <th>Assigned Vehicle</th>
                         <th>Start Location</th>
@@ -51,7 +49,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="order : ${clientOrder.transportOrders}">
-                        <td th:text="${order.clientOrder.clientOrderId}"></td>
+                        <td th:text="${order.transportOrderId}"></td>
                         <td th:text="${order.assignedDriver.driverId}"></td>
                         <td th:text="${order.assignedVehicle.vehicleId}"></td>
                         <td th:text="${order.startLocation.name}"></td>
@@ -111,8 +109,7 @@
         </form>
     </div>
     <div class="modal-footer bg-light">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-            <i class="fas fa-times"></i> Close
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i> Close
         </button>
     </div>
 </div>

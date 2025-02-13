@@ -1,42 +1,66 @@
 <div th:fragment="editBreakdownModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-tools"></i> Edit Breakdown
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-tools"></i> Edit Breakdown</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{'/breakdowns/update/' + ${breakdown.breakdownId}}" th:object="${breakdown}">
+        <form class="needs-validation row g-3" novalidate method="post" th:action="@{'/breakdowns/update/' + ${breakdown.breakdownId}}" th:object="${breakdown}">
             <input th:field="*{breakdownId}" type="hidden">
+
             <div class="mb-3">
                 <label class="form-label fw-bold" for="incident">Incident</label>
-                <select class="form-select" id="incident" th:field="*{incident.incidentId}">
+                <select class="form-select select2" id="incident" required th:field="*{incident.incidentId}">
+                    <option value="" disabled selected>Select an incident</option>
                     <option th:each="incident : ${incidents}"
-                            th:selected="${incident.incidentId == breakdown.incident.incidentId}"
                             th:text="${incident.incidentType}"
-                            th:value="${incident.incidentId}"></option>
+                            th:value="${incident.incidentId}"
+                            th:selected="${incident.incidentId == breakdown.incident.incidentId}">
+                    </option>
                 </select>
+                <div class="invalid-feedback">Please select an incident.</div>
             </div>
+
             <div class="mb-3">
                 <label class="form-label fw-bold" for="description">Description</label>
-                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                <textarea class="form-control" id="description" placeholder="Enter description" required th:field="*{description}"></textarea>
+                <div class="invalid-feedback">Please provide a description.</div>
             </div>
+
             <div class="mb-3">
                 <label class="form-label fw-bold" for="repairCost">Repair Cost</label>
-                <input class="form-control" id="repairCost" required step="0.01" th:field="*{repairCost}" type="number">
+                <input class="form-control" id="repairCost" placeholder="Enter repair cost" required step="0.01" min="0" th:field="*{repairCost}" type="number">
+                <div class="invalid-feedback">Please enter a valid repair cost.</div>
             </div>
+
             <div class="mb-3">
                 <label class="form-label fw-bold" for="repairDate">Repair Date</label>
-                <input class="form-control" id="repairDate" required th:field="*{repairDate}" type="date">
+                <input class="form-control" id="repairDate" placeholder="Select repair date" required th:field="*{repairDate}" type="date">
+                <div class="invalid-feedback">Please select a repair date.</div>
             </div>
+
             <div class="modal-footer mt-3">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
+                <button class="btn btn-success btn-sm" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i> Cancel</button>
             </div>
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        $('#incident').select2({
+            placeholder: 'Select an incident',
+            allowClear: true
+        });
+    });
+</script>

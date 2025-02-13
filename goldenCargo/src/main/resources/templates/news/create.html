@@ -1,28 +1,45 @@
 <div th:fragment="createNewsModal">
     <div class="border p-4">
         <h4 class="h3 mb-3"><i class="fas fa-newspaper"></i> Add New News</h4>
-        <form class="row g-3" method="post" th:action="@{/news/create}" th:object="${news}">
+        <form class="row g-3 needs-validation" method="post" novalidate th:action="@{/news/create}" th:object="${news}">
             <div class="col-md-6">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" id="title" required th:field="*{title}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a title.
+                </div>
             </div>
             <div class="col-md-12">
                 <label class="form-label" for="content">Content</label>
                 <textarea class="form-control" id="content" required rows="5" th:field="*{content}"></textarea>
+                <div class="invalid-feedback">
+                    Please provide the content.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="datePosted">Date Posted</label>
-                <input class="form-control" id="datePosted" required th:field="*{datePosted}" type="date">
+                <input class="form-control" id="datePosted" required th:field="*{datePosted}" type="date"
+                       th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">
+                    Please select a valid date (today or later).
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="postedBy">Posted By</label>
-                <select class="form-control select2" id="postedBy" th:field="*{postedBy.userId}">
+                <select class="form-control select2" id="postedBy" required th:field="*{postedBy.userId}">
+                    <option value="" disabled selected>Select user</option>
                     <option th:each="user : ${users}" th:text="${user.username}" th:value="${user.userId}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select a user.
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="graphic">Graphic URL</label>
                 <input class="form-control" id="graphic" th:field="*{graphic}" type="text">
+                <div class="invalid-feedback">
+                    Please provide a valid URL if applicable.
+                </div>
             </div>
             <div class="col-md-12 d-flex">
                 <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>

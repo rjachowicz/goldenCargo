@@ -1,50 +1,79 @@
 <div th:fragment="editShippingDocumentModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Shipping Document
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Shipping Document</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form enctype="multipart/form-data" method="post"
+        <form class="needs-validation" novalidate enctype="multipart/form-data" method="post"
               th:action="@{'/shipping-documents/update/' + ${shippingDocument.documentId}}"
               th:object="${shippingDocument}">
+            <input th:field="*{documentId}" type="hidden">
             <div class="mb-3">
-                <label class="form-label fw-bold" for="transport">Transport</label>
-                <select class="form-select" id="transport" th:field="*{transport.transportId}">
+                <label class="form-label fw-bold text-dark" for="transport">Transport</label>
+                <select class="form-select select2" id="transport" th:field="*{transport.transportId}" required>
+                    <option value="" disabled selected>Select a transport</option>
                     <option th:each="transport : ${transports}"
                             th:selected="${transport.transportId == shippingDocument.transport.transportId}"
                             th:text="${transport.transportOrder.name}"
-                            th:value="${transport.transportId}"></option>
+                            th:value="${transport.transportId}">
+                    </option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select a transport.
+                </div>
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold" for="documentType">Document Type</label>
+                <label class="form-label fw-bold text-dark" for="documentType">Document Type</label>
                 <input class="form-control" id="documentType" placeholder="Enter document type" required
                        th:field="*{documentType}" type="text">
+                <div class="invalid-feedback">
+                    Please enter a document type.
+                </div>
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold" for="documentNumber">Document Number</label>
-                <input class="form-control" id="documentNumber" placeholder="Enter document number"
+                <label class="form-label fw-bold text-dark" for="documentNumber">Document Number</label>
+                <input class="form-control" id="documentNumber" placeholder="Enter document number" required
                        th:field="*{documentNumber}" type="text">
+                <div class="invalid-feedback">
+                    Please enter a document number.
+                </div>
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold" for="issueDate">Issue Date</label>
+                <label class="form-label fw-bold text-dark" for="issueDate">Issue Date</label>
                 <input class="form-control" id="issueDate" placeholder="Select issue date" required
-                       th:field="*{issueDate}" type="date">
+                       th:field="*{issueDate}" type="date"
+                       th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">
+                    Please select a valid issue date (not in the future).
+                </div>
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold" for="content">Replace Content</label>
+                <label class="form-label fw-bold text-dark" for="content">Replace Content</label>
                 <input accept=".pdf,.doc,.docx,.jpg,.png" class="form-control" id="content" name="file" type="file">
             </div>
             <div class="modal-footer mt-3">
-                <button class="btn btn-success" type="submit">
+                <button class="btn btn-success btn-sm" type="submit">
                     <i class="fas fa-save"></i> Save
                 </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" type="button">
                     <i class="fas fa-times"></i> Cancel
                 </button>
             </div>
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    });
+</script>

@@ -4,28 +4,47 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body">
-        <form method="post" th:action="@{/transports/update/{id}(id=${transport.transportId})}"
-              th:object="${transport}">
+        <form method="post" th:action="@{/transports/update/{id}(id=${transport.transportId})}" th:object="${transport}"
+              class="needs-validation" novalidate>
+
             <div class="mb-3">
                 <label class="form-label" for="transportOrder">Transport Order</label>
-                <select class="form-control" id="transportOrder" th:field="*{transportOrder.transportOrderId}">
-                    <option th:each="order : ${transportOrders}" th:text="${order.name}"
-                            th:value="${order.transportOrderId}"></option>
-                </select>
+                <div class="form-control-plaintext" id="transportOrder"
+                     th:text="${transport.transportOrder.name}"></div>
+                <input type="hidden" th:field="*{transportOrder.transportOrderId}">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="actualDeparture">Actual Departure</label>
-                <input class="form-control" id="actualDeparture" th:field="*{actualDeparture}" type="datetime-local">
+                <input class="form-control" id="actualDeparture" th:field="*{actualDeparture}" type="date" required
+                       th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">
+                    Please select a departure date.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="actualArrival">Actual Arrival</label>
-                <input class="form-control" id="actualArrival" th:field="*{actualArrival}" type="datetime-local">
+                <input class="form-control" id="actualArrival" th:field="*{actualArrival}" type="date" required
+                       th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">
+                    Please select an arrival date.
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="status">Status</label>
-                <select class="form-control" id="status" th:field="*{status}">
+                <select class="form-control" id="status" th:field="*{status}" required>
+                    <option value="" disabled>Select status</option>
                     <option th:each="status : ${statuses}" th:text="${status.name()}" th:value="${status}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select a status.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="notes">Notes</label>
+                <textarea class="form-control" id="notes" th:field="*{notes}" required></textarea>
+                <div class="invalid-feedback">
+                    Please enter notes.
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-warning" type="submit">Update</button>
@@ -34,3 +53,15 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var departureInput = document.getElementById("actualDeparture");
+        var arrivalInput = document.getElementById("actualArrival");
+        if (departureInput && arrivalInput) {
+            departureInput.addEventListener("change", function () {
+                arrivalInput.min = departureInput.value;
+            });
+        }
+    });
+</script>

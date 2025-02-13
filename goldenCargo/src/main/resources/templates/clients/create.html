@@ -1,35 +1,44 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-plus-circle"></i> Add New Client</h4>
-    <form class="row g-3" method="post" th:action="@{/clients/create}" th:object="${client}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/clients/create}" th:object="${client}"
+          novalidate>
         <div class="col-md-6">
             <label class="form-label" for="name">Name</label>
             <input class="form-control" id="name" required th:field="*{name}" type="text">
+            <div class="invalid-feedback">Please provide a name.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="address">Address</label>
-            <input class="form-control" id="address" th:field="*{address}" type="text">
+            <input class="form-control" id="address" required th:field="*{address}" type="text">
+            <div class="invalid-feedback">Please provide an address.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="contactPerson">Contact Person</label>
-            <input class="form-control" id="contactPerson" th:field="*{contactPerson}" type="text">
+            <input class="form-control" id="contactPerson" required th:field="*{contactPerson}" type="text">
+            <div class="invalid-feedback">Please provide a contact person.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="phone">Phone</label>
-            <input class="form-control" id="phone" th:field="*{phone}" type="text">
+            <input class="form-control" id="phone" required th:field="*{phone}" type="text">
+            <div class="invalid-feedback">Please provide a phone number.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="email">Email</label>
-            <input class="form-control" id="email" th:field="*{email}" type="email">
+            <input class="form-control" id="email" required th:field="*{email}" type="email">
+            <div class="invalid-feedback">Please provide a valid email.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="taxId">NIP</label>
-            <input class="form-control" id="taxId" th:field="*{nip}" type="text">
+            <input class="form-control" id="taxId" required th:field="*{nip}" type="text">
+            <div class="invalid-feedback">Please provide a NIP.</div>
         </div>
         <div class="mb-3">
             <label class="form-label" for="invoiceType">Invoice Type</label>
-            <select class="form-control" id="invoiceType" required th:field="*{invoiceType}">
+            <select class="form-select" id="invoiceType" required th:field="*{invoiceType}">
+                <option value="" disabled selected>Select invoice type</option>
                 <option th:each="type : ${invoiceTypes}" th:text="${type}" th:value="${type}"></option>
             </select>
+            <div class="invalid-feedback">Please select an invoice type.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>

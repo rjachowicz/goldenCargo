@@ -79,6 +79,7 @@ public class TransportOrderController {
 
     @PostMapping("/create")
     public String createOrder(TransportOrder transportOrder) {
+        transportOrder.setStatus(Status.NEW);
         transportOrderService.createOrder(transportOrder);
         return "redirect:/transport-orders";
     }

@@ -1,28 +1,45 @@
 <div th:fragment="createDamageModal">
     <div class="border p-4 bg-light rounded shadow-sm">
         <h4 class="h3 mb-3"><i class="fas fa-tools"></i> Add New Damage</h4>
-        <form class="row g-3" method="post" th:action="@{/damages/create}" th:object="${damage}">
+        <form class="row g-3 needs-validation" method="post" th:action="@{/damages/create}" th:object="${damage}"
+              novalidate>
             <div class="col-md-6">
                 <label class="form-label" for="incident">Incident</label>
-                <select class="form-control select2" id="incident" th:field="*{incident.incidentId}">
+                <select class="form-select select2" id="incident" th:field="*{incident.incidentId}" required>
+                    <option value="" disabled selected>Select an incident</option>
                     <option th:each="incident : ${incidents}" th:text="${incident.incidentType}"
                             th:value="${incident.incidentId}"></option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select an incident.
+                </div>
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="repairCost">Repair Cost</label>
-                <input class="form-control" id="repairCost" step="0.01" th:field="*{repairCost}" type="number">
+                <input class="form-control" id="repairCost" step="0.01" th:field="*{repairCost}" type="number" required
+                       min="0">
+                <div class="invalid-feedback">
+                    Please enter the repair cost.
+                </div>
             </div>
             <div class="col-md-12">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                <textarea class="form-control" id="description" placeholder="Enter description" required
+                          th:field="*{description}"></textarea>
+                <div class="invalid-feedback">
+                    Please provide a description.
+                </div>
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="insuranceClaim">Insurance Claim</label>
-                <select class="form-control" id="insuranceClaim" th:field="*{insuranceClaim}">
+                <select class="form-select" id="insuranceClaim" th:field="*{insuranceClaim}" required>
+                    <option value="" disabled selected>Select an option</option>
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
+                <div class="invalid-feedback">
+                    Please select an insurance claim option.
+                </div>
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="claimNumber">Claim Number</label>
@@ -40,3 +57,22 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        $('#incident').select2({
+            placeholder: 'Select an incident',
+            allowClear: true
+        });
+    });
+</script>

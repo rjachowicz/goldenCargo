@@ -1,48 +1,70 @@
 <div class="border p-4">
     <h4 class="h3 mb-3"><i class="fas fa-user"></i> Assign Driver to Vehicle</h4>
-    <form class="row g-3" method="post" th:action="@{/driver-vehicles/create}" th:object="${driverVehicle}">
+    <form class="row g-3 needs-validation" method="post" th:action="@{/driver-vehicles/create}"
+          th:object="${driverVehicle}" novalidate>
         <div class="col-md-6">
             <label class="form-label" for="driver">Driver</label>
-            <select class="form-control select2" id="driver" th:field="*{driver.driverId}">
+            <select class="form-control select2" id="driver" th:field="*{driver.driverId}" required>
+                <option value="" disabled selected>Select a driver</option>
                 <option th:each="driver : ${drivers}" th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"
                         th:value="${driver.driverId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a driver.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="vehicle">Vehicle</label>
-            <select class="form-control select2" id="vehicle" th:field="*{vehicle.vehicleId}">
+            <select class="form-control select2" id="vehicle" th:field="*{vehicle.vehicleId}" required>
+                <option value="" disabled selected>Select a vehicle</option>
                 <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}"
                         th:value="${vehicle.vehicleId}"></option>
             </select>
+            <div class="invalid-feedback">Please select a vehicle.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="assignedDate">Assigned Date</label>
-            <input class="form-control" id="assignedDate" required th:field="*{assignedDate}" type="date">
+            <input class="form-control" id="assignedDate" required th:field="*{assignedDate}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select an assigned date.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="endDate">End Date</label>
-            <input class="form-control" id="endDate" required th:field="*{endDate}" type="date">
+            <input class="form-control" id="endDate" required th:field="*{endDate}" type="date"
+                   th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Please select an end date.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label" for="status">Status</label>
-            <select class="form-control" id="status" th:field="*{status}">
+            <select class="form-control" id="status" th:field="*{status}" required>
+                <option value="" disabled selected>Select status</option>
                 <option th:each="status : ${statuses}" th:text="${status}" th:value="${status}"></option>
             </select>
+            <div class="invalid-feedback">Please select a status.</div>
         </div>
         <div class="col-md-12">
             <label class="form-label" for="notes">Notes</label>
-            <textarea class="form-control" id="notes" placeholder="Enter any notes" th:field="*{notes}"></textarea>
+            <textarea class="form-control" id="notes" placeholder="Enter any notes" th:field="*{notes}"
+                      required></textarea>
+            <div class="invalid-feedback">Please enter some notes.</div>
         </div>
         <div class="col-md-12 d-flex">
             <button class="btn btn-success me-2" type="submit">
                 <i class="fas fa-check"></i> Save
             </button>
-            <button class="btn btn-secondary"
-                    data-bs-target="#assignDriverVehicleForm"
-                    data-bs-toggle="collapse"
+            <button class="btn btn-secondary" data-bs-target="#assignDriverVehicleForm" data-bs-toggle="collapse"
                     type="button">
                 <i class="fas fa-times"></i> Cancel
             </button>
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var assignedDateInput = document.getElementById("assignedDate");
+        var endDateInput = document.getElementById("endDate");
+        if (assignedDateInput && endDateInput) {
+            assignedDateInput.addEventListener("change", function () {
+                endDateInput.min = assignedDateInput.value;
+            });
+        }
+    });
+</script>

@@ -1,48 +1,70 @@
-<div th:fragment="createInvoiceForm">
-    <div class="border p-4 bg-light rounded shadow-sm">
-        <h4 class="h5 mb-3"><i class="fas fa-file-invoice-dollar"></i> Create Invoice</h4>
-        <form enctype="multipart/form-data" method="post" th:action="@{/invoices/create}"
-              th:object="${invoice}">
-            <div class="mb-3">
-                <label class="form-label" for="invoiceNumber">Invoice Number</label>
-                <input class="form-control" id="invoiceNumber" placeholder="Enter invoice number" required
-                       th:field="*{invoiceNumber}" type="text">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="invoiceType">Invoice Type</label>
-                <select class="form-control" id="invoiceType" required th:field="*{invoiceType}">
-                    <option th:each="type : ${invoiceTypes}" th:text="${type}" th:value="${type}"></option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="dateIssued">Date Issued</label>
-                <input class="form-control" id="dateIssued" placeholder="Select issue date" required
-                       th:field="*{dateIssued}" type="date">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="dueDate">Due Date</label>
-                <input class="form-control" id="dueDate" placeholder="Select due date" required th:field="*{dueDate}"
-                       type="date">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="totalAmount">Total Amount</label>
-                <input class="form-control" id="totalAmount" placeholder="Enter total amount" required step="0.01"
-                       th:field="*{totalAmount}" type="number">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="paymentStatus">Payment Status</label>
-                <select class="form-control" id="paymentStatus" required th:field="*{paymentStatus}">
-                    <option th:each="status : ${paymentStatuses}" th:text="${status}" th:value="${status}"></option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="file">Content</label>
-                <input accept=".pdf,.doc,.docx,.jpg,.png" class="form-control" id="file" name="file" type="file">
-            </div>
-            <button class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
-            <button class="btn btn-secondary" data-bs-target="#addInvoiceForm" data-bs-toggle="collapse" type="button">
+<div class="border p-4 bg-light rounded shadow-sm">
+    <h4 class="h3 mb-3"><i class="fas fa-file-invoice-dollar"></i> Create Invoice</h4>
+    <form enctype="multipart/form-data" class="row g-3 needs-validation" method="post" th:action="@{/invoices/create}"
+          th:object="${invoice}" novalidate>
+        <div class="mb-3">
+            <label class="form-label" for="invoiceNumber">Invoice Number</label>
+            <input class="form-control" id="invoiceNumber" placeholder="Enter invoice number" required
+                   th:field="*{invoiceNumber}" type="text">
+            <div class="invalid-feedback">Please enter an invoice number.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="invoiceType">Invoice Type</label>
+            <select class="form-select" id="invoiceType" required th:field="*{invoiceType}">
+                <option value="" disabled selected>Select invoice type</option>
+                <option th:each="type : ${invoiceTypes}" th:text="${type}" th:value="${type}"></option>
+            </select>
+            <div class="invalid-feedback">Please select an invoice type.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="dateIssued">Date Issued</label>
+            <input class="form-control" id="dateIssued" placeholder="Select issue date" required
+                   th:field="*{dateIssued}" type="date"
+                   th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Date Issued cannot be in the future.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="dueDate">Due Date</label>
+            <input class="form-control" id="dueDate" placeholder="Select due date" required th:field="*{dueDate}"
+                   type="date" th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            <div class="invalid-feedback">Due Date cannot be in the past.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="totalAmount">Total Amount</label>
+            <input class="form-control" id="totalAmount" placeholder="Enter total amount" required step="0.01" min="0"
+                   th:field="*{totalAmount}" type="number">
+            <div class="invalid-feedback">Please enter a total amount.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="paymentStatus">Payment Status</label>
+            <select class="form-select" id="paymentStatus" required th:field="*{paymentStatus}">
+                <option value="" disabled selected>Select payment status</option>
+                <option th:each="status : ${T(com.goldencargo.model.data.PaymentStatus).values()}" th:text="${status}"
+                        th:value="${status}"></option>
+            </select>
+            <div class="invalid-feedback">Please select a payment status.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="file">Content</label>
+            <input accept=".pdf,.doc,.docx,.jpg,.png" class="form-control" id="file" name="file" type="file">
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-success btn-sm me-2" type="submit"><i class="fas fa-check"></i> Save</button>
+            <button class="btn btn-secondary btn-sm" data-bs-target="#addInvoiceForm" data-bs-toggle="collapse"
+                    type="button">
                 <i class="fas fa-times"></i> Cancel
             </button>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var dateIssuedInput = document.getElementById("dateIssued");
+        var dueDateInput = document.getElementById("dueDate");
+        if (dateIssuedInput && dueDateInput) {
+            dateIssuedInput.addEventListener("change", function () {
+                dueDateInput.min = dateIssuedInput.value;
+            });
+        }
+    });
+</script>

@@ -1,60 +1,66 @@
 <div th:fragment="editClientOrderModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Client Order
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Client Order</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{/client-orders/update/{id}(id=${clientOrder.clientOrderId})}"
-              th:object="${clientOrder}">
+        <form class="row g-3 needs-validation" method="post"
+              th:action="@{/client-orders/update/{id}(id=${clientOrder.clientOrderId})}" th:object="${clientOrder}"
+              novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label fw-bold" for="client">Client</label>
-                    <select class="form-select select2" id="client" th:field="*{client.clientId}">
+                    <select class="form-select select2" id="client" th:field="*{client.clientId}" required>
+                        <option value="" disabled selected>Select a client</option>
                         <option th:each="client : ${clients}"
                                 th:selected="${client.clientId == clientOrder.client.clientId}"
                                 th:text="${client.name}"
                                 th:value="${client.clientId}">
                         </option>
                     </select>
+                    <div class="invalid-feedback">Please select a client.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold" for="orderDate">Order Date</label>
-                    <input class="form-control" id="orderDate" required th:field="*{orderDate}" type="date">
+                    <input class="form-control" id="orderDate" required th:field="*{orderDate}" type="date"
+                           th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                    <div class="invalid-feedback">Please select an order date (not in the future).</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold" for="status">Status</label>
-                    <select class="form-select" id="status" th:field="*{status}">
+                    <select class="form-select" id="status" th:field="*{status}" required>
+                        <option value="" disabled selected>Select status</option>
                         <option th:each="status : ${T(com.goldencargo.model.data.Status).values()}"
                                 th:selected="${status == clientOrder.status.toString()}"
                                 th:text="${status}"
                                 th:value="${status}">
                         </option>
                     </select>
+                    <div class="invalid-feedback">Please select a status.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold" for="totalAmount">Total Amount</label>
-                    <input class="form-control" id="totalAmount" required step="0.01" th:field="*{totalAmount}"
+                    <input class="form-control" id="totalAmount" required step="0.01" min="0" th:field="*{totalAmount}"
                            type="number">
+                    <div class="invalid-feedback">Please enter the total amount.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold" for="paymentStatus">Payment Status</label>
-                    <select class="form-select" id="paymentStatus" th:field="*{paymentStatus}">
+                    <select class="form-select" id="paymentStatus" th:field="*{paymentStatus}" required>
+                        <option value="" disabled selected>Select payment status</option>
                         <option th:each="status : ${T(com.goldencargo.model.data.PaymentStatus).values()}"
                                 th:selected="${status == clientOrder.paymentStatus.toString()}"
                                 th:text="${status}"
                                 th:value="${status}">
                         </option>
                     </select>
+                    <div class="invalid-feedback">Please select a payment status.</div>
                 </div>
             </div>
             <div class="modal-footer mt-4 bg-light">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i>
+                    Cancel
                 </button>
             </div>
         </form>

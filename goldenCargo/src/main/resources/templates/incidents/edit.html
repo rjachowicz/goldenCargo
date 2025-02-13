@@ -1,73 +1,91 @@
 <div th:fragment="editIncidentModal">
     <div class="modal-header bg-warning text-dark border-bottom">
-        <h5 class="modal-title">
-            <i class="fas fa-edit"></i> Edit Incident
-        </h5>
+        <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Incident</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
     </div>
     <div class="modal-body bg-light text-dark">
-        <form method="post" th:action="@{'/incidents/update/' + ${incident.incidentId}}" th:object="${incident}">
+        <form class="row g-3 needs-validation" novalidate method="post"
+              th:action="@{'/incidents/update/' + ${incident.incidentId}}" th:object="${incident}">
             <div class="mb-3">
                 <label class="form-label fw-bold" for="incidentType">Type</label>
-                <input class="form-control" id="incidentType" required th:field="*{incidentType}" type="text">
+                <input class="form-control" id="incidentType" placeholder="Enter incident type" required
+                       th:field="*{incidentType}" type="text">
+                <div class="invalid-feedback">Please enter an incident type.</div>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold" for="date">Date</label>
-                <input class="form-control" id="date" required th:field="*{date}"
-                       th:value="${#dates.format(incident.date, 'yyyy-MM-dd')}" type="date">
+                <input class="form-control" id="date" placeholder="Select incident date" required th:field="*{date}"
+                       type="date"
+                       th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                <div class="invalid-feedback">Please select a valid date (not in the future).</div>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold" for="description">Description</label>
-                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                <textarea class="form-control" id="description" placeholder="Enter incident description" required
+                          th:field="*{description}"></textarea>
+                <div class="invalid-feedback">Please provide a description.</div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label fw-bold" for="vehicle">Vehicle</label>
-                <select class="form-select select2" id="vehicle" th:field="*{vehicle.vehicleId}">
-                    <option th:each="vehicle : ${vehicles}"
-                            th:selected="${vehicle.vehicleId == incident.vehicle.vehicleId}"
-                            th:text="${vehicle.registrationNumber}"
+                <select class="form-select select2" id="vehicle" required th:field="*{vehicle.vehicleId}">
+                    <option value="" disabled selected>Select a vehicle</option>
+                    <option th:each="vehicle : ${vehicles}" th:text="${vehicle.registrationNumber}"
                             th:value="${vehicle.vehicleId}"></option>
                 </select>
+                <div class="invalid-feedback">Please select a vehicle.</div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label fw-bold" for="driver">Driver</label>
-                <select class="form-select select2" id="driver" th:field="*{driver.driverId}">
+                <select class="form-select select2" id="driver" required th:field="*{driver.driverId}">
+                    <option value="" disabled selected>Select a driver</option>
                     <option th:each="driver : ${drivers}"
                             th:text="${driver.user.firstName} + ' ' + ${driver.user.lastName}"
                             th:value="${driver.driverId}"></option>
                 </select>
+                <div class="invalid-feedback">Please select a driver.</div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label fw-bold" for="reportedBy">Reported By</label>
-                <select class="form-select select2" id="reportedBy" th:field="*{reportedBy.userId}">
-                    <option th:each="user : ${users}"
-                            th:selected="${user.userId == incident.reportedBy.userId}"
-                            th:text="${user.username}"
-                            th:value="${user.userId}"></option>
+                <select class="form-select select2" id="reportedBy" required th:field="*{reportedBy.userId}">
+                    <option value="" disabled selected>Select a user</option>
+                    <option th:each="user : ${users}" th:text="${user.username}" th:value="${user.userId}"></option>
                 </select>
+                <div class="invalid-feedback">Please select the reporting user.</div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label fw-bold" for="status">Status</label>
-                <select class="form-select" id="status" th:field="*{status}">
-                    <option th:each="status : ${statuses}"
-                            th:selected="${status == incident.status}"
-                            th:text="${status}"
-                            th:value="${status}"></option>
+                <select class="form-select" id="status" required th:field="*{status}">
+                    <option value="" disabled selected>Select status</option>
+                    <option th:each="status : ${statuses}" th:text="${status}" th:value="${status}"></option>
                 </select>
+                <div class="invalid-feedback">Please select a status.</div>
             </div>
-
-            <div class="modal-footer mt-3">
-                <button class="btn btn-success" type="submit">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+            <div class="mt-4">
+                <button class="btn btn-success btn-sm me-2" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button class="btn btn-secondary btn-sm" data-bs-target="#addIncidentForm" data-bs-toggle="collapse"
+                        type="button">
                     <i class="fas fa-times"></i> Cancel
                 </button>
             </div>
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        $('#vehicle, #driver, #reportedBy').select2({
+            placeholder: 'Select an option',
+            allowClear: true
+        });
+    });
+</script>

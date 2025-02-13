@@ -33,7 +33,7 @@ public class FcmService {
 
     @PostConstruct
     public void initialize() throws IOException {
-        FileInputStream serviceAccount = new FileInputStream("src/main/resources/goldencargoapp-firebase-adminsdk-fbsvc-84e390676c.json");
+        FileInputStream serviceAccount = new FileInputStream("src/main/resources/goldencargoapp-firebase-adminsdk-fbsvc-04018ab415.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
