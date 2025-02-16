@@ -248,3 +248,16 @@ canvas {
         grid-template-columns: 1fr;
     }
 }
+
+.rotate {
+    transition: transform 0.3s ease;
+}
+
+.rotate.up {
+    transform: rotate(180deg);
+}
+
+.disabled-btn {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

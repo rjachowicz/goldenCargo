@@ -32,19 +32,21 @@ public class InvoiceController {
 
     private static final String ALIAS = "i";
     private final TransportService transportService;
-    private final InvoiceRepository invoiceRepository;
     private final TransportRepository transportRepository;
     private final ClientInvoiceService clientInvoiceService;
     private final ClientInvoiceRepository clientInvoiceRepository;
 
-    public InvoiceController(InvoiceService invoiceService, GenericService genericService, DropboxService dropboxService, TransportService transportService,
-                             InvoiceRepository invoiceRepository,
-                             TransportRepository transportRepository, ClientInvoiceService clientInvoiceService, ClientInvoiceRepository clientInvoiceRepository) {
+    public InvoiceController(InvoiceService invoiceService,
+                             GenericService genericService,
+                             DropboxService dropboxService,
+                             TransportService transportService,
+                             TransportRepository transportRepository,
+                             ClientInvoiceService clientInvoiceService,
+                             ClientInvoiceRepository clientInvoiceRepository) {
         this.invoiceService = invoiceService;
         this.genericService = genericService;
         this.dropboxService = dropboxService;
         this.transportService = transportService;
-        this.invoiceRepository = invoiceRepository;
         this.transportRepository = transportRepository;
         this.clientInvoiceService = clientInvoiceService;
         this.clientInvoiceRepository = clientInvoiceRepository;

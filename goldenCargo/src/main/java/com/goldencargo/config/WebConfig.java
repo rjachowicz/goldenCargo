@@ -2,6 +2,7 @@ package com.goldencargo.config;
 
 import com.goldencargo.component.DateConverter;
 import com.goldencargo.service.DropboxService;
+import com.google.api.client.util.Value;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    String token = "";
-
+    @Value("${dropbox.token}")
+    private String DROPBOX_TOKEN;
     private final DateConverter dateConverter;
 
     public WebConfig(DateConverter dateConverter) {
@@ -29,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public DropboxService dropboxService() {
-        return new DropboxService(token);
+        return new DropboxService(DROPBOX_TOKEN);
     }
 
     @Override
