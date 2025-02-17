@@ -12,11 +12,13 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,8 +35,9 @@ public class FcmService {
 
     @PostConstruct
     public void initialize() throws IOException {
-        FileInputStream serviceAccount = new FileInputStream("src/main/resources/goldencargoapp-firebase-adminsdk-fbsvc-04018ab415.json");
+        InputStream serviceAccount = getClass().getResourceAsStream("/goldencargoapp-firebase-adminsdk-fbsvc-9da6a4ccd2.json");
 
+        assert serviceAccount != null;
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
