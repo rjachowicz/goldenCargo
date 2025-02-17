@@ -68,7 +68,7 @@ public class TransportOrderController {
 
         model.addAttribute("transportOrders", transportOrders);
         model.addAttribute("transportOrder", new TransportOrder());
-        model.addAttribute("clientOrders", clientOrderService.getAllClientOrders());
+        model.addAttribute("clientOrders", clientOrderService.getAllNewClientOrders());
         model.addAttribute("drivers", driverService.getAllDrivers());
         model.addAttribute("vehicles", vehicleService.getAllVehicles());
         model.addAttribute("locations", locationService.getAllLocations());

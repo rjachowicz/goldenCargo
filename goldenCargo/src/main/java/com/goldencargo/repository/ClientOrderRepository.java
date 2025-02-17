@@ -13,6 +13,9 @@ public interface ClientOrderRepository extends JpaRepository<ClientOrder, Long> 
 
     List<ClientOrder> findByIsDeletedFalse();
 
+    @Query("SELECT co from ClientOrder co where co.isDeleted is false and co.status = 'NEW'")
+    List<ClientOrder> findByIsDeletedFalseAndStatusIsNew();
+
     @Modifying
     @Transactional
     @Query("UPDATE ClientOrder b SET b.isDeleted = true WHERE b.clientOrderId = :id")

@@ -21,13 +21,11 @@
             </div>
             <div>
                 <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
                 <button aria-controls="addInspectionForm" aria-expanded="false" class="btn btn-outline-success me-2"
-                        data-bs-target="#addInspectionForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#addInspectionForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Inspection
                 </button>
                 <a class="btn btn-secondary" href="/technical-inspections"><i class="fas fa-redo"></i> Show All</a>
@@ -40,35 +38,69 @@
             <div th:replace="~{/technical-inspections/create}"></div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-light">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light align-middle">
                 <tr>
-                    <th>Vehicle</th>
-                    <th>Inspection Date</th>
-                    <th>Result</th>
-                    <th>Next Inspection Date</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Vehicle
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='vehicle.registrationNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='vehicle.registrationNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Inspection Date
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='inspectionDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='inspectionDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Result
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='result', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='result', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Next Inspection Date
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='nextInspectionDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/technical-inspections(sortBy='nextInspectionDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="inspection : ${technicalInspections}">
-                    <td th:text="${inspection.vehicle.registrationNumber}"></td>
-                    <td th:text="${#dates.format(inspection.inspectionDate, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td th:text="${inspection.result}"></td>
-                    <td th:text="${#dates.format(inspection.nextInspectionDate, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm"
-                                data-endpoint="technical-inspections/edit"
-                                data-modal-action
-                                data-modal-id="editInspectionModal"
-                                th:attr="data-id=${inspection.inspectionId}">
+                    <td class="text-center align-middle" th:text="${inspection.vehicle.registrationNumber}"></td>
+                    <td class="text-center align-middle" th:text="${#dates.format(inspection.inspectionDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td class="text-center align-middle" th:text="${inspection.result}"></td>
+                    <td class="text-center align-middle" th:text="${#dates.format(inspection.nextInspectionDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td class="text-center align-middle">
+                        <button class="btn btn-warning btn-sm" data-endpoint="technical-inspections/edit" data-modal-action
+                                data-modal-id="editInspectionModal" th:attr="data-id=${inspection.inspectionId}">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-info btn-sm"
-                                data-endpoint="technical-inspections/details"
-                                data-modal-action
-                                data-modal-id="detailsInspectionModal"
-                                th:attr="data-id=${inspection.inspectionId}">
+                        <button class="btn btn-info btn-sm" data-endpoint="technical-inspections/details" data-modal-action
+                                data-modal-id="detailsInspectionModal" th:attr="data-id=${inspection.inspectionId}">
                             <i class="fas fa-info-circle"></i> Details
                         </button>
                         <button class="btn btn-danger btn-sm" data-delete-url="/technical-inspections/delete/{id}"
@@ -82,14 +114,12 @@
             </table>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="editInspectionModalLabel" class="modal fade" id="editInspectionModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="editInspectionModalLabel" class="modal fade" id="editInspectionModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content"></div>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="detailsInspectionModalLabel" class="modal fade" id="detailsInspectionModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="detailsInspectionModalLabel" class="modal fade" id="detailsInspectionModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>

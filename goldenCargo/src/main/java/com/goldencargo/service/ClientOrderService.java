@@ -68,4 +68,7 @@ public class ClientOrderService {
         return clientOrderRepository.findAllById(ids);
     }
 
+    public List<ClientOrder> getAllNewClientOrders() {
+        return clientOrderRepository.findByIsDeletedFalseAndStatusIsNew();
+    }
 }

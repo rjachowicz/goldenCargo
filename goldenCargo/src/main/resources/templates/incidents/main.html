@@ -21,13 +21,11 @@
             </div>
             <div>
                 <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
                 <button aria-controls="addIncidentForm" aria-expanded="false" class="btn btn-outline-success me-2"
-                        data-bs-target="#addIncidentForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#addIncidentForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Incident
                 </button>
                 <a class="btn btn-secondary" href="/incidents"><i class="fas fa-redo"></i> Show All</a>
@@ -43,42 +41,107 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>
+                    <th class="text-center">
                         Type
-                        <a class="text-decoration-none" th:href="@{/incidents(sortBy='type', sortLogic='asc')}">
-                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                        </a>
-                        <a class="text-decoration-none" th:href="@{/incidents(sortBy='type', sortLogic='desc')}">
-                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                        </a>
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='incidentType', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='incidentType', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
                     </th>
-                    <th>
+                    <th class="text-center">
                         Date
-                        <a class="text-decoration-none" th:href="@{/incidents(sortBy='date', sortLogic='asc')}">
-                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                        </a>
-                        <a class="text-decoration-none" th:href="@{/incidents(sortBy='date', sortLogic='desc')}">
-                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
-                        </a>
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/incidents(sortBy='date', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/incidents(sortBy='date', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
                     </th>
-                    <th>Description</th>
-                    <th>Vehicle</th>
-                    <th>Driver</th>
-                    <th>Reported By</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Description
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='description', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='description', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Vehicle
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='vehicle.registrationNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='vehicle.registrationNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Driver
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='driver.user.lastName', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='driver.user.lastName', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Reported By
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='reportedBy.username', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/incidents(sortBy='reportedBy.username', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Status
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/incidents(sortBy='status', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/incidents(sortBy='status', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="incident : ${incidents}">
-                    <td th:text="${incident.incidentType}"></td>
-                    <td th:text="${#dates.format(incident.date, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${incident.description}"></td>
-                    <td th:text="${incident.vehicle.registrationNumber}"></td>
-                    <td th:text="${incident.driver.user.firstName} + ' ' + ${incident.driver.user.lastName}"></td>
-                    <td th:text="${incident.reportedBy.username}"></td>
-                    <td th:text="${incident.status}"></td>
-                    <td>
+                    <td class="text-center align-middle" th:text="${incident.incidentType}"></td>
+                    <td class="text-center align-middle" th:text="${#dates.format(incident.date, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle" th:text="${incident.description}"></td>
+                    <td class="text-center align-middle" th:text="${incident.vehicle.registrationNumber}"></td>
+                    <td class="text-center align-middle"
+                        th:text="${incident.driver.user.firstName} + ' ' + ${incident.driver.user.lastName}"></td>
+                    <td class="text-center align-middle" th:text="${incident.reportedBy.username}"></td>
+                    <td class="text-center align-middle" th:text="${incident.status}"></td>
+                    <td class="text-center align-middle">
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="incidents/edit"
                                 data-modal-action
@@ -106,21 +169,16 @@
         </div>
     </div>
 </main>
-
 <div aria-hidden="true" aria-labelledby="editIncidentModalLabel" class="modal fade" id="editIncidentModal"
      tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-dialog">
-            <div class="modal-content"></div>
-        </div>
+        <div class="modal-content"></div>
     </div>
 </div>
 <div aria-hidden="true" aria-labelledby="detailsIncidentModalLabel" class="modal fade" id="detailsIncidentModal"
      tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content"></div>
-        </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
     </div>
 </div>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>

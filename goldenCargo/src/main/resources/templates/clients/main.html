@@ -20,12 +20,10 @@
                 <p class="mb-0 text-muted">Easily view, edit, and manage client information.</p>
             </div>
             <div>
-                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
+                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2" data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
-                <button aria-controls="addClientForm" aria-expanded="false" class="btn btn-outline-success me-2"
-                        data-bs-target="#addClientForm" data-bs-toggle="collapse" type="button">
+                <button aria-controls="addClientForm" aria-expanded="false" class="btn btn-outline-success me-2" data-bs-target="#addClientForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Client
                 </button>
                 <a class="btn btn-secondary" href="/clients"><i class="fas fa-redo"></i> Show All</a>
@@ -50,12 +48,60 @@
                             <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
                         </a>
                     </th>
-                    <th>Address</th>
-                    <th>Contact Person</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Tax ID</th>
-                    <th>Invoice Type</th>
+                    <th>
+                        Address
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='address', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='address', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Contact Person
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='contactPerson', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='contactPerson', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Phone
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='phone', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='phone', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Email
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='email', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='email', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Tax ID
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='nip', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='nip', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Invoice Type
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='invoiceType', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{/clients(sortBy='invoiceType', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -69,24 +115,13 @@
                     <td th:text="${client.nip}"></td>
                     <td th:text="${client.invoiceType}"></td>
                     <td>
-                        <button class="btn btn-warning btn-sm"
-                                data-endpoint="clients/edit"
-                                data-modal-action
-                                data-modal-id="editClientModal"
-                                th:attr="data-id=${client.clientId}">
+                        <button class="btn btn-warning btn-sm" data-endpoint="clients/edit" data-modal-action data-modal-id="editClientModal" th:attr="data-id=${client.clientId}">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-info btn-sm"
-                                data-endpoint="clients/details"
-                                data-modal-action
-                                data-modal-id="detailsClientModal"
-                                th:attr="data-id=${client.clientId}">
+                        <button class="btn btn-info btn-sm" data-endpoint="clients/details" data-modal-action data-modal-id="detailsClientModal" th:attr="data-id=${client.clientId}">
                             <i class="fas fa-info-circle"></i> Details
                         </button>
-                        <button class="btn btn-danger btn-sm" data-delete-url="/clients/delete/{id}"
-                                data-entity-type="client"
-                                onclick="showDeleteModal(this)"
-                                th:attr="data-entity-id=${client.clientId}">
+                        <button class="btn btn-danger btn-sm" data-delete-url="/clients/delete/{id}" data-entity-type="client" onclick="showDeleteModal(this)" th:attr="data-entity-id=${client.clientId}">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </td>
@@ -95,14 +130,12 @@
             </table>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="editClientModalLabel" class="modal fade" id="editClientModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="editClientModalLabel" class="modal fade" id="editClientModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content"></div>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="detailsClientModalLabel" class="modal fade" id="detailsClientModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="detailsClientModalLabel" class="modal fade" id="detailsClientModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>
@@ -110,7 +143,6 @@
 </main>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <div th:replace="~{/helpers/footer :: footer}"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
 <script src="/js/validFormScript.js"></script>
