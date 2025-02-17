@@ -21,13 +21,11 @@
             </div>
             <div>
                 <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
                 <button aria-controls="addGoodsForm" aria-expanded="false" class="btn btn-outline-success me-2"
-                        data-bs-target="#addGoodsForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#addGoodsForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Goods
                 </button>
                 <a class="btn btn-secondary" href="/goods"><i class="fas fa-redo"></i> Show All</a>
@@ -40,25 +38,75 @@
             <div th:replace="~{/goods/create}"></div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-light">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light align-middle">
                 <tr>
-                    <th>Name</th>
-                    <th>Weight</th>
-                    <th>Dimensions</th>
-                    <th>Description</th>
-                    <th>Special Data</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Name
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='name', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='name', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Weight
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='weight', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='weight', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Dimensions
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='dimensions', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='dimensions', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Description
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='description', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='description', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Special Data
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='specialHandlingInstructions', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/goods(sortBy='specialHandlingInstructions', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="goods : ${goodsList}">
-                    <td th:text="${goods.name}"></td>
-                    <td th:text="${goods.weight}"></td>
-                    <td th:text="${goods.dimensions}"></td>
-                    <td th:text="${goods.description}"></td>
-                    <td th:text="${goods.specialHandlingInstructions}"></td>
-                    <td>
+                    <td class="text-center align-middle" th:text="${goods.name}"></td>
+                    <td class="text-center align-middle" th:text="${goods.weight}"></td>
+                    <td class="text-center align-middle" th:text="${goods.dimensions}"></td>
+                    <td class="text-center align-middle" th:text="${goods.description}"></td>
+                    <td class="text-center align-middle" th:text="${goods.specialHandlingInstructions}"></td>
+                    <td class="text-center align-middle">
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="goods/edit"
                                 data-modal-action
@@ -84,14 +132,12 @@
             </table>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="editGoodsModalLabel" class="modal fade" id="editGoodsModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="editGoodsModalLabel" class="modal fade" id="editGoodsModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content"></div>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="detailsGoodsModalLabel" class="modal fade" id="detailsGoodsModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="detailsGoodsModalLabel" class="modal fade" id="detailsGoodsModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>

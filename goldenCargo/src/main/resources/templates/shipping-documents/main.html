@@ -74,7 +74,17 @@
                             <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
                         </a>
                     </th>
-                    <th>Issue Date</th>
+                    <th>
+                        Issue Date
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='issueDate', sortLogic='asc')}">
+                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                        </a>
+                        <a class="text-decoration-none"
+                           th:href="@{/shipping-documents(sortBy='issueDate', sortLogic='desc')}">
+                            <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                        </a>
+                    </th>
                     <th>Actions</th>
                 </tr>
                 </thead>

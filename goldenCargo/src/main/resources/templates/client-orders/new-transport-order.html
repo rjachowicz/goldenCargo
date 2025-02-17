@@ -27,9 +27,9 @@
             <div class="d-flex justify-content-between align-items-center text-dark rounded py-3 mb-1">
                 <h4 class="h4 mb-0">Client Orders</h4>
                 <button type="button" class="btn btn-outline-success"
+                        id="openTransportOrderModalBtn"
                         data-bs-toggle="modal"
-                        data-bs-target="#addTransportOrderModal"
-                        id="openTransportOrderModalBtn">
+                        data-bs-target="#addTransportOrderModal">
                     <i class="fas fa-plus"></i> Create New Transport Order
                 </button>
             </div>
@@ -76,9 +76,9 @@
             <div class="d-flex justify-content-between align-items-center text-dark rounded py-3 mb-1">
                 <h4 class="h4 mb-0">Transport Orders</h4>
                 <button type="button" class="btn btn-outline-success"
+                        id="openTransportModal"
                         data-bs-toggle="modal"
-                        data-bs-target="#addTransportModal"
-                        id="openTransportModal">
+                        data-bs-target="#addTransportModal">
                     <i class="fas fa-plus"></i> Create New Transport
                 </button>
             </div>
@@ -122,7 +122,7 @@
         </div>
         <div th:fragment="transportCard" class="card shadow-sm border px-3 py-3 mb-4">
             <div class="d-flex justify-content-between align-items-center text-dark rounded py-3 mb-1">
-                <h4 class="h4 mb-0">Finished Transport </h4>
+                <h4 class="h4 mb-0">Finished Transport</h4>
             </div>
             <div class="mb-3">
                 <input type="text" id="transportSearch" class="form-control"
@@ -149,10 +149,10 @@
                             <td th:text="${transport.transportOrder.name}"></td>
                             <td th:text="${transport.transportOrder.assignedDriver.licenseNumber}"></td>
                             <td th:text="${transport.transportOrder.assignedVehicle != null
-                                  ? transport.transportOrder.assignedVehicle.make + ' '
-                                    + transport.transportOrder.assignedVehicle.model + ' ('
-                                    + transport.transportOrder.assignedVehicle.registrationNumber + ')'
-                                  : 'No vehicle assigned'}"></td>
+                                          ? transport.transportOrder.assignedVehicle.make + ' ' +
+                                            transport.transportOrder.assignedVehicle.model + ' (' +
+                                            transport.transportOrder.assignedVehicle.registrationNumber + ')'
+                                          : 'No vehicle assigned'}"></td>
                             <td th:text="${#dates.format(transport.actualDeparture, 'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${#dates.format(transport.actualArrival, 'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${transport.status}"></td>
@@ -231,10 +231,8 @@
                         <button class="btn btn-success me-2" type="submit">
                             <i class="fas fa-check"></i> Save
                         </button>
-                        <button class="btn btn-secondary"
-                                data-bs-target="#addTransportOrderForm"
-                                data-bs-toggle="collapse"
-                                type="button">
+                        <button class="btn btn-secondary" data-bs-target="#addTransportOrderForm"
+                                data-bs-toggle="collapse" type="button">
                             <i class="fas fa-times"></i> Cancel
                         </button>
                     </div>
@@ -244,8 +242,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="addTransportModal" tabindex="-1" aria-labelledby="addTransportModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="addTransportModal" tabindex="-1" aria-labelledby="addTransportModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -268,8 +265,12 @@
                         <textarea class="form-control" id="notes" th:field="*{notes}"></textarea>
                     </div>
                     <div class="col-md-12 d-flex">
-                        <button class="btn btn-success me-2" type="submit"><i class="fas fa-check"></i> Save</button>
-                        <button class="btn btn-secondary" type="button"><i class="fas fa-times"></i> Cancel</button>
+                        <button class="btn btn-success me-2" type="submit">
+                            <i class="fas fa-check"></i> Save
+                        </button>
+                        <button class="btn btn-secondary" type="button">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
                     </div>
                 </form>
             </div>
@@ -277,11 +278,45 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('actualDeparture').setAttribute('min', today);
+        document.getElementById('actualArrival').setAttribute('min', today);
+    });
+</script>
+
+<div class="modal fade" id="errorModalTransport" tabindex="-1" aria-labelledby="errorModalTransportLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalTransportLabel">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Please select at least one transport order.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('scheduledDeparture').setAttribute('min', today);
+        document.getElementById('scheduledArrival').setAttribute('min', today);
+    });
+</script>
 <div th:replace="~{/helpers/footer :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/searchForm.js"></script>
 <script src="/js/generateTransportOrderName.js"></script>
 <script src="/js/fillTransportOrders.js"></script>
 <script src="/js/fillTransports.js"></script>
+<script src="/js/validateTransportOrderModal.js"></script>
 </body>
 </html>

@@ -41,36 +41,111 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>
+                    <th class="text-center">
                         Client
-                        <a class="text-decoration-none"
-                           th:href="@{/client-invoices(sortBy='client.name', sortLogic='asc')}">
-                            <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
-                        </a>
-                        <a class="text-decoration-none"
-                           th:href="@{/client-invoices(sortBy='client.name', sortLogic='desc')}">
-                            <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
-                        </a>
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='client.name', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='client.name', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
+                            </a>
+                        </div>
                     </th>
-                    <th>Order</th>
-                    <th>Invoice Number</th>
-                    <th>Date Issued</th>
-                    <th>Due Date</th>
-                    <th>Total Amount</th>
-                    <th>Payment Status</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Order
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='clientOrder.clientOrderId', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='clientOrder.clientOrderId', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Invoice Number
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='invoiceNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='invoiceNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Date Issued
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='dateIssued', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='dateIssued', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Due Date
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='dueDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='dueDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Total Amount
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='totalAmount', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='totalAmount', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Payment Status
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='paymentStatus', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/client-invoices(sortBy='paymentStatus', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-wide-short text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="invoice : ${clientInvoices}">
-                    <td th:text="${invoice.client.name}"></td>
-                    <td th:text="${invoice.clientOrder.clientOrderId}"></td>
-                    <td th:text="${invoice.invoiceNumber}"></td>
-                    <td th:text="${#dates.format(invoice.dateIssued, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#dates.format(invoice.dueDate, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${invoice.totalAmount}"></td>
-                    <td th:text="${invoice.paymentStatus}"></td>
-                    <td>
+                    <td class="text-center align-middle" th:text="${invoice.client.name}"></td>
+                    <td class="text-center align-middle" th:text="${invoice.clientOrder.clientOrderId}"></td>
+                    <td class="text-center align-middle" th:text="${invoice.invoiceNumber}"></td>
+                    <td class="text-center align-middle"
+                        th:text="${#dates.format(invoice.dateIssued, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle" th:text="${#dates.format(invoice.dueDate, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle" th:text="${invoice.totalAmount}"></td>
+                    <td class="text-center align-middle" th:text="${invoice.paymentStatus}"></td>
+                    <td class="text-center align-middle">
                         <a class="btn btn-warning btn-sm"
                            th:href="@{/check-invoice(clientOrderId=${invoice.clientOrder.clientOrderId}, clientId=${invoice.client.clientId})}">
                             <i class="fas fa-info-circle"></i>
@@ -110,7 +185,6 @@
 </main>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <div th:replace="~{/helpers/footer :: footer}"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
 <script src="/js/validFormScript.js"></script>

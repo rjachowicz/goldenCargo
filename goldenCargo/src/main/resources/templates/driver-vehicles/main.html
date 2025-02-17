@@ -39,25 +39,89 @@
             <div th:replace="~{/driver-vehicles/create}"></div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-light">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light align-middle">
                 <tr>
-                    <th>Driver</th>
-                    <th>Vehicle</th>
-                    <th>Assigned Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Driver
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='driver.user.firstName', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='driver.user.firstName', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Vehicle
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='vehicle.registrationNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='vehicle.registrationNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Assigned Date
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='assignedDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='assignedDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        End Date
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='endDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='endDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Status
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='status', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/driver-vehicles(sortBy='status', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="driverVehicle : ${driverVehicles}">
-                    <td th:text="${driverVehicle.driver.user.firstName} + ' ' + ${driverVehicle.driver.user.lastName}"></td>
-                    <td th:text="${driverVehicle.vehicle.registrationNumber}"></td>
-                    <td th:text="${#dates.format(driverVehicle.assignedDate, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#dates.format(driverVehicle.endDate, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${driverVehicle.status}"></td>
-                    <td>
+                    <td class="text-center align-middle"
+                        th:text="${driverVehicle.driver.user.firstName} + ' ' + ${driverVehicle.driver.user.lastName}">
+                    </td>
+                    <td class="text-center align-middle" th:text="${driverVehicle.vehicle.registrationNumber}"></td>
+                    <td class="text-center align-middle"
+                        th:text="${#dates.format(driverVehicle.assignedDate, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle"
+                        th:text="${#dates.format(driverVehicle.endDate, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle" th:text="${driverVehicle.status}"></td>
+                    <td class="text-center align-middle">
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="driver-vehicles/edit"
                                 data-modal-action

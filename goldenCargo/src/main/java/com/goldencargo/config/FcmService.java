@@ -87,7 +87,13 @@ public class FcmService {
 
     public void sendAlert(Long driverId) throws FirebaseMessagingException {
         FcmToken tokenByUserId = findTokenByUserId(driverId);
-        sendNotification(tokenByUserId.getFcmToken(), "GOLDEN CARGO", "Przypisano nowe zlecenie", null);
+        if (tokenByUserId == null || tokenByUserId.getFcmToken() == null) {
+            System.out.println("Not found fcm Token: " + driverId);
+            return;
+        }
+        String fcmToken = tokenByUserId.getFcmToken();
+        sendNotification(fcmToken, "GOLDEN CARGO", "Przypisano nowe zlecenie", null);
     }
+
 }
 

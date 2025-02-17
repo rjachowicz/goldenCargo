@@ -20,8 +20,9 @@
                 <p class="mb-0 text-muted">Select a client and add goods to the order.</p>
             </div>
             <div>
-                <a class="btn btn-secondary" href="/transport-orders/new-transport-order"><i class="fa-solid fa-truck"></i>
-                    Transport Orders</a>
+                <a class="btn btn-secondary" href="/transport-orders/new-transport-order">
+                    <i class="fa-solid fa-truck"></i> Transport Orders
+                </a>
                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                         data-bs-target="#addClientModal">
                     <i class="fas fa-user-plus"></i> Add New Client
@@ -32,80 +33,96 @@
                 </button>
             </div>
         </div>
-        <form th:action="@{/client-orders/save}" method="post">
-            <div th:fragment="clientOrderCard" class="card shadow-sm border px-3 py-3 mb-4">
+        <form id="orderForm" th:action="@{/client-orders/save}" method="post" novalidate>
+            <div class="card shadow-sm border px-3 py-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center text-dark rounded py-3 mb-1">
-                    <h4 class="h4 mb-0">Clients</h4>
+                    <h4 class="h4 mb-0">
+                        <button id="toggleClients" type="button" class="btn btn-outline-secondary"
+                                data-bs-toggle="collapse" data-bs-target="#collapseClients" aria-expanded="true"
+                                aria-controls="collapseClients">
+                            <i class="fas fa-chevron-up me-2 rotate"></i> Clients
+                        </button>
+                    </h4>
                 </div>
-                <div class="mb-3">
-                    <input type="text" id="clientSearch" class="form-control"
-                           onkeyup="filterTable('clientSearch', 'clientTable')"
-                           placeholder="Type to search client...">
-                </div>
-                <div class="mb-3">
-                    <div class="table-responsive">
-                        <table id="clientTable" class="table table-bordered table-striped">
-                            <thead class="table-light">
-                            <tr>
-                                <th>Select</th>
-                                <th>Client Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Address</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="client : ${clients}">
-                                <td>
-                                    <input type="radio" name="clientId" th:value="${client.clientId}" required
-                                           onclick="selectItemAndReset('clientSearch', 'clientTable')">
-                                </td>
-                                <td th:text="${client.name}"></td>
-                                <td th:text="${client.email}"></td>
-                                <td th:text="${client.phone}"></td>
-                                <td th:text="${client.address}"></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="collapse show" id="collapseClients">
+                    <div class="mb-3">
+                        <input type="text" id="clientSearch" class="form-control"
+                               onkeyup="filterTable('clientSearch', 'clientTable')"
+                               placeholder="Type to search client...">
+                    </div>
+                    <div class="mb-3">
+                        <div class="table-responsive">
+                            <table id="clientTable" class="table table-bordered table-striped">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Client Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="client : ${clients}">
+                                    <td>
+                                        <input type="radio" name="clientId" th:value="${client.clientId}"
+                                               onclick="selectItemAndReset('clientSearch', 'clientTable')">
+                                    </td>
+                                    <td th:text="${client.name}"></td>
+                                    <td th:text="${client.email}"></td>
+                                    <td th:text="${client.phone}"></td>
+                                    <td th:text="${client.address}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div th:fragment="clientOrderCard" class="card shadow-sm border px-3 py-3 mb-4">
+            <div class="card shadow-sm border px-3 py-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center text-dark rounded py-3 mb-1">
-                    <h4 class="h4 mb-0">Goods</h4>
+                    <h4 class="h4 mb-0">
+                        <button id="toggleGoods" type="button" class="btn btn-outline-secondary"
+                                data-bs-toggle="collapse" data-bs-target="#collapseGoods" aria-expanded="true"
+                                aria-controls="collapseGoods">
+                            <i class="fas fa-chevron-up me-2 rotate"></i> Goods
+                        </button>
+                    </h4>
                 </div>
-                <div class="mb-3">
-                    <input type="text" id="goodsSearch" class="form-control"
-                           onkeyup="filterTable('goodsSearch', 'goodsTable')"
-                           placeholder="Type to search goods...">
-                </div>
-                <div class="mb-3">
-                    <div class="table-responsive">
-                        <table id="goodsTable" class="table table-bordered table-striped">
-                            <thead class="table-light">
-                            <tr>
-                                <th>Select</th>
-                                <th>Goods Name</th>
-                                <th>Description</th>
-                                <th>Dimensions</th>
-                                <th>Weight</th>
-                                <th>Special</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="goods : ${availableGoods}">
-                                <td>
-                                    <input type="checkbox" name="goodsIds" th:value="${goods.goodsId}"
-                                           onclick="selectItemAndReset('goodsSearch', 'goodsTable')">
-                                </td>
-                                <td th:text="${goods.name}"></td>
-                                <td th:text="${goods.description}"></td>
-                                <td th:text="${goods.dimensions}"></td>
-                                <td th:text="${goods.weight}"></td>
-                                <td th:text="${goods.specialHandlingInstructions}"></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="collapse show" id="collapseGoods">
+                    <div class="mb-3">
+                        <input type="text" id="goodsSearch" class="form-control"
+                               onkeyup="filterTable('goodsSearch', 'goodsTable')"
+                               placeholder="Type to search goods...">
+                    </div>
+                    <div class="mb-3">
+                        <div class="table-responsive">
+                            <table id="goodsTable" class="table table-bordered table-striped">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Goods Name</th>
+                                    <th>Description</th>
+                                    <th>Dimensions</th>
+                                    <th>Weight</th>
+                                    <th>Special</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="goods : ${availableGoods}">
+                                    <td>
+                                        <input type="checkbox" name="goodsIds" th:value="${goods.goodsId}"
+                                               onclick="selectItemAndReset('goodsSearch', 'goodsTable')">
+                                    </td>
+                                    <td th:text="${goods.name}"></td>
+                                    <td th:text="${goods.description}"></td>
+                                    <td th:text="${goods.dimensions}"></td>
+                                    <td th:text="${goods.weight}"></td>
+                                    <td th:text="${goods.specialHandlingInstructions}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -125,30 +142,39 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/client-orders/create-client}" method="post">
+                <form th:action="@{/client-orders/create-client}" method="post" class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="clientName" class="form-label">Client Name</label>
                         <input type="text" id="clientName" name="name" class="form-control" required>
+                        <div class="invalid-feedback">Please enter the client name.</div>
                     </div>
                     <div class="mb-3">
                         <label for="clientAddress" class="form-label">Address</label>
-                        <input type="text" id="clientAddress" name="address" class="form-control">
+                        <input type="text" id="clientAddress" name="address" class="form-control" required>
+                        <div class="invalid-feedback">Please enter the address.</div>
                     </div>
                     <div class="mb-3">
                         <label for="clientContactPerson" class="form-label">Contact Person</label>
-                        <input type="text" id="clientContactPerson" name="contactPerson" class="form-control">
+                        <input type="text" id="clientContactPerson" name="contactPerson" class="form-control" required>
+                        <div class="invalid-feedback">Please enter the contact person.</div>
                     </div>
                     <div class="mb-3">
                         <label for="clientPhone" class="form-label">Phone</label>
-                        <input type="text" id="clientPhone" name="phone" class="form-control">
+                        <input type="text" id="clientPhone" name="phone" class="form-control" required
+                               pattern="^\+?[0-9\s\-()]{7,20}$">
+                        <div class="invalid-feedback">Please enter a valid phone number (7-20 digits, plus optional +,
+                            spaces, dashes, or parentheses).
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="clientEmail" class="form-label">Email</label>
-                        <input type="email" id="clientEmail" name="email" class="form-control">
+                        <input type="email" id="clientEmail" name="email" class="form-control" required>
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
                     </div>
                     <div class="mb-3">
                         <label for="clientNIP" class="form-label">NIP</label>
-                        <input type="text" id="clientNIP" name="nip" class="form-control">
+                        <input type="text" id="clientNIP" name="nip" class="form-control" required>
+                        <div class="invalid-feedback">Please enter the NIP.</div>
                     </div>
                     <button type="submit" class="btn btn-success">Save Client</button>
                 </form>
@@ -156,7 +182,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="addGoodsModal" tabindex="-1" aria-labelledby="addGoodsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -165,34 +190,34 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="row g-3" th:action="@{/client-orders/create-goods}" method="post" th:object="${goods}">
+                <form class="row g-3 needs-validation" th:action="@{/client-orders/create-goods}" method="post"
+                      th:object="${goods}" novalidate>
                     <div class="col-md-6">
                         <label class="form-label" for="name">Name</label>
-                        <input class="form-control" id="name" placeholder="Enter name" required th:field="*{name}"
-                               type="text">
+                        <input class="form-control" id="name" required th:field="*{name}" type="text">
+                        <div class="invalid-feedback">Please enter the goods name.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="dimensions">Dimensions</label>
-                        <input class="form-control" id="dimensions" placeholder="Enter dimensions"
-                               th:field="*{dimensions}"
-                               type="text">
+                        <input class="form-control" id="dimensions" required th:field="*{dimensions}" type="text">
+                        <div class="invalid-feedback">Please enter the dimensions.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="weight">Weight</label>
-                        <input class="form-control" id="weight" placeholder="Enter weight" required th:field="*{weight}"
-                               type="number">
+                        <input class="form-control" id="weight" required th:field="*{weight}" type="number">
+                        <div class="invalid-feedback">Please enter the weight.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="description">Description</label>
-                        <textarea class="form-control" id="description" th:field="*{description}"
-                                  placeholder="Enter description"></textarea>
+                        <textarea class="form-control" id="description" required th:field="*{description}"></textarea>
+                        <div class="invalid-feedback">Please enter the description.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="specialHandlingInstructions">Special Handling
                             Instructions</label>
                         <textarea class="form-control" id="specialHandlingInstructions" required
-                                  th:field="*{specialHandlingInstructions}"
-                                  placeholder="Enter special handling instructions"></textarea>
+                                  th:field="*{specialHandlingInstructions}"></textarea>
+                        <div class="invalid-feedback">Please enter special handling instructions.</div>
                     </div>
                     <div class="col-md-12 d-flex">
                         <button class="btn btn-success me-2" type="submit">
@@ -207,9 +232,53 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="validationModal" tabindex="-1" aria-labelledby="validationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="validationModalLabel">Creating Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="validationModalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div th:replace="~{/helpers/footer :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/searchForm.js"></script>
+<script src="/js/iconRotate.js"></script>
+<script src="/js/formValidation.js"></script>
+<script>
+    (function () {
+        'use strict';
+
+        function initValidation(form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        }
+
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            initValidation(form);
+        });
+        document.addEventListener('shown.bs.modal', function (event) {
+            var modal = event.target;
+            var modalForms = modal.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(modalForms).forEach(function (form) {
+                initValidation(form);
+            });
+        });
+    })();
+</script>
 </body>
 </html>

@@ -13,9 +13,9 @@
     <div class="container mt-5">
         <div class="bg-light p-4 rounded shadow-sm border">
             <h1 class="h3 mb-3">Create Client Invoice</h1>
-            <form th:action="@{/generate}" method="post" th:object="${clientInvoice}">
-                <input type="hidden" id="clientId" name="clientId" th:value="${clientId}">
-                <input type="hidden" id="clientOrderId" name="clientOrderId" th:value="${clientOrderId}">
+            <form th:action="@{/generate}" method="post" th:object="${clientInvoice}" class="needs-validation" novalidate>
+                <input type="hidden" id="clientIdHidden" name="clientId" th:value="${clientId}">
+                <input type="hidden" id="clientOrderIdHidden" name="clientOrderId" th:value="${clientOrderId}">
 
                 <div class="mb-3">
                     <label for="clientId" class="form-label">Client ID</label>
@@ -31,21 +31,25 @@
                     <label for="invoiceNumber" class="form-label">Invoice Number</label>
                     <input type="text" id="invoiceNumber" name="invoiceNumber" class="form-control"
                            th:field="*{invoiceNumber}" required>
+                    <div class="invalid-feedback">Please provide an invoice number.</div>
                 </div>
                 <div class="mb-3">
                     <label for="dateIssued" class="form-label">Date Issued</label>
                     <input type="date" id="dateIssued" name="dateIssued" class="form-control"
                            th:field="*{dateIssued}" required>
+                    <div class="invalid-feedback">Please select a valid issuing date.</div>
                 </div>
                 <div class="mb-3">
                     <label for="dueDate" class="form-label">Due Date</label>
                     <input type="date" id="dueDate" name="dueDate" class="form-control"
                            th:field="*{dueDate}" required>
+                    <div class="invalid-feedback">Please select a valid due date.</div>
                 </div>
                 <div class="mb-3">
                     <label for="totalAmount" class="form-label">Total Amount</label>
                     <input type="number" id="totalAmount" name="totalAmount" class="form-control"
                            th:field="*{totalAmount}" step="0.01" required>
+                    <div class="invalid-feedback">Please enter the total amount.</div>
                 </div>
                 <div class="d-flex justify-content-end">
                     <a href="/transport-orders/new-transport-order" class="btn btn-secondary me-2">Cancel</a>
@@ -57,5 +61,6 @@
 </main>
 <div th:replace="~{/helpers/footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/invoiceScript.js"></script>
 </body>
 </html>

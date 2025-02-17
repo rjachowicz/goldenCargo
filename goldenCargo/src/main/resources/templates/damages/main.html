@@ -41,22 +41,81 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>Incident</th>
-                    <th>Description</th>
-                    <th>Repair Cost</th>
-                    <th>Insurance Claim</th>
-                    <th>Claim Number</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Incident
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='incident.incidentType', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='incident.incidentType', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Description
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='description', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='description', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Repair Cost
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/damages(sortBy='repairCost', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='repairCost', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Insurance Claim
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='insuranceClaim', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='insuranceClaim', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Claim Number
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='claimNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/damages(sortBy='claimNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="damage : ${damages}">
-                    <td th:text="${damage.incident.incidentType}"></td>
-                    <td th:text="${damage.description}"></td>
-                    <td th:text="${damage.repairCost}"></td>
-                    <td th:text="${damage.insuranceClaim ? 'Yes' : 'No'}"></td>
-                    <td th:text="${damage.claimNumber}"></td>
-                    <td>
+                    <td class="text-center align-middle" th:text="${damage.incident.incidentType}"></td>
+                    <td class="text-center align-middle" th:text="${damage.description}"></td>
+                    <td class="text-center align-middle" th:text="${damage.repairCost}"></td>
+                    <td class="text-center align-middle" th:text="${damage.insuranceClaim ? 'Yes' : 'No'}"></td>
+                    <td class="text-center align-middle" th:text="${damage.claimNumber}"></td>
+                    <td class="text-center align-middle">
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="damages/edit"
                                 data-modal-action
@@ -86,8 +145,7 @@
 </main>
 <div aria-hidden="true" aria-labelledby="editDamageModalLabel" class="modal fade" id="editDamageModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
-        </div>
+        <div class="modal-content"></div>
     </div>
 </div>
 <div aria-hidden="true" aria-labelledby="detailsDamageModalLabel" class="modal fade" id="detailsDamageModal"

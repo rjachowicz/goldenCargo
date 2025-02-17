@@ -41,20 +41,69 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>Incident</th>
-                    <th>Description</th>
-                    <th>Repair Cost</th>
-                    <th>Repair Date</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Incident
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='incident.incidentType', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='incident.incidentType', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Description
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='description', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='description', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Repair Cost
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='repairCost', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='repairCost', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Repair Date
+                        <div>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='repairDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/breakdowns(sortBy='repairDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="breakdown : ${breakdowns}">
-                    <td th:text="${breakdown.incident.incidentType}"></td>
-                    <td th:text="${breakdown.description}"></td>
-                    <td th:text="${breakdown.repairCost}"></td>
-                    <td th:text="${#dates.format(breakdown.repairDate, 'yyyy-MM-dd')}"></td>
-                    <td>
+                    <td class="text-center align-middle" th:text="${breakdown.incident.incidentType}"></td>
+                    <td class="text-center align-middle" th:text="${breakdown.description}"></td>
+                    <td class="text-center align-middle" th:text="${breakdown.repairCost}"></td>
+                    <td class="text-center align-middle"
+                        th:text="${#dates.format(breakdown.repairDate, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center align-middle">
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="breakdowns/edit"
                                 data-modal-action
@@ -70,7 +119,7 @@
                             <i class="fas fa-info-circle"></i> Details
                         </button>
                         <button class="btn btn-danger btn-sm" data-delete-url="/breakdowns/delete/{id}"
-                                data-entity-type="breakdowns"
+                                data-entity-type="breakdown"
                                 onclick="showDeleteModal(this)"
                                 th:attr="data-entity-id=${breakdown.breakdownId}">
                             <i class="fas fa-trash"></i> Delete
@@ -80,23 +129,22 @@
                 </tbody>
             </table>
         </div>
-        <div aria-hidden="true" aria-labelledby="editBreakdownModalLabel" class="modal fade"
-             id="editBreakdownModal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content"></div>
-            </div>
-        </div>
-        <div aria-hidden="true" aria-labelledby="detailsBreakdownModalLabel" class="modal fade"
-             id="detailsBreakdownModal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content"></div>
-            </div>
-        </div>
     </div>
 </main>
+<div aria-hidden="true" aria-labelledby="editBreakdownModalLabel" class="modal fade" id="editBreakdownModal"
+     tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="detailsBreakdownModalLabel" class="modal fade" id="detailsBreakdownModal"
+     tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+</div>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <div th:replace="~{/helpers/footer :: footer}"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
 <script src="/js/validFormScript.js"></script>

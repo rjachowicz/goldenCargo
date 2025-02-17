@@ -21,13 +21,11 @@
             </div>
             <div>
                 <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
                 <button aria-controls="addRepairForm" aria-expanded="false" class="btn btn-outline-success me-2"
-                        data-bs-target="#addRepairForm"
-                        data-bs-toggle="collapse" type="button">
+                        data-bs-target="#addRepairForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Repair
                 </button>
                 <a class="btn btn-secondary" href="/vehicle-repairs"><i class="fas fa-redo"></i> Show All</a>
@@ -40,23 +38,63 @@
             <div th:replace="~{/vehicle-repairs/create}"></div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-light">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light align-middle">
                 <tr>
-                    <th>Vehicle</th>
-                    <th>Service Date</th>
-                    <th>Service Type</th>
-                    <th>Cost</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Vehicle
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='vehicle.registrationNumber', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='vehicle.registrationNumber', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Service Date
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='serviceDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='serviceDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Service Type
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='serviceType', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='serviceType', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Cost
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='cost', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/vehicle-repairs(sortBy='cost', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="repair : ${vehicleRepairs}">
-                    <td th:text="${repair.vehicle.registrationNumber}"></td>
-                    <td th:text="${#dates.format(repair.serviceDate, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td th:text="${repair.serviceType}"></td>
-                    <td th:text="${repair.cost} + ' $'"></td>
-                    <td>
+                    <td class="text-center align-middle" th:text="${repair.vehicle.registrationNumber}"></td>
+                    <td class="text-center align-middle" th:text="${#dates.format(repair.serviceDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td class="text-center align-middle" th:text="${repair.serviceType}"></td>
+                    <td class="text-center align-middle" th:text="${repair.cost} + ' $'"></td>
+                    <td class="text-center align-middle">
                         <button class="btn btn-warning btn-sm"
                                 data-endpoint="vehicle-repairs/edit"
                                 data-modal-action
@@ -85,15 +123,13 @@
     <div aria-hidden="true" aria-labelledby="editRepairModalLabel" class="modal fade" id="editRepairModal"
          tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content">
-            </div>
+            <div class="modal-content"></div>
         </div>
     </div>
     <div aria-hidden="true" aria-labelledby="detailsRepairModalLabel" class="modal fade" id="detailsRepairModal"
          tabindex="-1">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            </div>
+            <div class="modal-content"></div>
         </div>
     </div>
     <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>

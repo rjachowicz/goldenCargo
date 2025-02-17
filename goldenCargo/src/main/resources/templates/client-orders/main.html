@@ -20,12 +20,10 @@
                 <p class="mb-0 text-muted">Easily view, edit, and manage client orders.</p>
             </div>
             <div>
-                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2"
-                        data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
+                <button aria-controls="searchForm" aria-expanded="false" class="btn btn-outline-primary me-2" data-bs-target="#searchForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-search"></i> Search
                 </button>
-                <button aria-controls="addClientOrderForm" aria-expanded="false" class="btn btn-outline-success me-2"
-                        data-bs-target="#addClientOrderForm" data-bs-toggle="collapse" type="button">
+                <button aria-controls="addClientOrderForm" aria-expanded="false" class="btn btn-outline-success me-2" data-bs-target="#addClientOrderForm" data-bs-toggle="collapse" type="button">
                     <i class="fas fa-plus-circle"></i> Add Client Order
                 </button>
                 <a class="btn btn-secondary" href="/client-orders"><i class="fas fa-redo"></i> Show All</a>
@@ -41,39 +39,79 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>Client</th>
-                    <th>Order Date</th>
-                    <th>Status</th>
-                    <th>Total Amount</th>
-                    <th>Payment Status</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Client
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='client.name', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='client.name', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Order Date
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='orderDate', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='orderDate', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Status
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='status', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='status', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Total Amount
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='totalAmount', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='totalAmount', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">
+                        Payment Status
+                        <div>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='paymentStatus', sortLogic='asc')}">
+                                <i class="fa-solid fa-arrow-up-wide-short text-black"></i>
+                            </a>
+                            <a class="text-decoration-none" th:href="@{/client-orders(sortBy='paymentStatus', sortLogic='desc')}">
+                                <i class="fa-solid fa-arrow-down-short-wide text-black"></i>
+                            </a>
+                        </div>
+                    </th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="order : ${clientOrders}">
-                    <td th:text="${order.client.name}"></td>
-                    <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${order.status}"></td>
-                    <td th:text="${order.totalAmount}"></td>
-                    <td th:text="${order.paymentStatus}"></td>
-                    <td>
-                        <button class="btn btn-warning btn-sm"
-                                data-endpoint="client-orders/edit"
-                                data-modal-action
-                                data-modal-id="editClientOrderModal"
-                                th:attr="data-id=${order.clientOrderId}">
+                    <td class="text-center" th:text="${order.client.name}"></td>
+                    <td class="text-center" th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
+                    <td class="text-center" th:text="${order.status}"></td>
+                    <td class="text-center" th:text="${order.totalAmount}"></td>
+                    <td class="text-center" th:text="${order.paymentStatus}"></td>
+                    <td class="text-center">
+                        <button class="btn btn-warning btn-sm" data-endpoint="client-orders/edit" data-modal-action data-modal-id="editClientOrderModal" th:attr="data-id=${order.clientOrderId}">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-info btn-sm"
-                                data-endpoint="client-orders/details"
-                                data-modal-action
-                                data-modal-id="detailsClientOrderModal"
-                                th:attr="data-id=${order.clientOrderId}">
+                        <button class="btn btn-info btn-sm" data-endpoint="client-orders/details" data-modal-action data-modal-id="detailsClientOrderModal" th:attr="data-id=${order.clientOrderId}">
                             <i class="fas fa-info-circle"></i> Details
                         </button>
-                        <button class="btn btn-danger btn-sm" data-delete-url="/client-orders/delete/{id}"
-                                data-entity-type="clientOrder" onclick="showDeleteModal(this)"
-                                th:attr="data-entity-id=${order.clientOrderId}">
+                        <button class="btn btn-danger btn-sm" data-delete-url="/client-orders/delete/{id}" data-entity-type="clientOrder" onclick="showDeleteModal(this)" th:attr="data-entity-id=${order.clientOrderId}">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </td>
@@ -82,15 +120,12 @@
             </table>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="editClientOrderModalLabel" class="modal fade" id="editClientOrderModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="editClientOrderModalLabel" class="modal fade" id="editClientOrderModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content"></div>
         </div>
     </div>
-    <div aria-hidden="true" aria-labelledby="detailsClientOrderModalLabel" class="modal fade"
-         id="detailsClientOrderModal"
-         tabindex="-1">
+    <div aria-hidden="true" aria-labelledby="detailsClientOrderModalLabel" class="modal fade" id="detailsClientOrderModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"></div>
         </div>
@@ -98,7 +133,6 @@
 </main>
 <div th:replace="~{helpers/confirm-delete-modal.html :: #confirmDeleteModal}"></div>
 <div th:replace="~{/helpers/footer :: footer}"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/confirmDelete.js"></script>
 <script src="/js/validFormScript.js"></script>
