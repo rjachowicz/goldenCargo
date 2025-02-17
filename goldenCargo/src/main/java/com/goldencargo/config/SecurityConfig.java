@@ -60,14 +60,18 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/save-to-dropbox",
+                                "/about",
+                                "/contact-us",
                                 "/"
                         ).permitAll()
 
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
-
                         .requestMatchers("/login**").permitAll()
-                        .requestMatchers("/breakdowns/**").hasAnyRole("ADMIN", "MANAGER", "DRIVER", "USER")
+
+                        .requestMatchers("/breakdowns/**")
+                        .hasAnyRole("ADMIN", "MANAGER", "DRIVER", "USER")
+
                         .requestMatchers("/clients/**",
                                 "/client-invoices/**",
                                 "/drivers/**",
@@ -75,17 +79,32 @@ public class SecurityConfig {
                                 "/goods/**",
                                 "/invoices/**",
                                 "/news/**",
-                                "/users/**").hasAnyRole("ADMIN", "MANAGER")
+                                "/users/**",
+                                "/driver-vehicles/**")
+                        .hasAnyRole("ADMIN", "MANAGER")
+
                         .requestMatchers("/client-orders/**",
                                 "/orders/**",
-                                "/shipping-documents/**").hasAnyRole("ADMIN", "MANAGER", "LOGISTIC")
-                        .requestMatchers("/damages/**", "/incidents/**").hasAnyRole("ADMIN", "DRIVER", "USER")
+                                "/shipping-documents/**")
+                        .hasAnyRole("ADMIN", "MANAGER", "LOGISTIC")
+
+                        .requestMatchers("/damages/**",
+                                "/incidents/**")
+                        .hasAnyRole("ADMIN", "DRIVER", "USER")
+
                         .requestMatchers("/locations/**",
-                                "/routes/**", "/transports/**",
-                                "/transport-orders/**").hasAnyRole("ADMIN", "LOGISTIC")
+                                "/logistics/**",
+                                "/routes/**",
+                                "/transports/**",
+                                "/transport-orders/**")
+                        .hasAnyRole("ADMIN", "LOGISTIC")
+
                         .requestMatchers("/service-schedules/**",
                                 "/technical-inspections/**",
-                                "/vehicles/**", "/vehicle-repairs/**", "/vehicle-types/**").hasAnyRole("ADMIN", "USER")
+                                "/vehicles/**",
+                                "/vehicle-repairs/**",
+                                "/vehicle-types/**")
+                        .hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

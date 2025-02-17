@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const openTransportOrderModalBtn = document.getElementById('openTransportOrderModalBtn');
 
     function updateClientOrderButtonState() {
@@ -17,15 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
     updateClientOrderButtonState();
 
     const clientCheckboxes = document.querySelectorAll('input[name="selectedClientOrders"]');
-    clientCheckboxes.forEach(function(checkbox) {
+    clientCheckboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', updateClientOrderButtonState);
     });
 
-    openTransportOrderModalBtn.addEventListener('click', function(e) {
+    openTransportOrderModalBtn.addEventListener('click', function (e) {
         const selectedOrders = document.querySelectorAll('input[name="selectedClientOrders"]:checked');
         if (selectedOrders.length === 0) {
             e.preventDefault();
-            const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+            const errorModal = new bootstrap.Modal(document.getElementById('errorModalTransport'));
             errorModal.show();
         }
     });
@@ -48,11 +48,11 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTransportButtonState();
 
     const transportRadios = document.querySelectorAll('input[name="selectedTransportOrder"]');
-    transportRadios.forEach(function(radio) {
+    transportRadios.forEach(function (radio) {
         radio.addEventListener('change', updateTransportButtonState);
     });
 
-    openTransportModalBtn.addEventListener('click', function(e) {
+    openTransportModalBtn.addEventListener('click', function (e) {
         const selectedTransport = document.querySelector('input[name="selectedTransportOrder"]:checked');
         if (!selectedTransport) {
             e.preventDefault();

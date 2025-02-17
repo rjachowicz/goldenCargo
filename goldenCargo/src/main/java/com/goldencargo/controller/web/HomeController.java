@@ -1,11 +1,15 @@
 package com.goldencargo.controller.web;
 
+import com.goldencargo.model.dto.web.ContactForm;
 import com.goldencargo.model.entities.News;
+import com.goldencargo.service.EmailService;
 import com.goldencargo.service.HomeService;
 import com.goldencargo.service.NewsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -14,10 +18,13 @@ public class HomeController {
 
     private final HomeService homeService;
     private final NewsService newsService;
+    private final EmailService emailService;
 
-    public HomeController(HomeService homeService, NewsService newsService) {
+
+    public HomeController(HomeService homeService, NewsService newsService, EmailService emailService) {
         this.homeService = homeService;
         this.newsService = newsService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/main")
@@ -62,6 +69,30 @@ public class HomeController {
     @GetMapping("/")
     public String getHomePage() {
         return "home";
+    }
+
+    @GetMapping("/about")
+    public String getAboutPage() {
+        return "about";
+    }
+
+    @GetMapping("/contact-us")
+    public String getContactUsPage(Model model) {
+        model.addAttribute("contactForm", new ContactForm());
+        return "contactForm";
+    }
+
+    @PostMapping("/contact-us")
+    public String sendContactForm(@ModelAttribute("contactForm") ContactForm contactForm, Model model) {
+        emailService.sendContactFormMessage(
+                contactForm.getSubject(),
+                contactForm.getName(),
+                contactForm.getContactEmail(),
+                contactForm.getMessage()
+        );
+        model.addAttribute("successMessage", "Your message has been sent successfully!");
+        model.addAttribute("contactForm", new ContactForm());
+        return "contactForm";
     }
 
 }
