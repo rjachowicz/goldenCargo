@@ -238,19 +238,19 @@ VALUES (false, '2021-07-01 08:00:00', '2021-07-01 08:00:00', '123123123', 'Rober
 INSERT INTO drivers (is_deleted, created_at, date_of_birth, hire_date, medical_certificate_expiry, updated_at, user_id,
                      license_category, license_number, driver_status)
 VALUES (false, '2021-07-16 08:00:00', '1980-01-01', '2020-01-15', '2022-01-15', '2021-07-16 08:00:00', 1, 'C+E',
-        'LIC-0001', 'ACTIVE'),
+        'LIC-0001', 'AVAILABLE'),
        (false, '2021-07-17 09:15:00', '1982-02-02', '2020-02-15', '2022-02-15', '2021-07-17 09:15:00', 3, 'C+E',
-        'LIC-0002', 'ACTIVE'),
+        'LIC-0002', 'AVAILABLE'),
        (false, '2021-07-18 10:30:00', '1984-03-03', '2020-03-15', '2022-03-15', '2021-07-18 10:30:00', 5, 'C+E',
-        'LIC-0003', 'ACTIVE'),
+        'LIC-0003', 'AVAILABLE'),
        (false, '2021-07-19 11:45:00', '1986-04-04', '2020-04-15', '2022-04-15', '2021-07-19 11:45:00', 7, 'C+E',
-        'LIC-0004', 'ACTIVE'),
+        'LIC-0004', 'AVAILABLE'),
        (false, '2021-07-20 13:00:00', '1988-05-05', '2020-05-15', '2022-05-15', '2021-07-20 13:00:00', 9, 'C+E',
-        'LIC-0005', 'ACTIVE'),
+        'LIC-0005', 'AVAILABLE'),
        (false, '2021-07-21 14:15:00', '1990-06-06', '2020-06-15', '2022-06-15', '2021-07-21 14:15:00', 11, 'C+E',
-        'LIC-0006', 'ACTIVE'),
+        'LIC-0006', 'AVAILABLE'),
        (false, '2021-07-22 15:30:00', '1992-07-07', '2020-07-15', '2022-07-15', '2021-07-22 15:30:00', 13, 'C+E',
-        'LIC-0007', 'ACTIVE');
+        'LIC-0007', 'AVAILABLE');
 INSERT INTO driver_reports (is_deleted, created_at, date, driver_id, updated_at, content)
 VALUES (false, '2021-08-01 08:00:00', '2021-07-31 17:00:00', 1, '2021-08-01 08:00:00', 'Brak problemów podczas trasy.'),
        (false, '2021-08-02 09:15:00', '2021-08-01 17:00:00', 2, '2021-08-02 09:15:00',
